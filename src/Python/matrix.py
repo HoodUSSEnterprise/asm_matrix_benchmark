@@ -2,7 +2,7 @@
 # @Author: HoodUSSEnterprise
 # @Date: 2026-06-16 09:16:25
 # @LastEditors: HoodUSSEnterprise
-# @LastEditTime: 2026-06-16 15:31:41
+# @LastEditTime: 2026-06-16 20:26:09
 # @FilePath: \asm_matrix_benchmark\src\Python\matrix.py
 # @Description: Python file of matrix
 ###########################################################
@@ -298,11 +298,45 @@ def replace_elem(
         m.data[x * m.cols + y] = new_value
 
 
+def _print_sep(title: str) -> None:
+    print(title)
+
+
+def demo_examples() -> None:
+    data: List[int | float] = [1, 2, 3, 4]
+    v1 = Matrix(2, 2, data.copy())
+    v2 = Matrix(1, 4, data.copy())
+    v3 = Matrix(2, 2, data.copy())
+
+    _print_sep("---------------------------------------add matrix---------------------------------------")
+    v = v1 + v2
+    m = v1 + v3
+    print(v)
+    print(m)
+    _print_sep("----------------------------------------------------------------------------------------")
+
+    _print_sep("---------------------------------------sub matrix---------------------------------------")
+    v = v1 - v2
+    m = v1 - v3
+    print(v)
+    print(m)
+    _print_sep("----------------------------------------------------------------------------------------")
+
+    _print_sep("---------------------------------------mul matrix---------------------------------------")
+    mul_data: List[int | float] = [1, 2, 3]
+    mul1 = Matrix(3, 1, mul_data.copy())
+    mul2 = Matrix(1, 3, mul_data.copy())
+    m = mul1 * mul2
+    print(m)
+    _print_sep("----------------------------------------------------------------------------------------")
+
+    _print_sep("--------------------------------------scale matrix--------------------------------------")
+    scale_data: List[int | float] = [1,2,3,4,5,6,7,8,9,10]
+    scale = Matrix(2, 5, scale_data.copy())
+    print(scale)
+    m = scale * 2
+    print(m)
+
+
 if __name__ == "__main__":
-    m = Matrix(2, 2, [1, 2, 3, 4])
-    m1 = Matrix(2, 2, [3, 4, 5, 6])
-    print(m1)
-    row, col = find_elem(m, 2)
-    print(row, col)
-    m3 = m + m1
-    print(m3)
+    demo_examples()
