@@ -76,6 +76,34 @@ target_link_libraries(matrix_int_clib ${EXTRA_LIBS})
 add_executable(matrix_intc example/matrix_int.c)
 target_link_libraries(matrix_intc matrix_int_clib)
 
+# 库的源文件（从对应平台目录读取）
+set(LIB_SOURCES_MATRIX_CPP
+    src/C++/add_matrix.cpp
+    src/C++/constructor_matrix.cpp
+    src/C++/destructor_matrix.cpp
+    # src/C++/find_matrix.cpp
+    # src/C++/insert_matrix.cpp
+    src/C++/mul_matrix.cpp
+    # src/C++/pop_matrix.cpp
+    # src/C++/push_back_matrix.cpp
+    src/C++/print_matrix.cpp
+    # src/C++/remove_matrix.cpp
+    # src/C++/replace_matrix.cpp
+    # src/C++/reverse_matrix.cpp
+    src/C++/scale_matrix.cpp
+    src/C++/sub_matrix.cpp
+)
+
+# 创建库
+add_library(matrix_int_cpplib ${LIB_SOURCES_MATRIX_CPP})
+
+target_include_directories(matrix_int_cpplib PUBLIC include)
+target_link_libraries(matrix_int_cpplib ${EXTRA_LIBS})
+
+# 创建测试可执行文件
+add_executable(matrix_intcpp example/matrix_int.cpp)
+target_link_libraries(matrix_intcpp matrix_int_cpplib)
+
 # set(LIB_SOURCES_MATRIX_DOUBLE
 #     src/assembly/${PLATFORM_DIR}/add_matrix_double.asm
 #     src/assembly/${PLATFORM_DIR}/find_matrix_double.asm
