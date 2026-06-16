@@ -29,7 +29,7 @@ set(LIB_SOURCES_MATRIX_INT
     src/assembly/${PLATFORM_DIR}/add_matrix_int.asm
     # src/assembly/${PLATFORM_DIR}/find_matrix_int.asm
     # src/assembly/${PLATFORM_DIR}/insert_matrix_int.asm
-    # src/assembly/${PLATFORM_DIR}/mul_matrix_int.asm
+    src/assembly/${PLATFORM_DIR}/mul_matrix_int.asm
     # src/assembly/${PLATFORM_DIR}/pop_matrix_int.asm
     # src/assembly/${PLATFORM_DIR}/push_back_matrix_int.asm
     src/assembly/${PLATFORM_DIR}/print_matrix_int.asm
