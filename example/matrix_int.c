@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-15 21:56:03
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-16 17:16:35
+@LastEditTime: 2026-06-16 18:51:42
 @FilePath: \asm_matrix_benchmark\example\matrix_int.c
 @Description:example of matrix int
 *************************************************************/
@@ -33,6 +33,13 @@ int main(void)
     MatrixInt mul1 = {mul_data, 3, 1};
     MatrixInt mul2 = {mul_data, 1, 3};
     m = mul_matrix_int(&mul1, &mul2);
+    print_matrix(m);
+    puts("----------------------------------------------------------------------------------------");
+    puts("--------------------------------------scale matrix--------------------------------------");
+    int scale_data[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    MatrixInt scale = {scale_data, 2, 5};
+    print_matrix(&scale);
+    m = scale_matrix_int(&scale, 2);
     print_matrix(m);
     return 0;
 }
