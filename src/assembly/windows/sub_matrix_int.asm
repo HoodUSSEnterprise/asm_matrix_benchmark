@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-16 16:36:24
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-16 16:47:45
+; @LastEditTime: 2026-06-16 17:24:26
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\sub_matrix_int.asm
 ; @Description: sub matrix nasm code on windows
 ;-------------------------------------------------------------
@@ -79,6 +79,7 @@ sub_matrix_int:
 
     ; malloc res->data
     mov rcx, rdi
+    shl rcx, 2 ; rcx *= 4
     call malloc
     test rax, rax
     jz malloc_fail_data
