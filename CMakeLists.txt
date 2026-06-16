@@ -32,6 +32,7 @@ set(LIB_SOURCES_MATRIX_INT
     # src/assembly/${PLATFORM_DIR}/mul_matrix_int.asm
     # src/assembly/${PLATFORM_DIR}/pop_matrix_int.asm
     # src/assembly/${PLATFORM_DIR}/push_back_matrix_int.asm
+    src/assembly/${PLATFORM_DIR}/print_matrix_int.asm
     # src/assembly/${PLATFORM_DIR}/remove_matrix_int.asm
     # src/assembly/${PLATFORM_DIR}/replace_matrix_int.asm
     # src/assembly/${PLATFORM_DIR}/reverse_matrix_int.asm
