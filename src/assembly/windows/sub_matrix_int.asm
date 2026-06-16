@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-16 16:36:24
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-16 16:41:05
+; @LastEditTime: 2026-06-16 16:47:45
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\sub_matrix_int.asm
 ; @Description: sub matrix nasm code on windows
 ;-------------------------------------------------------------
@@ -19,7 +19,7 @@ section .rodata
 
 section .text
 
-; MatrixInt *add_matrix_int(MatrixInt *m1, MatrixInt *m2);
+; MatrixInt *sub_matrix_int(MatrixInt *m1, MatrixInt *m2);
 ; rcx = m1, rdx = m2
 sub_matrix_int:
 
