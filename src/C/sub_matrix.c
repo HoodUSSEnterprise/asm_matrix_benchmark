@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-16 19:06:54
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-16 19:10:41
+@LastEditTime: 2026-06-16 21:41:29
 @FilePath: \asm_matrix_benchmark\src\C\sub_matrix.c
 @Description: sub matrix c code
 *************************************************************/
@@ -20,13 +20,13 @@ MatrixInt *sub_matrix_int(MatrixInt *m1, MatrixInt *m2)
     // check m1 and m2
     if (m1 == NULL || m2 == NULL)
     {
-        fprintf(stderr, "Memory allocation failed\n");
+        puts("Invalid param!");
         return NULL;
     }
     // check m1->data and m2->data
     if (m1->data == NULL || m2->data == NULL)
     {
-        fprintf(stderr, "Memory allocation failed\n");
+        puts("Invalid param!");
         return NULL;
     }
     // check dimension

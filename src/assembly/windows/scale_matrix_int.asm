@@ -13,7 +13,7 @@ extern free
 
 section .rodata
     malloc_failed db "Memory allocation failed", 10, 0                         ; malloc failed msg
-    invaild_param db "Invalid param!", 10, 0                                   ; invalid param msg
+    invalid_param db "Invalid param!", 10, 0                                   ; invalid param msg
 
 section .text
 
@@ -108,7 +108,7 @@ malloc_fail_data:
     jmp cleanup
 
 null_ptr:
-    lea rcx, [rel invaild_param] ; rcx = invaild_param
+    lea rcx, [rel invalid_param] ; rcx = invalid_param
     call printf
     mov rax, 0 ; return NULL
     jmp cleanup

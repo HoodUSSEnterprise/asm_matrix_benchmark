@@ -20,13 +20,13 @@ MatrixInt *mul_matrix_int(MatrixInt *m1, MatrixInt *m2)
     // check m1 and m2
     if (m1 == NULL || m2 == NULL)
     {
-        fprintf(stderr, "Memory allocation failed\n");
+        puts("Invalid param!");
         return NULL;
     }
     // check m1->data and m2->data
     if (m1->data == NULL || m2->data == NULL)
     {
-        fprintf(stderr, "Memory allocation failed\n");
+        puts("Invalid param!");
         return NULL;
     }
     // check dimension

@@ -19,13 +19,13 @@ MatrixInt *scale_matrix_int(MatrixInt *m, int scale)
     // check m
     if (m == NULL)
     {
-        fprintf(stderr, "Memory allocation failed\n");
+        puts("Invalid param!");
         return NULL;
     }
     // check m->data
     if (m->data == NULL)
     {
-        fprintf(stderr, "Memory allocation failed\n");
+        puts("Invalid param!");
         return NULL;
     }
     // malloc for new res

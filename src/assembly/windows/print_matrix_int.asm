@@ -14,7 +14,7 @@ extern putchar
 
 section .rodata
     matrix_info db "------------------matrix info------------------", 0
-    invaild_param db "Invalid param!", 0                                   ; invalid param msg
+    invalid_param db "Invalid param!", 0                                   ; invalid param msg
     matrix_size db "matrix size: (%d, %d)", 10, 0
     matrix_data db "matrix data:", 0
     fmt db "%d ", 0
@@ -86,7 +86,7 @@ change_line:
     jmp loop1
 
 error:
-    lea rcx, [rel invaild_param]
+    lea rcx, [rel invalid_param]
     call puts
     jmp end
 
