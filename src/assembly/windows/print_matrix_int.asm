@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-16 15:39:42
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-16 16:33:15
+; @LastEditTime: 2026-06-16 16:35:02
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\print_matrix_int.asm
 ; @Description: print matrix nasm code on windows
 ;-------------------------------------------------------------
@@ -13,10 +13,10 @@ extern puts
 extern putchar
 
 section .rodata
-    matrix_info db "------------------matrix info------------------", 10, 0
-    invaild_param db "Invalid param!", 10, 0                                   ; invalid param msg
+    matrix_info db "------------------matrix info------------------", 0
+    invaild_param db "Invalid param!", 0                                   ; invalid param msg
     matrix_size db "matrix size: (%d, %d)", 10, 0
-    matrix_data db "matrix data:", 10, 0
+    matrix_data db "matrix data:", 0
     fmt db "%d ", 0
 
 section .text
@@ -87,7 +87,7 @@ change_line:
 
 error:
     lea rcx, [rel invaild_param]
-    call printf
+    call puts
     jmp end
 
 end:
