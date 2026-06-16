@@ -15,7 +15,7 @@ extern free
 section .rodata
     malloc_failed db "Memory allocation failed", 10, 0                         ; malloc failed msg
     invaild_param db "Invalid param!", 10, 0                                   ; invalid param msg
-    dim_mismatch  db "Dimension mismatch! m1(%d, %d) vs m2(%d, %d)", 10, 0       ; dim mismatch msg
+    dim_mismatch  db "Dimension mismatch! m1(%zu, %zu) vs m2(%zu, %zu)", 10, 0       ; dim mismatch msg
 
 section .text
 
