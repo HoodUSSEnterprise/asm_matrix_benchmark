@@ -37,7 +37,7 @@ set(LIB_SOURCES_MATRIX_INT
     # src/assembly/${PLATFORM_DIR}/replace_matrix_int.asm
     # src/assembly/${PLATFORM_DIR}/reverse_matrix_int.asm
     # src/assembly/${PLATFORM_DIR}/scale_matrix_int.asm
-    # src/assembly/${PLATFORM_DIR}/sub_matrix_int.asm
+    src/assembly/${PLATFORM_DIR}/sub_matrix_int.asm
 )
 
 # 创建库
