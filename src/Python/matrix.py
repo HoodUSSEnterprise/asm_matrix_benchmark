@@ -2,12 +2,12 @@
 # @Author: HoodUSSEnterprise
 # @Date: 2026-06-16 09:16:25
 # @LastEditors: HoodUSSEnterprise
-# @LastEditTime: 2026-06-16 13:57:09
+# @LastEditTime: 2026-06-16 14:25:54
 # @FilePath: \asm_matrix\src\Python\matrix.py
 # @Description: Python file of matrix
 ###########################################################
 
-from typing import List, Union
+from typing import Any, List, Optional, Union
 
 
 class Matrix:
@@ -17,8 +17,8 @@ class Matrix:
         self.cols = cols
         self.data = data
 
-    def __add__(self, other: "Matrix"):
-        if other is None or self is None:
+    def __add__(self, other: "Matrix | None") -> Optional["Matrix"]:
+        if other is None:
             print("Invalid param")
             return None
 
@@ -28,18 +28,12 @@ class Matrix:
             )
             return None
 
-        result = [0 for i in range(self.rows * self.cols)]
-
-        for i in range(self.rows):
-            for j in range(self.cols):
-                result[i * self.cols + j] = (
-                    self.data[i * self.cols + j] + other.data[i * self.cols + j]
-                )
+        result = [self.data[i] + other.data[i] for i in range(self.rows * self.cols)]
 
         return Matrix(self.rows, self.cols, result)
 
-    def __sub__(self, other):
-        if other is None or self is None:
+    def __sub__(self, other: "Matrix | None") -> Optional["Matrix"]:
+        if other is None:
             print("Invalid param")
             return None
 
@@ -49,18 +43,14 @@ class Matrix:
             )
             return None
 
-        result = [0 for i in range(self.rows * self.cols)]
-
-        for i in range(self.rows):
-            for j in range(self.cols):
-                result[i * self.cols + j] = (
-                    self.data[i * self.cols + j] - other.data[i * self.cols + j]
-                )
+        result = result = [
+            self.data[i] - other.data[i] for i in range(self.rows * self.cols)
+        ]
 
         return Matrix(self.rows, self.cols, result)
 
-    def __mul__(self, other):
-        if other is None or self is None:
+    def __mul__(self, other: "Matrix | None") -> Optional["Matrix"]:
+        if other is None:
             print("Invalid param")
             return None
 
@@ -70,7 +60,7 @@ class Matrix:
             )
             return None
 
-        result = [0 for i in range(self.rows * self.cols)]
+        result: List[Union[int, float]] = [0 for _ in range(self.rows * self.cols)]
 
         for i in range(self.rows):
             for j in range(other.cols):
@@ -79,10 +69,10 @@ class Matrix:
                     num += self.data[i * self.cols + k] * other.data[k * self.cols + j]
                 result[i * self.cols + j] = num
 
-        return Matrix(self.rows, self.cols, result)
+        return Matrix(self.rows, other.cols, result)
 
-    def __eq__(self, other):
-        if other is None or self is None:
+    def __eq__(self, other: object) -> bool:
+        if other is None or not isinstance(other, Matrix):
             print("Invalid param")
             return False
 
@@ -99,7 +89,7 @@ class Matrix:
 
         return True
 
-    def __str__(self):
+    def __str__(self: "Matrix | None"):
         if self is None:
             return "This matrix is None\n"
         else:
@@ -110,50 +100,38 @@ class Matrix:
                 f"--------------------------------------------"
             )
 
-    def __iadd__(self, other):
-        if other is None or self is None:
+    def __iadd__(self, other: "Matrix | None"):
+        if other is None:
             print("Invalid param")
-            return None
+            return self
 
         if self.rows != other.rows or self.cols != other.cols:
             print(
                 f"Dimension mismatch! m1({self.rows}, {other.rows}) vs m2({self.cols}, {other.cols})"
             )
-            return None
+            return self
 
-        result = [0 for i in range(self.rows * self.cols)]
+        self.data = [self.data[i] + other.data[i] for i in range(self.rows * self.cols)]
 
-        for i in range(self.rows):
-            for j in range(self.cols):
-                result[i * self.cols + j] = (
-                    self.data[i * self.cols + j] + other.data[i * self.cols + j]
-                )
+        return self
 
-        return Matrix(self.rows, self.cols, result)
-
-    def __isub__(self, other):
-        if other is None or self is None:
+    def __isub__(self, other: "Matrix | None"):
+        if other is None:
             print("Invalid param")
-            return None
+            return self
 
         if self.rows != other.rows or self.cols != other.cols:
             print(
                 f"Dimension mismatch! m1({self.rows}, {other.rows}) vs m2({self.cols}, {other.cols})"
             )
-            return None
+            return self
 
-        result = [0 for i in range(self.rows * self.cols)]
+        self.data = [self.data[i] - other.data[i] for i in range(self.rows * self.cols)]
 
-        for i in range(self.rows):
-            for j in range(self.cols):
-                result[i * self.cols + j] = (
-                    self.data[i * self.cols + j] - other.data[i * self.cols + j]
-                )
+        return self
 
-        return Matrix(self.rows, self.cols, result)
-
-    def __imul__(self, other):
-        if other is None or self is None:
+    def __imul__(self, other: "Matrix | None"):
+        if other is None:
             print("Invalid param")
             return None
 
@@ -163,7 +141,7 @@ class Matrix:
             )
             return None
 
-        result = [0 for i in range(self.rows * self.cols)]
+        result: List[Union[int, float]] = [0 for _ in range(self.rows * self.cols)]
 
         for i in range(self.rows):
             for j in range(other.cols):
@@ -172,7 +150,10 @@ class Matrix:
                     num += self.data[i * self.cols + k] * other.data[k * self.cols + j]
                 result[i * self.cols + j] = num
 
-        return Matrix(self.rows, self.cols, result)
+        self.data = result
+        self.cols = other.cols
+
+        return self
 
 
 ###########################################################
@@ -181,8 +162,8 @@ class Matrix:
 # @param {Number} v
 # @return {*}
 ###########################################################
-def find_elem(m: Matrix, v: Number):
-    if m is None or m.data is None:
+def find_elem(m: Any, v: Union[int, float]):
+    if m is None or not isinstance(m, Matrix):
         print("Invalid param")
         return -1, -1
 
