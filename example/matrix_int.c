@@ -3,7 +3,7 @@
 @Date: 2026-06-15 21:56:03
 @LastEditors: HoodUSSEnterprise
 @LastEditTime: 2026-06-16 16:07:19
-@FilePath: \asm_matrix\example\matrix_int.c
+@FilePath: \asm_matrix_benchmark\example\matrix_int.c
 @Description:example of matrix int
 *************************************************************/
 
