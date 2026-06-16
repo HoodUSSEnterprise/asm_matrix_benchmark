@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+echo "Bulid this program is $(pwd)"
+
+mkdir -p build
+cd build || exit 1
+cmake .. || exit 1
+make || exit 1
+cd ..
+
+echo "Bulid Complete"
+
