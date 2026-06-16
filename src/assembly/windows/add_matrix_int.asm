@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-16 08:56:25
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-16 16:32:18
+; @LastEditTime: 2026-06-16 17:24:10
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\add_matrix_int.asm
 ; @Description: add matrix nasm code on windows
 ;-------------------------------------------------------------
@@ -79,6 +79,7 @@ add_matrix_int:
 
     ; malloc res->data
     mov rcx, rdi
+    shl rcx, 2 ; rcx *= 4
     call malloc
     test rax, rax
     jz malloc_fail_data
