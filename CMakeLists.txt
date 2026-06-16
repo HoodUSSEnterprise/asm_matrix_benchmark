@@ -26,17 +26,17 @@ include_directories(include)
 
 # 库的源文件（从对应平台目录读取）
 set(LIB_SOURCES_MATRIX_INT
-    src/${PLATFORM_DIR}/add_matrix_int.asm
-    # src/${PLATFORM_DIR}/find_matrix_int.asm
-    # src/${PLATFORM_DIR}/insert_matrix_int.asm
-    # src/${PLATFORM_DIR}/mul_matrix_int.asm
-    # src/${PLATFORM_DIR}/pop_matrix_int.asm
-    # src/${PLATFORM_DIR}/push_back_matrix_int.asm
-    # src/${PLATFORM_DIR}/remove_matrix_int.asm
-    # src/${PLATFORM_DIR}/replace_matrix_int.asm
-    # src/${PLATFORM_DIR}/reverse_matrix_int.asm
-    # src/${PLATFORM_DIR}/scale_matrix_int.asm
-    # src/${PLATFORM_DIR}/sub_matrix_int.asm
+    src/assembly/${PLATFORM_DIR}/add_matrix_int.asm
+    # src/assembly/${PLATFORM_DIR}/find_matrix_int.asm
+    # src/assembly/${PLATFORM_DIR}/insert_matrix_int.asm
+    # src/assembly/${PLATFORM_DIR}/mul_matrix_int.asm
+    # src/assembly/${PLATFORM_DIR}/pop_matrix_int.asm
+    # src/assembly/${PLATFORM_DIR}/push_back_matrix_int.asm
+    # src/assembly/${PLATFORM_DIR}/remove_matrix_int.asm
+    # src/assembly/${PLATFORM_DIR}/replace_matrix_int.asm
+    # src/assembly/${PLATFORM_DIR}/reverse_matrix_int.asm
+    # src/assembly/${PLATFORM_DIR}/scale_matrix_int.asm
+    # src/assembly/${PLATFORM_DIR}/sub_matrix_int.asm
 )
 
 # 创建库
@@ -50,17 +50,17 @@ add_executable(matrix_int example/matrix_int.c)
 target_link_libraries(matrix_int matrix_int_lib)
 
 # set(LIB_SOURCES_MATRIX_DOUBLE
-#     src/${PLATFORM_DIR}/add_matrix_double.asm
-#     src/${PLATFORM_DIR}/find_matrix_double.asm
-#     src/${PLATFORM_DIR}/insert_matrix_double.asm
-#     src/${PLATFORM_DIR}/mul_matrix_double.asm
-#     src/${PLATFORM_DIR}/pop_matrix_double.asm
-#     src/${PLATFORM_DIR}/push_back_matrix_double.asm
-#     src/${PLATFORM_DIR}/remove_matrix_double.asm
-#     src/${PLATFORM_DIR}/replace_matrix_double.asm
-#     src/${PLATFORM_DIR}/reverse_matrix_double.asm
-#     src/${PLATFORM_DIR}/scale_matrix_double.asm
-#     src/${PLATFORM_DIR}/sub_matrix_double.asm
+#     src/assembly/${PLATFORM_DIR}/add_matrix_double.asm
+#     src/assembly/${PLATFORM_DIR}/find_matrix_double.asm
+#     src/assembly/${PLATFORM_DIR}/insert_matrix_double.asm
+#     src/assembly/${PLATFORM_DIR}/mul_matrix_double.asm
+#     src/assembly/${PLATFORM_DIR}/pop_matrix_double.asm
+#     src/assembly/${PLATFORM_DIR}/push_back_matrix_double.asm
+#     src/assembly/${PLATFORM_DIR}/remove_matrix_double.asm
+#     src/assembly/${PLATFORM_DIR}/replace_matrix_double.asm
+#     src/assembly/${PLATFORM_DIR}/reverse_matrix_double.asm
+#     src/assembly/${PLATFORM_DIR}/scale_matrix_double.asm
+#     src/assembly/${PLATFORM_DIR}/sub_matrix_double.asm
 # )
 
 # add_library(matrix_lib_double ${LIB_SOURCES_MATRIX_DOUBLE})
@@ -72,17 +72,17 @@ target_link_libraries(matrix_int matrix_int_lib)
 
 # # Float 版本
 # set(LIB_SOURCES_MATRIX_FLOAT
-#     src/${PLATFORM_DIR}/add_matrix_float.asm
-#     src/${PLATFORM_DIR}/find_matrix_float.asm
-#     src/${PLATFORM_DIR}/insert_matrix_float.asm
-#     src/${PLATFORM_DIR}/mul_matrix_float.asm
-#     src/${PLATFORM_DIR}/pop_matrix_float.asm
-#     src/${PLATFORM_DIR}/push_back_matrix_float.asm
-#     src/${PLATFORM_DIR}/remove_matrix_float.asm
-#     src/${PLATFORM_DIR}/replace_matrix_float.asm
-#     src/${PLATFORM_DIR}/reverse_matrix_float.asm
-#     src/${PLATFORM_DIR}/scale_matrix_float.asm
-#     src/${PLATFORM_DIR}/sub_matrix_float.asm
+#     src/assembly/${PLATFORM_DIR}/add_matrix_float.asm
+#     src/assembly/${PLATFORM_DIR}/find_matrix_float.asm
+#     src/assembly/${PLATFORM_DIR}/insert_matrix_float.asm
+#     src/assembly/${PLATFORM_DIR}/mul_matrix_float.asm
+#     src/assembly/${PLATFORM_DIR}/pop_matrix_float.asm
+#     src/assembly/${PLATFORM_DIR}/push_back_matrix_float.asm
+#     src/assembly/${PLATFORM_DIR}/remove_matrix_float.asm
+#     src/assembly/${PLATFORM_DIR}/replace_matrix_float.asm
+#     src/assembly/${PLATFORM_DIR}/reverse_matrix_float.asm
+#     src/assembly/${PLATFORM_DIR}/scale_matrix_float.asm
+#     src/assembly/${PLATFORM_DIR}/sub_matrix_float.asm
 # )
 
 # add_library(matrix_float_lib ${LIB_SOURCES_MATRIX_FLOAT})
