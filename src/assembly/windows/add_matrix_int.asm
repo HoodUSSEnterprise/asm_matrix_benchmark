@@ -1,7 +1,9 @@
 ;-------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
-; @Date: 2026-06-15 20:54:20
-; @FilePath: \asm_matrix\src\windows\add_matrix_int.asm
+; @Date: 2026-06-16 08:56:25
+; @LastEditors: HoodUSSEnterprise
+; @LastEditTime: 2026-06-16 13:20:12
+; @FilePath: \asm_matrix\src\assembly\windows\add_matrix_int.asm
 ; @Description: This file is used to implement matrix addition.
 ;-------------------------------------------------------------
 
@@ -64,20 +66,51 @@ add_matrix_int:
     cmp r9, r11 ; m1->cols == m2->cols
     jne dimension_mismatch
 
+    ; save the data len in rdi
+    mov rdi, r8 ; rdi = m1->rows
+    imul rdi, r9 ; rdi = m1->rows * m1->cols
+
     ; malloc res 24 bytes
     mov rcx, 24 
     call malloc
     test rax, rax
-    jz malloc_fail
+    jz malloc_fail_struct
 
-    mov rdi, r8 ; rdi = m1->rows
-    imul rdi, r9 ; rdi = m1->rows * m1->cols
+    mov rbx, rax
+
+    ; malloc res->data
+    mov rcx, rdi
+    call malloc
+    test rax, rax
+    jz malloc_fail_data
+
+    mov [rbx], rax ; res->data = new malloc data
+    mov [rbx + 8], [r14 + 8] ; res->rows = m1->rows
+    mov [rbx + 8], [r14 + 8] ; res->cols = m1->cols
+    
+    ; add m1 and m2
     xor rcx, rcx ; i = 0
+    mov r13, [rbx]
+
+on_loop:
+    cmp rcx, rdi ; i < rdi
+    jge end
+
+    ; res->data[rcx] = m1->data[rcx] + m2->data[rcx]
+    mov r8d, [[r14] + rcx * 4]
 
 
-malloc_fail:
+malloc_fail_struct:
     lea rcx, [rel malloc_failed] ; rcx = malloc_failed
     call printf
+    mov rax, 0
+    jmp cleanup
+
+malloc_fail_data:
+    lea rcx, [rel malloc_failed] ; rcx = malloc_failed
+    call printf
+    mov rcx, rbx
+    call free
     mov rax, 0
     jmp cleanup
 
@@ -97,6 +130,9 @@ dimension_mismatch:
     call printf
     mov rax, 0 ; return NULL
     jmp cleanup
+
+end:
+    mov rax, rbx
 
 cleanup:
     add rsp, 32 ; restore stack pointer
