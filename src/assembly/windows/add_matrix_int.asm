@@ -2,11 +2,10 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-16 08:56:25
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-16 13:20:12
+; @LastEditTime: 2026-06-16 16:08:42
 ; @FilePath: \asm_matrix\src\assembly\windows\add_matrix_int.asm
-; @Description: This file is used to implement matrix addition.
+; @Description: add matrix nasm code on windows
 ;-------------------------------------------------------------
-
 
 global add_matrix_int
 extern printf
@@ -85,19 +84,27 @@ add_matrix_int:
     jz malloc_fail_data
 
     mov [rbx], rax ; res->data = new malloc data
-    mov [rbx + 8], [r14 + 8] ; res->rows = m1->rows
-    mov [rbx + 8], [r14 + 8] ; res->cols = m1->cols
+    mov r9, [r14 + 8] ; r9 = m1->data
+    mov r10, [r14 + 16] ; r10 = m2->data
+    mov [rbx + 8], r9 ; res->rows = m1->rows
+    mov [rbx + 16], r10 ; res->cols = m1->cols
     
     ; add m1 and m2
     xor rcx, rcx ; i = 0
     mov r13, [rbx]
+    mov r9, [r14] ; r9 = m1->data
+    mov r10, [r15] ; r10 = m2->data
 
 on_loop:
     cmp rcx, rdi ; i < rdi
     jge end
 
     ; res->data[rcx] = m1->data[rcx] + m2->data[rcx]
-    mov r8d, [[r14] + rcx * 4]
+    mov r8d, [r9 + rcx * 4]
+    add r8d, [r10 + rcx * 4]
+
+    mov [r13 + rcx * 4], r8d
+    jmp on_loop
 
 
 malloc_fail_struct:
