@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-16 08:56:25
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-16 16:08:42
+; @LastEditTime: 2026-06-16 16:32:18
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\add_matrix_int.asm
 ; @Description: add matrix nasm code on windows
 ;-------------------------------------------------------------
@@ -66,8 +66,8 @@ add_matrix_int:
     jne dimension_mismatch
 
     ; save the data len in rdi
-    mov rdi, r8 ; rdi = m1->rows
-    imul rdi, r9 ; rdi = m1->rows * m1->cols
+    mov rdi, r8     ; rdi = m1->rows
+    imul rdi, r9    ; rdi = m1->rows * m1->cols
 
     ; malloc res 24 bytes
     mov rcx, 24 
@@ -83,12 +83,12 @@ add_matrix_int:
     test rax, rax
     jz malloc_fail_data
 
-    mov [rbx], rax ; res->data = new malloc data
-    mov r9, [r14 + 8] ; r9 = m1->data
-    mov r10, [r14 + 16] ; r10 = m2->data
-    mov [rbx + 8], r9 ; res->rows = m1->rows
+    mov [rbx], rax      ; res->data = new malloc data
+    mov r9, [r14 + 8]   ; r9 = m1->rows
+    mov r10, [r14 + 16] ; r10 = m2->cols
+    mov [rbx + 8], r9   ; res->rows = m1->rows
     mov [rbx + 16], r10 ; res->cols = m1->cols
-    
+
     ; add m1 and m2
     xor rcx, rcx ; i = 0
     mov r13, [rbx]
@@ -104,6 +104,7 @@ on_loop:
     add r8d, [r10 + rcx * 4]
 
     mov [r13 + rcx * 4], r8d
+    inc rcx ; i++
     jmp on_loop
 
 
@@ -130,15 +131,16 @@ null_ptr:
 dimension_mismatch:
     lea rcx, [rel dim_mismatch] 
     mov rdx, [r14 + 8]          ; m1.rows
-    mov r8, [r14 + 16]       ; m1.cols
+    mov r8, [r14 + 16]          ; m1.cols
     mov r9, [r15 + 8]           ; m2.rows
-    mov r10, [r15 + 16]      ; m2.cols
-    mov [rsp + 32], r10     ; fifth parament
+    mov r10, [r15 + 16]         ; m2.cols
+    mov [rsp + 32], r10         ; fifth parament
     call printf
-    mov rax, 0 ; return NULL
+    mov rax, 0                  ; return NULL
     jmp cleanup
 
 end:
+
     mov rax, rbx
 
 cleanup:

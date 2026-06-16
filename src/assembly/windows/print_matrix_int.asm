@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-16 15:39:42
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-16 16:19:13
+; @LastEditTime: 2026-06-16 16:33:15
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\print_matrix_int.asm
 ; @Description: print matrix nasm code on windows
 ;-------------------------------------------------------------
@@ -75,10 +75,11 @@ loop2:
     add r11, r14  ; now r11 = i * matrix->cols + j
     mov rdx, [r15 + r11 * 4]
     call printf ; printf("%d ", matrix->data[i * matrix->cols + j]);
+    inc r14; j++
     jmp loop2
 
 change_line:
-
+    inc r13 ; i++
     ; print change line
     mov rcx, 10
     call putchar ; putchar('\n');
