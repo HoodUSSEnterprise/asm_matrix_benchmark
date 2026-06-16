@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-16 16:47:06
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-16 17:17:08
+; @LastEditTime: 2026-06-16 18:41:57
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\mul_matrix_int.asm
 ; @Description: mul matrix nasm code on windows
 ;-------------------------------------------------------------
@@ -55,15 +55,17 @@ mul_matrix_int:
     mov r15, rdx
 
     ; check dimension
+    mov r8, [r14 + 8]   ; m1->rows
     mov r9, [r14 + 16]  ; m1->cols
     mov r10, [r15 + 8]  ; m2->rows
+    mov r11, [r15 + 16] ; m2->cols
 
     cmp r9, r10 ; m1->cols == m2->rows
     jne dimension_mismatch
 
     ; save the data len in rdi
-    mov rdi, r9     ; rdi = m1->rows
-    imul rdi, r10    ; rdi = m1->rows * m1->cols
+    mov rdi, r8     ; rdi = m1->rows
+    imul rdi, r11    ; rdi = m1->rows * m2->cols
 
     ; malloc res 24 bytes
     mov rcx, 24 
@@ -75,6 +77,7 @@ mul_matrix_int:
 
     ; malloc res->data
     mov rcx, rdi
+    shl rcx, 2 ; rcx *= 4
     call malloc
     test rax, rax
     jz malloc_fail_data
@@ -93,13 +96,17 @@ mul_matrix_int:
     mov rcx, [r15 + 16] ; rcx = m2->cols
     mov r11, [rbx]
 
+    ; after this we don't use r14 and r15, so we use r14 and r15 directly
+    mov r14, [r14]
+    mov r15, [r15]
+
 loop1:
     cmp rdi, r9 ; i < result.rows
     jge end
     xor rsi, rsi
     loop2:
         cmp rsi, r10 ; j < result.cols
-        jge loop1
+        jge inc_rdi
         mov eax, 0
         xor r13, r13 ; k = 0
         loop3:
@@ -110,16 +117,17 @@ loop1:
             mov r8, rdi ; r8 = i
             imul r8, rdx ; r8 *= m1->cols
             add r8, r13 ; r8 += k
-            mov r9d, [r14 + r8 * 4] ; r9 = m1->data[i * m1->cols + k]
+            mov r12d, [r14 + r8 * 4] ; r9 = m1->data[i * m1->cols + k]
             
             ; calc second number
             mov r8, r13 ; r8 = k
             imul r8, rcx ; r8 *= m2->cols
             add r8, rsi ; r8 += j
-            imul r9d, [r15 + r8 * 4] ; r9 *= m2->data[k * m1->cols + j]
+            imul r12d, [r15 + r8 * 4] ; r9 *= m2->data[k * m1->cols + j]
 
             ; calc the sum
-            add eax, r9d
+            add eax, r12d
+            inc r13 ; k++
             jmp loop3
         
     give_value:
@@ -128,8 +136,12 @@ loop1:
         imul r8, r10 ; r8 *= res->cols
         add r8, rsi ; r8 += j
         mov [r11 + r8 * 4], eax ; res->data[i * res->cols + j] = sum
+        inc rsi ; j++
         jmp loop2
 
+inc_rdi:
+    inc rdi ; i++
+    jmp loop1
 
 malloc_fail_struct:
     lea rcx, [rel malloc_failed] ; rcx = malloc_failed
