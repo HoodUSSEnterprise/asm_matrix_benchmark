@@ -2,7 +2,7 @@
 # @Author: HoodUSSEnterprise
 # @Date: 2026-06-16 09:16:25
 # @LastEditors: HoodUSSEnterprise
-# @LastEditTime: 2026-06-16 15:00:24
+# @LastEditTime: 2026-06-16 15:31:41
 # @FilePath: \asm_matrix\src\Python\matrix.py
 # @Description: Python file of matrix
 ###########################################################
@@ -76,10 +76,16 @@ class Matrix:
     # @param {*} other
     # @return {*}
     ###########################################################
-    def __mul__(self, other: "Matrix | None") -> Optional["Matrix"]:
+    def __mul__(self, other: "Matrix| int | float | None") -> Optional["Matrix"]:
         if other is None:
             print("Invalid param")
             return None
+
+        if isinstance(other, int | float):
+            result: List[Union[int, float]] = [
+                self.data[i] * other for i in range(self.rows * self.cols)
+            ]
+            return Matrix(self.rows, self.cols, result)
 
         if self.cols != other.rows:
             print(
@@ -186,10 +192,16 @@ class Matrix:
     # @param {*} other
     # @return {*}
     ###########################################################
-    def __imul__(self, other: "Matrix | None"):
+    def __imul__(self, other: "Matrix |int | float | None"):
         if other is None:
             print("Invalid param")
             return None
+
+        if isinstance(other, int | float):
+            result: List[Union[int, float]] = [
+                self.data[i] * other for i in range(self.rows * self.cols)
+            ]
+            return Matrix(self.rows, self.cols, result)
 
         if self.cols != other.rows:
             print(
