@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-16 15:39:42
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-16 16:06:45
+; @LastEditTime: 2026-06-16 16:19:13
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\print_matrix_int.asm
 ; @Description: print matrix nasm code on windows
 ;-------------------------------------------------------------
@@ -14,6 +14,7 @@ extern putchar
 
 section .rodata
     matrix_info db "------------------matrix info------------------", 10, 0
+    invaild_param db "Invalid param!", 10, 0                                   ; invalid param msg
     matrix_size db "matrix size: (%d, %d)", 10, 0
     matrix_data db "matrix data:", 10, 0
     fmt db "%d ", 0
@@ -29,9 +30,13 @@ print_matrix:
     push r13
     push r14
     push r15
-    add rsp, 32 ;  allocate shadow space for printf and puts
+    sub rsp, 32 ;  allocate shadow space for printf and puts
 
     mov r12, rcx ; r12 = m
+
+    ; check matrix
+    test r12, r12
+    jz error
 
     ; print matrix_info
     lea rcx, [rel matrix_info] ; rcx = matrix_info
@@ -79,6 +84,11 @@ change_line:
     call putchar ; putchar('\n');
     jmp loop1
 
+error:
+    lea rcx, [rel invaild_param]
+    call printf
+    jmp end
+
 end:
     add rsp, 32 ; restore stack pointer
     ; restore callee_register
@@ -86,6 +96,6 @@ end:
     pop r14
     pop r13
     pop r12
+    pop rsi
     pop rdi
-    pop rbx
     ret
