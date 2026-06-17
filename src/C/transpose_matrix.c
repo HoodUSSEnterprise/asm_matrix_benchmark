@@ -18,13 +18,13 @@ MatrixInt *transpose_matrix_int(MatrixInt *m)
     // check m
     if (m == NULL)
     {
-        puts("Invalid param!");
+        fprintf(stderr, "Invalid param!\n");
         return NULL;
     }
     // check m->data
     if (m->data == NULL)
     {
-        puts("Invalid param!");
+        fprintf(stderr, "Invalid param!\n");
         return NULL;
     }
     // malloc res matrix
