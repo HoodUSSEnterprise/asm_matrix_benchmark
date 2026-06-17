@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-15 21:56:03
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-17 16:53:18
+@LastEditTime: 2026-06-17 17:02:48
 @FilePath: \asm_matrix_benchmark\example\matrix_int.c
 @Description:example of matrix int
 *************************************************************/
@@ -127,5 +127,6 @@ int main(void)
     print_matrix(&raw_matrix);
     MatrixInt *transpose_matrix = transpose_matrix_int(&raw_matrix);
     print_matrix(transpose_matrix);
+    puts("----------------------------------------------------------------------------------------");
     return 0;
 }
