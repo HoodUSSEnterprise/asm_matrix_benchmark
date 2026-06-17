@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-17 13:48:54
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-17 15:01:20
+; @LastEditTime: 2026-06-17 17:06:28
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\replace_matrix_int_by_value.asm
 ; @Description: replace matrix int by value nasm code on windows
 ;-------------------------------------------------------------
@@ -65,7 +65,7 @@ replace_matrix_int_by_value:
 loop_replace:
     mov rcx, r14
     mov edx, r15d
-    lea r8, [rsp]
+    lea r8, [rsp + 32]
     call find_elem_int
     cmp rax, 1
     je replace_data
