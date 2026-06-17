@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-15 21:56:03
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-17 13:15:02
+@LastEditTime: 2026-06-17 14:13:24
 @FilePath: \asm_matrix_benchmark\example\matrix_int.c
 @Description:example of matrix int
 *************************************************************/
@@ -78,6 +78,47 @@ int main(void)
     else
     {
         printf("No find elem : %d\n", find_elem);
+    }
+    puts("----------------------------------------------------------------------------------------");
+    puts("-------------------------------------replace matrix-------------------------------------");
+    int replace_data[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    MatrixInt replace_matrix = {replace_data, 5, 2};
+    Point replace_pos = {10, 2};
+    if (replace_matrix_int_by_coord(&replace_matrix, &replace_pos, 10))
+    {
+        print_matrix(&replace_matrix);
+    }
+    else
+    {
+        printf("(%zu, %zu) has out of index range\n", replace_pos.x, replace_pos.y);
+    }
+    replace_pos = (Point){0, 0};
+    if (replace_matrix_int_by_coord(&replace_matrix, &replace_pos, 10))
+    {
+        print_matrix(&replace_matrix);
+    }
+    else
+    {
+        printf("(%zu, %zu) has out of index range\n", replace_pos.x, replace_pos.y);
+    }
+    int old_data = 7;
+    int new_data = 10;
+    if (replace_matrix_int_by_value(&replace_matrix, old_data, new_data))
+    {
+        print_matrix(&replace_matrix);
+    }
+    else
+    {
+        printf("%d has not in matrix\n", old_data);
+    }
+    old_data = 20;
+    if (replace_matrix_int_by_value(&replace_matrix, old_data, new_data))
+    {
+        print_matrix(&replace_matrix);
+    }
+    else
+    {
+        printf("%d has not in matrix\n", old_data);
     }
     return 0;
 }
