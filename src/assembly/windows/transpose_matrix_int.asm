@@ -60,8 +60,8 @@ transpose_matrix_int:
     mov [rbx], rax      ; res->data = new malloc data
     mov r9, [r14 + 8]   ; r9 = m->rows
     mov r10, [r14 + 16] ; r10 = m->cols
-    mov [rbx + 8], r10  ; res->rows = m->rows
-    mov [rbx + 16], r9  ; res->cols = m->cols
+    mov [rbx + 8], r10  ; res->rows = m->cols
+    mov [rbx + 16], r9  ; res->cols = m->rows
 
     ; init loop conditino
     xor rdi, rdi ; i = 0
@@ -70,28 +70,28 @@ transpose_matrix_int:
     mov r12, [rbx] ; r13 = res->data
 
 loop1:
-    cmp rdi, r9 ; i < res->rows
+    cmp rdi, r10 ; i < res->rows
     jge end
     xor rsi ,rsi
     loop2:
-        cmp rsi, r10 ; j < res->cols
+        cmp rsi, r9 ; j < res->cols
         jge inc_rdi
 
         ; calc index of m
-        mov r8, r9      ; r8 = m->cols
+        mov r8, r10      ; r8 = m->cols
         imul r8, rsi    ; r8 *= j
         add r8, rdi     ; r8 += i
 
-        ; rcx = m->data[j * m->cols + i]
-        mov rcx, [r11 + r8 * 4]
+        ; ecx = m->data[j * m->cols + i]
+        mov ecx, [r11 + r8 * 4]
 
         ; calc index of res
-        mov r8, r10     ; r8 = res->cols
+        mov r8, r9     ; r8 = res->cols
         imul r8, rdi    ; r8 *= i
         add r8, rsi     ; r8 += j
 
         ; m->data[i * res->cols + j] = rcx
-        mov [r12 + r8 * 4], rcx
+        mov [r12 + r8 * 4], ecx
         inc rsi ; j++
         jmp loop2
 
