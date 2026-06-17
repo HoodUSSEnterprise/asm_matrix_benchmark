@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-16 08:56:25
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-16 21:45:57
+; @LastEditTime: 2026-06-17 15:55:06
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\add_matrix_int.asm
 ; @Description: add matrix nasm code on windows
 ;-------------------------------------------------------------
@@ -86,7 +86,7 @@ add_matrix_int:
 
     mov [rbx], rax      ; res->data = new malloc data
     mov r9, [r14 + 8]   ; r9 = m1->rows
-    mov r10, [r14 + 16] ; r10 = m2->cols
+    mov r10, [r14 + 16] ; r10 = m1->cols
     mov [rbx + 8], r9   ; res->rows = m1->rows
     mov [rbx + 16], r10 ; res->cols = m1->cols
 
