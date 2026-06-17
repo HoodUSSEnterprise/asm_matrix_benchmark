@@ -40,6 +40,7 @@ set(LIB_SOURCES_MATRIX_INT
     # src/assembly/${PLATFORM_DIR}/reverse_matrix_int.asm
     src/assembly/${PLATFORM_DIR}/scale_matrix_int.asm
     src/assembly/${PLATFORM_DIR}/sub_matrix_int.asm
+    src/assembly/${PLATFORM_DIR}/transpose_matrix_int.asm
 )
 
 # 创建库
@@ -67,6 +68,7 @@ set(LIB_SOURCES_MATRIX_C
     # src/C/reverse_matrix.c
     src/C/scale_matrix.c
     src/C/sub_matrix.c
+    src/C/transpose_matrix.c
 )
 
 # 创建库

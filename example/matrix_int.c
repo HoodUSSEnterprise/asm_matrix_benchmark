@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-15 21:56:03
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-17 14:13:24
+@LastEditTime: 2026-06-17 16:53:18
 @FilePath: \asm_matrix_benchmark\example\matrix_int.c
 @Description:example of matrix int
 *************************************************************/
@@ -120,5 +120,12 @@ int main(void)
     {
         printf("%d has not in matrix\n", old_data);
     }
+    puts("----------------------------------------------------------------------------------------");
+    puts("------------------------------------transpose matrix------------------------------------");
+    int transpose_data[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    MatrixInt raw_matrix = {transpose_data, 5, 2};
+    print_matrix(&raw_matrix);
+    MatrixInt *transpose_matrix = transpose_matrix_int(&raw_matrix);
+    print_matrix(transpose_matrix);
     return 0;
 }
