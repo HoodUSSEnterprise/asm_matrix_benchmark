@@ -2,7 +2,7 @@
 # @Author: HoodUSSEnterprise
 # @Date: 2026-06-16 09:16:25
 # @LastEditors: HoodUSSEnterprise
-# @LastEditTime: 2026-06-17 09:20:52
+# @LastEditTime: 2026-06-17 10:04:13
 # @FilePath: \asm_matrix_benchmark\src\Python\matrix.py
 # @Description: Python file of matrix
 ###########################################################
@@ -38,7 +38,7 @@ class Matrix:
 
         if self.rows != other.rows or self.cols != other.cols:
             print(
-                f"Dimension mismatch! m1({self.rows}, {other.rows}) vs m2({self.cols}, {other.cols})"
+                f"Dimension mismatch! m1({self.rows}, {self.cols}) vs m2({other.rows}, {other.cols})"
             )
             return None
 
@@ -59,7 +59,7 @@ class Matrix:
 
         if self.rows != other.rows or self.cols != other.cols:
             print(
-                f"Dimension mismatch! m1({self.rows}, {other.rows}) vs m2({self.cols}, {other.cols})"
+                f"Dimension mismatch! m1({self.rows}, {self.cols}) vs m2({other.rows}, {other.cols})"
             )
             return None
 
@@ -88,7 +88,7 @@ class Matrix:
 
         if self.cols != other.rows:
             print(
-                f"Dimension mismatch! m1({self.rows}, {other.rows}) vs m2({self.cols}, {other.cols})"
+                f"Dimension mismatch! m1({self.rows}, {self.cols}) vs m2({other.rows}, {other.cols})"
             )
             return None
 
@@ -116,7 +116,7 @@ class Matrix:
 
         if self.rows != other.rows or self.cols != other.cols:
             print(
-                f"Dimension mismatch! m1({self.rows}, {other.rows}) vs m2({self.cols}, {other.cols})"
+                f"Dimension mismatch! m1({self.rows}, {self.cols}) vs m2({other.rows}, {other.cols})"
             )
             return False
 
@@ -156,7 +156,7 @@ class Matrix:
 
         if self.rows != other.rows or self.cols != other.cols:
             print(
-                f"Dimension mismatch! m1({self.rows}, {other.rows}) vs m2({self.cols}, {other.cols})"
+                f"Dimension mismatch! m1({self.rows}, {self.cols}) vs m2({other.rows}, {other.cols})"
             )
             return self
 
@@ -177,7 +177,7 @@ class Matrix:
 
         if self.rows != other.rows or self.cols != other.cols:
             print(
-                f"Dimension mismatch! m1({self.rows}, {other.rows}) vs m2({self.cols}, {other.cols})"
+                f"Dimension mismatch! m1({self.rows}, {self.cols}) vs m2({other.rows}, {other.cols})"
             )
             return self
 
@@ -204,7 +204,7 @@ class Matrix:
 
         if self.cols != other.rows:
             print(
-                f"Dimension mismatch! m1({self.rows}, {other.rows}) vs m2({self.cols}, {other.cols})"
+                f"Dimension mismatch! m1({self.rows}, {self.cols}) vs m2({other.rows}, {other.cols})"
             )
             return None
 
@@ -299,9 +299,35 @@ def replace_elem(
 
 def cat_matrix(m1: "Matrix", m2: "Matrix", axis: int) -> "Matrix | None":
     if axis == 0:
-        pass
+        if m1.cols != m2.cols:
+            print(
+                f"Dimension mismatch! m1({m1.rows}, {m1.rows}) vs m2({m2.cols}, {m2.cols})"
+            )
+            return None
+        data: List[int | float] = [0 for _ in range((m1.rows + m2.rows) * m1.cols)]
+        for i in range(m1.rows + m2.rows):
+            for j in range(m1.cols):
+                if i < m1.rows:
+                    data[i * m1.cols + j] = m1.data[i * m1.cols + j]
+                else:
+                    data[i * m1.cols + j] = m2.data[(i - m1.rows) * m1.cols + j]
+        return Matrix(m1.rows + m2.rows, m1.cols, data)
+
     elif axis == 1:
-        pass
+        if m1.rows != m2.rows:
+            print(
+                f"Dimension mismatch! m1({m1.rows}, {m1.rows}) vs m2({m2.cols}, {m2.cols})"
+            )
+            return None
+        data: List[int | float] = [0 for _ in range((m1.rows + m2.rows) * m1.cols)]
+        res_col = m1.cols + m2.cols
+        for i in range(m1.rows):
+            for j in range(res_col):
+                if j < m1.cols:
+                    data[i * res_col + j] = m1.data[i * m1.cols + j]
+                else:
+                    data[i * res_col + j] = m2.data[i * m2.cols + j - m1.cols]
+        return Matrix(m1.rows, res_col, data)
     else:
         print("Wrong params, axis must be 0 or 1")
 
