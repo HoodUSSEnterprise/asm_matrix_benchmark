@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-15 21:56:03
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-16 23:01:39
+@LastEditTime: 2026-06-17 13:15:02
 @FilePath: \asm_matrix_benchmark\example\matrix_int.c
 @Description:example of matrix int
 *************************************************************/
@@ -53,5 +53,31 @@ int main(void)
     MatrixInt cat_matrix4 = {cat_data2, 3, 2};
     m = cat_matrix_int(&cat_matrix3, &cat_matrix4, 1);
     print_matrix(m);
+    puts("----------------------------------------------------------------------------------------");
+    puts("--------------------------------------find matrix---------------------------------------");
+    int find_data[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    MatrixInt find_matrix = {find_data, 5, 2};
+    print_matrix(&find_matrix);
+    Point p = {0, 0};
+    int find_elem = 5;
+    if (find_elem_int(&find_matrix, find_elem, &p))
+    {
+        puts("find elem");
+        printf("Position is (%zu, %zu)\n", p.x, p.y);
+    }
+    else
+    {
+        printf("No find elem : %d\n", find_elem);
+    }
+    find_elem = 11;
+    if (find_elem_int(&find_matrix, find_elem, &p))
+    {
+        puts("find elem");
+        printf("Position is (%zu, %zu)\n", p.x, p.y);
+    }
+    else
+    {
+        printf("No find elem : %d\n", find_elem);
+    }
     return 0;
 }
