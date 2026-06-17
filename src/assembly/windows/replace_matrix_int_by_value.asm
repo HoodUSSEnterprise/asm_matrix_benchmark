@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-17 13:48:54
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-17 14:04:34
+; @LastEditTime: 2026-06-17 15:01:20
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\replace_matrix_int_by_value.asm
 ; @Description: replace matrix int by value nasm code on windows
 ;-------------------------------------------------------------
@@ -28,16 +28,14 @@ replace_matrix_int_by_value:
     push r13
     push r14
     push r15
-    sub rsp, 32 ; allocate shadow space for puts
+    sub rsp, 48 ; allocate shadow space for puts
 
     mov r14, rcx ; r14 = m
     mov r15d, edx ; r15d = old_data
     mov r13d, r8d ; r13d = new_data
 
-    ; check m and pos
+    ; check m
     test r14, r14
-    jz null_ptr
-    test r15, r15
     jz null_ptr
 
     mov r14, [rcx] ; r14 = m->data
@@ -51,23 +49,23 @@ replace_matrix_int_by_value:
 
     mov rcx, r14
     mov edx, r15d
-    mov r8, 0
+    lea r8, [rsp + 32]
     call find_elem_int
     cmp rax, 0
-    jmp no_find
+    je no_find
 
     mov rsi, [r14] ; rsi = m->data
     ; calc index of array
     mov r10, [r14 + 16] ; r10 = m->cols
-    imul r10, [r8] ; pos.x * m->cols
-    add r10, [r8 + 8] ; pos.x * m->cols + pos.y
+    imul r10, [rsp + 32] ; pos.x * m->cols
+    add r10, [rsp + 40] ; pos.x * m->cols + pos.y
 
     mov [rsi + r10 * 4], r13d ; m->data[pos.x * m->cols + pos.y] = new_data
 
 loop_replace:
     mov rcx, r14
     mov edx, r15d
-    mov r8, 0
+    lea r8, [rsp]
     call find_elem_int
     cmp rax, 1
     je replace_data
@@ -76,8 +74,8 @@ loop_replace:
 replace_data:
     ; calc index of array
     mov r10, [r14 + 16] ; r10 = m->cols
-    imul r10, [r8] ; pos.x * m->cols
-    add r10, [r8 + 8] ; pos.x * m->cols + pos.y
+    imul r10, [rsp + 32] ; pos.x * m->cols
+    add r10, [rsp + 40] ; pos.x * m->cols + pos.y
 
     mov [rsi + r10 * 4], r13d ; m->data[pos.x * m->cols + pos.y] = new_data
     jmp loop_replace
@@ -96,7 +94,7 @@ end:
     mov rax, 1
 
 cleanup:
-    add rsp, 32 ; restore stack pointer
+    add rsp, 48 ; restore stack pointer
     ; restore callee_register
     pop r15
     pop r14
