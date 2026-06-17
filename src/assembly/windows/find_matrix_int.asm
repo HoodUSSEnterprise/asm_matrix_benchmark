@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-17 10:39:56
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-17 13:16:59
+; @LastEditTime: 2026-06-17 14:45:30
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\find_matrix_int.asm
 ; @Description: find elem position in matrix nasm code on windows
 ;-------------------------------------------------------------
@@ -12,6 +12,7 @@ extern malloc
 
 section .rodata
     invalid_param db "Invalid param!", 0                                   ; invalid param msg
+    malloc_failed db "Memory allocation failed", 0                         ; malloc failed msg
 
 section .text
 
@@ -59,6 +60,8 @@ malloc_pos:
     ; sizeof(Point) = 16
     mov rcx, 16
     call malloc
+    test rax, rax
+    jz malloc_fail
     mov r13, rax
 
 init_loop:
@@ -81,7 +84,7 @@ loop1:
         imul r10, rdi ; r10 *= i
         add r10, rsi ; r10 += j
 
-        cmp [r14 + r10 * 4], r15d
+        cmp [r11 + r10 * 4], r15d
         je end
         inc rsi ; j++
         jmp loop2
@@ -92,6 +95,12 @@ inc_rdi:
 
 null_ptr:
     lea rcx, [rel invalid_param] ; rcx = invalid_param
+    call puts
+    mov rax, 0 ; return NULL
+    jmp cleanup
+
+malloc_fail:
+    lea rcx, [rel malloc_failed] ; rcx = invalid_param
     call puts
     mov rax, 0 ; return NULL
     jmp cleanup
