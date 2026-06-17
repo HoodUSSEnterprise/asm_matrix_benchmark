@@ -20,13 +20,13 @@ bool find_elem_int(MatrixInt *m, int elem, Point *pos)
     // check m
     if (m == NULL)
     {
-        puts("Invalid param!");
+        fprintf(stderr, "Invalid param!\n");
         return false;
     }
     // check m->data
     if (m->data == NULL)
     {
-        puts("Invalid param!");
+        fprintf(stderr, "Invalid param!\n");
         return false;
     }
     for (size_t i = 0; i < m->rows; i++)
