@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-17 17:22:48
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-17 20:15:53
+; @LastEditTime: 2026-06-17 20:21:18
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\special_matrix_int.asm
 ; @Description: some special matrix like identity matrix, diag matrix,
 ; eye_matrix and zero matrix nasm code on windows
@@ -143,18 +143,18 @@ diag_matrix_int:
 
     ; init res param
     mov [rbx], rax          ; res->data = new malloc data
-    mov [rbx + 8], r14      ; res->rows = len
-    mov [rbx + 16], r14     ; res->cols = len
+    mov [rbx + 8], r15      ; res->rows = len
+    mov [rbx + 16], r15     ; res->cols = len
 
     ; set data 
     xor rdi, rdi ; i = 0
     mov rsi, [rbx] ; rsi = res->data
 
 loopdiag:
-    cmp rdi, r14 ; i < len
+    cmp rdi, r15 ; i < len
     jge end
 
-    mov r8, r14 ; r8 = len
+    mov r8, r15 ; r8 = len
     imul r8, rdi ; r8 *= i
     add r8, rdi ; r8 += i
 
