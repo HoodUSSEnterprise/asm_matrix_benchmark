@@ -20,13 +20,13 @@ bool replace_matrix_int_by_coord(MatrixInt *m, Point *pos, int new_data)
     // check m and pos
     if (m == NULL || pos == NULL)
     {
-        puts("Invalid param!");
+        fprintf(stderr, "Invalid param!\n");
         return false;
     }
     // check m->data
     if (m->data == NULL)
     {
-        puts("Invalid param!");
+        fprintf(stderr, "Invalid param!\n");
         return false;
     }
     size_t x = pos->x;
@@ -54,13 +54,13 @@ bool replace_matrix_int_by_value(MatrixInt *m, int old_data, int new_data)
     // check m
     if (m == NULL)
     {
-        puts("Invalid param!");
+        fprintf(stderr, "Invalid param!\n");
         return false;
     }
     // check m->data
     if (m->data == NULL)
     {
-        puts("Invalid param!");
+        fprintf(stderr, "Invalid param!\n");
         return false;
     }
     // replace value with while loop
