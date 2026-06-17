@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-15 21:56:03
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-16 18:51:42
+@LastEditTime: 2026-06-16 23:01:39
 @FilePath: \asm_matrix_benchmark\example\matrix_int.c
 @Description:example of matrix int
 *************************************************************/
@@ -40,6 +40,18 @@ int main(void)
     MatrixInt scale = {scale_data, 2, 5};
     print_matrix(&scale);
     m = scale_matrix_int(&scale, 2);
+    print_matrix(m);
+    puts("----------------------------------------------------------------------------------------");
+    puts("---------------------------------------cat matrix---------------------------------------");
+    int cat_data1[3] = {1, 2, 3};
+    int cat_data2[6] = {4, 5, 6, 7, 8, 9};
+    MatrixInt cat_matrix1 = {cat_data1, 1, 3};
+    MatrixInt cat_matrix2 = {cat_data2, 2, 3};
+    m = cat_matrix_int(&cat_matrix1, &cat_matrix2, 0);
+    print_matrix(m);
+    MatrixInt cat_matrix3 = {cat_data1, 3, 1};
+    MatrixInt cat_matrix4 = {cat_data2, 3, 2};
+    m = cat_matrix_int(&cat_matrix3, &cat_matrix4, 1);
     print_matrix(m);
     return 0;
 }

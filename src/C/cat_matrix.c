@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-16 20:59:10
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-16 23:01:04
+@LastEditTime: 2026-06-17 09:09:23
 @FilePath: \asm_matrix_benchmark\src\C\cat_matrix.c
 @Description: cat matrix
 *************************************************************/
@@ -110,7 +110,6 @@ MatrixInt *cat_matrix_int(MatrixInt *m1, MatrixInt *m2, int axis)
                 else
                 {
                     res->data[i * res->cols + j] = m2->data[i * m2->cols + j - m1->cols];
-                    printf("i * res->cols + j = %zu \t i * m2->cols + j - m1->cols = %zu \n", i * res->cols + j, i * m2->cols + j - m1->cols);
                 }
             }
         }
