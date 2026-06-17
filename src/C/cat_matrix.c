@@ -20,13 +20,13 @@ MatrixInt *cat_matrix_int(MatrixInt *m1, MatrixInt *m2, int axis)
     // check m1 and m2
     if (m1 == NULL || m2 == NULL)
     {
-        puts("Invalid param!");
+        fprintf(stderr, "Invalid param!\n");
         return NULL;
     }
     // check m1->data and m2->data
     if (m1->data == NULL || m2->data == NULL)
     {
-        puts("Invalid param!");
+        fprintf(stderr, "Invalid param!\n");
         return NULL;
     }
     // vertical, m1->cols must equal to m2->cols
