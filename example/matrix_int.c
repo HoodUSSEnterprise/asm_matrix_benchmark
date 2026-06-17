@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-15 21:56:03
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-17 17:02:48
+@LastEditTime: 2026-06-17 20:13:29
 @FilePath: \asm_matrix_benchmark\example\matrix_int.c
 @Description:example of matrix int
 *************************************************************/
@@ -128,5 +128,15 @@ int main(void)
     MatrixInt *transpose_matrix = transpose_matrix_int(&raw_matrix);
     print_matrix(transpose_matrix);
     puts("----------------------------------------------------------------------------------------");
+    puts("-------------------------------------special matrix-------------------------------------");
+    MatrixInt *identity = identity_matrix_int(6);
+    print_matrix(identity);
+    int diag_data[5] = {1, 2, 3, 4, 5};
+    MatrixInt *diag = diag_matrix_int(diag_data, 5);
+    print_matrix(diag);
+    MatrixInt *eye = eye_matrix_int(3, 4);
+    print_matrix(eye);
+    MatrixInt *zero = zero_matrix_int(10, 10);
+    print_matrix(zero);
     return 0;
 }
