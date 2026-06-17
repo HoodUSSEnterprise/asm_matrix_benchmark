@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-17 17:22:48
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-17 20:21:18
+; @LastEditTime: 2026-06-17 20:27:23
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\special_matrix_int.asm
 ; @Description: some special matrix like identity matrix, diag matrix,
 ; eye_matrix and zero matrix nasm code on windows
@@ -183,10 +183,10 @@ eye_matrix_int:
     mov r15d, edx ; r15d = cols
 
     ; check param rows
-    cmp r14, 0
+    cmp r14d, 0
     jle null_ptr
     ; check param cols
-    cmp r15, 0
+    cmp r15d, 0
     jle null_ptr
 
     ; save the data len in edi
@@ -237,11 +237,11 @@ loopeye:
     cmp rdi, r9 ; i < min(rows, cols)
     jge end
 
-    mov r8, r9 ; r8 = min(rows, cols)
+    mov r8, r15 ; r8 = cols
     imul r8, rdi ; r8 *= i
     add r8, rdi ; r8 += i
 
-    mov [rsi + r8 * 4], 1 ; res->data[i * min(rows, cols) + i] = 1
+    mov [rsi + r8 * 4], 1 ; res->data[i * cols + i] = 1
     inc rdi
     jmp loopeye
 
