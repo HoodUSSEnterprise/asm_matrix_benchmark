@@ -28,7 +28,7 @@ include_directories(include)
 set(LIB_SOURCES_MATRIX_INT
     src/assembly/${PLATFORM_DIR}/add_matrix_int.asm
     src/assembly/${PLATFORM_DIR}/cat_matrix_int.asm
-    # src/assembly/${PLATFORM_DIR}/find_matrix_int.asm
+    src/assembly/${PLATFORM_DIR}/find_matrix_int.asm
     # src/assembly/${PLATFORM_DIR}/insert_matrix_int.asm
     src/assembly/${PLATFORM_DIR}/mul_matrix_int.asm
     # src/assembly/${PLATFORM_DIR}/pop_matrix_int.asm
@@ -55,7 +55,7 @@ target_link_libraries(matrix_int matrix_int_lib)
 set(LIB_SOURCES_MATRIX_C
     src/C/add_matrix.c
     src/C/cat_matrix.c
-    # src/C/find_matrix.c
+    src/C/find_matrix.c
     # src/C/insert_matrix.c
     src/C/mul_matrix.c
     # src/C/pop_matrix.c
