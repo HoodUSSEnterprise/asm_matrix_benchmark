@@ -1,3 +1,11 @@
+###########################################################
+# @Author: HoodUSSEnterprise
+# @Date: 2026-06-16 20:18:25
+# @LastEditors: HoodUSSEnterprise
+# @LastEditTime: 2026-06-16 20:48:47
+# @FilePath: \asm_matrix_benchmark\src\benchmark\bench_python.py
+# @Description: test four language run time
+###########################################################
 #!/usr/bin/env python3
 """
 Simple Python benchmarking harness for functions in src/Python/matrix.py
@@ -13,6 +21,7 @@ import statistics
 
 import os
 import sys
+from typing import List
 
 # Ensure project root is on sys.path so `src` package can be imported when
 # running this script directly (e.g. `python src/benchmark/bench_python.py`).
@@ -27,8 +36,8 @@ Matrix = matrix_module.Matrix
 
 
 def make_matrices(n: int, m: int, fill: int = 1):
-    a = [fill for _ in range(n * m)]
-    b = [fill + 1 for _ in range(n * m)]
+    a: List[int | float] = [fill for _ in range(n * m)]
+    b: List[int | float] = [fill + 1 for _ in range(n * m)]
     return Matrix(n, m, a), Matrix(n, m, b)
 
 
