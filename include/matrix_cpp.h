@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-16 19:02:24
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-16 19:51:44
+@LastEditTime: 2026-06-17 09:18:20
 @FilePath: \asm_matrix_benchmark\include\matrix_cpp.h
 @Description: matrix C++ head file
 *************************************************************/
@@ -35,6 +35,8 @@ public:
     MatrixInt mul_matrix(MatrixInt m1, MatrixInt m2);
 
     MatrixInt scale_matrix(MatrixInt m1, int m2);
+
+    MatrixInt cat_matrix(MatrixInt m, int axis);
 
     void print_matrix();
 };

@@ -2,7 +2,7 @@
 # @Author: HoodUSSEnterprise
 # @Date: 2026-06-16 09:16:25
 # @LastEditors: HoodUSSEnterprise
-# @LastEditTime: 2026-06-16 20:26:09
+# @LastEditTime: 2026-06-17 09:20:52
 # @FilePath: \asm_matrix_benchmark\src\Python\matrix.py
 # @Description: Python file of matrix
 ###########################################################
@@ -11,7 +11,6 @@ from typing import Any, List, Optional, Union
 
 
 class Matrix:
-
     ###########################################################
     # @description: init matrix
     # @param {*} self
@@ -298,6 +297,15 @@ def replace_elem(
         m.data[x * m.cols + y] = new_value
 
 
+def cat_matrix(m1: "Matrix", m2: "Matrix", axis: int) -> "Matrix | None":
+    if axis == 0:
+        pass
+    elif axis == 1:
+        pass
+    else:
+        print("Wrong params, axis must be 0 or 1")
+
+
 def _print_sep(title: str) -> None:
     print(title)
 
@@ -308,30 +316,44 @@ def demo_examples() -> None:
     v2 = Matrix(1, 4, data.copy())
     v3 = Matrix(2, 2, data.copy())
 
-    _print_sep("---------------------------------------add matrix---------------------------------------")
+    _print_sep(
+        "---------------------------------------add matrix---------------------------------------"
+    )
     v = v1 + v2
     m = v1 + v3
     print(v)
     print(m)
-    _print_sep("----------------------------------------------------------------------------------------")
+    _print_sep(
+        "----------------------------------------------------------------------------------------"
+    )
 
-    _print_sep("---------------------------------------sub matrix---------------------------------------")
+    _print_sep(
+        "---------------------------------------sub matrix---------------------------------------"
+    )
     v = v1 - v2
     m = v1 - v3
     print(v)
     print(m)
-    _print_sep("----------------------------------------------------------------------------------------")
+    _print_sep(
+        "----------------------------------------------------------------------------------------"
+    )
 
-    _print_sep("---------------------------------------mul matrix---------------------------------------")
+    _print_sep(
+        "---------------------------------------mul matrix---------------------------------------"
+    )
     mul_data: List[int | float] = [1, 2, 3]
     mul1 = Matrix(3, 1, mul_data.copy())
     mul2 = Matrix(1, 3, mul_data.copy())
     m = mul1 * mul2
     print(m)
-    _print_sep("----------------------------------------------------------------------------------------")
+    _print_sep(
+        "----------------------------------------------------------------------------------------"
+    )
 
-    _print_sep("--------------------------------------scale matrix--------------------------------------")
-    scale_data: List[int | float] = [1,2,3,4,5,6,7,8,9,10]
+    _print_sep(
+        "--------------------------------------scale matrix--------------------------------------"
+    )
+    scale_data: List[int | float] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     scale = Matrix(2, 5, scale_data.copy())
     print(scale)
     m = scale * 2
