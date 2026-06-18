@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-15 21:56:03
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-17 20:13:29
+@LastEditTime: 2026-06-18 23:22:29
 @FilePath: \asm_matrix_benchmark\example\matrix_int.c
 @Description:example of matrix int
 *************************************************************/
@@ -138,5 +138,22 @@ int main(void)
     print_matrix(eye);
     MatrixInt *zero = zero_matrix_int(10, 10);
     print_matrix(zero);
+    puts("----------------------------------------------------------------------------------------");
+    puts("-------------------------------------rank and trace-------------------------------------");
+    int rank_data[9] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+    MatrixInt rank_matrix = {rank_data, 3, 3};
+    int rank = 0;
+    if (rank_matrix_int(&rank_matrix, &rank))
+    {
+        print_matrix(&rank_matrix);
+        printf("matrix rank = %d \n", rank);
+    }
+    MatrixInt trace_matrix = {rank_data, 3, 3};
+    int trace = 0;
+    if (trace_matrix_int(&trace_matrix, &trace))
+    {
+        print_matrix(&trace_matrix);
+        printf("matrix trace = %d \n", trace);
+    }
     return 0;
 }

@@ -24,7 +24,7 @@ set(CMAKE_C_FLAGS_RELEASE "-O2 -DNDEBUG")
 
 include_directories(include)
 
-# 库的源文件（从对应平台目录读取）
+# Assembly code 
 set(LIB_SOURCES_MATRIX_INT
     src/assembly/${PLATFORM_DIR}/add_matrix_int.asm
     src/assembly/${PLATFORM_DIR}/cat_matrix_int.asm
@@ -35,6 +35,7 @@ set(LIB_SOURCES_MATRIX_INT
     # src/assembly/${PLATFORM_DIR}/push_back_matrix_int.asm
     src/assembly/${PLATFORM_DIR}/print_matrix_int.asm
     # src/assembly/${PLATFORM_DIR}/remove_matrix_int.asm
+    src/assembly/${PLATFORM_DIR}/rank_trace_matrix_int.asm
     src/assembly/${PLATFORM_DIR}/replace_matrix_int_by_coord.asm
     src/assembly/${PLATFORM_DIR}/replace_matrix_int_by_value.asm
     # src/assembly/${PLATFORM_DIR}/reverse_matrix_int.asm
@@ -54,7 +55,7 @@ target_link_libraries(matrix_int_lib ${EXTRA_LIBS})
 add_executable(matrix_int example/matrix_int.c)
 target_link_libraries(matrix_int matrix_int_lib)
 
-# 库的源文件（从对应平台目录读取）
+# C code
 set(LIB_SOURCES_MATRIX_C
     src/C/add_matrix.c
     src/C/cat_matrix.c
@@ -65,6 +66,7 @@ set(LIB_SOURCES_MATRIX_C
     # src/C/push_back_matrix.c
     src/C/print_matrix.c
     # src/C/remove_matrix.c
+    src/C/rank_trace_matrix.c
     src/C/replace_matrix.c
     # src/C/reverse_matrix.c
     src/C/scale_matrix.c

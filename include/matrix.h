@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-15 20:51:29
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-17 17:22:07
+@LastEditTime: 2026-06-18 23:16:17
 @FilePath: \asm_matrix_benchmark\include\matrix.h
 @Description:This is a header file that consolidates all matrix operations.
 *************************************************************/
@@ -16,6 +16,7 @@
 #include "find_matrix.h"
 #include "mul_matrix.h"
 #include "print_matrix.h"
+#include "rank_trace_matrix.h"
 #include "replace_matrix.h"
 #include "scale_matrix.h"
 #include "special_matrix.h"
