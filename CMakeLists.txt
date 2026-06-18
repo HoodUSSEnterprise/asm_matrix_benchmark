@@ -35,13 +35,14 @@ set(LIB_SOURCES_MATRIX_INT
     # src/assembly/${PLATFORM_DIR}/push_back_matrix_int.asm
     src/assembly/${PLATFORM_DIR}/print_matrix_int.asm
     # src/assembly/${PLATFORM_DIR}/remove_matrix_int.asm
-    src/assembly/${PLATFORM_DIR}/rank_trace_matrix_int.asm
+    src/assembly/${PLATFORM_DIR}/rank_matrix_int.asm
     src/assembly/${PLATFORM_DIR}/replace_matrix_int_by_coord.asm
     src/assembly/${PLATFORM_DIR}/replace_matrix_int_by_value.asm
     # src/assembly/${PLATFORM_DIR}/reverse_matrix_int.asm
     src/assembly/${PLATFORM_DIR}/scale_matrix_int.asm
     src/assembly/${PLATFORM_DIR}/special_matrix_int.asm
     src/assembly/${PLATFORM_DIR}/sub_matrix_int.asm
+    src/assembly/${PLATFORM_DIR}/trace_matrix_int.asm
     src/assembly/${PLATFORM_DIR}/transpose_matrix_int.asm
 )
 
