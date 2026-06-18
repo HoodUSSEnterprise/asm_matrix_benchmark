@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-17 20:28:22
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-18 23:13:58
+@LastEditTime: 2026-06-18 23:31:32
 @FilePath: \asm_matrix_benchmark\src\C\rank_trace_matrix.c
 @Description: rank and trace of matrix
 *************************************************************/
@@ -17,6 +17,12 @@
  ************************************************************/
 bool rank_matrix_int(MatrixInt *m, int *rank)
 {
+    // check m and m->data
+    if (m == NULL || m->data == NULL)
+    {
+        fprintf(stderr, "Invalid param!\n");
+        return NULL;
+    }
     if (m->rows > m->cols)
     {
         // malloc new res
@@ -128,11 +134,19 @@ bool rank_matrix_int(MatrixInt *m, int *rank)
  ************************************************************/
 bool trace_matrix_int(MatrixInt *m, int *trace)
 {
+    // check m and m->data
+    if (m == NULL || m->data == NULL)
+    {
+        fprintf(stderr, "Invalid param!\n");
+        return NULL;
+    }
+    // check is or not a square
     if (m->cols != m->rows)
     {
         fprintf(stderr, "It is not a square!\n");
         return false;
     }
+    // calc trace
     int sum = 0;
     for (size_t i = 0; i < m->rows; i++)
     {
