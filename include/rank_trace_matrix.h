@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-17 19:37:37
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-17 19:38:28
+@LastEditTime: 2026-06-18 23:18:30
 @FilePath: \asm_matrix_benchmark\include\rank_trace_matrix.h
 @Description:  rank and trace of matrix
 *************************************************************/
@@ -10,19 +10,23 @@
 #define RANK_TRACE_MATRIX_H
 
 #include "base_matrix.h"
+#include "transpose_matrix.h"
+#include <stdbool.h>
 
 /***********************************************************
 @description: rank of matrix
 @param {MatrixInt} *m
+@param {int} *trace
 @return {*}
  ************************************************************/
-int rank_matrix(MatrixInt *m);
+bool rank_matrix_int(MatrixInt *m, int *rank);
 
 /***********************************************************
 @description: trace of matrix
 @param {MatrixInt} *m
+@param {int} *trace
 @return {*}
  ************************************************************/
-int trace_matrix(MatrixInt *m);
+bool trace_matrix_int(MatrixInt *m, int *trace);
 
 #endif // RANK_TRACE_MATRIX_H
