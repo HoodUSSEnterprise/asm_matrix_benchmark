@@ -1,0 +1,143 @@
+/************************************************************
+@Author: HoodUSSEnterprise
+@Date: 2026-06-17 20:28:22
+@LastEditors: HoodUSSEnterprise
+@LastEditTime: 2026-06-18 23:13:58
+@FilePath: \asm_matrix_benchmark\src\C\rank_trace_matrix.c
+@Description: rank and trace of matrix
+*************************************************************/
+#include "rank_trace_matrix.h"
+#include <math.h>
+
+/***********************************************************
+@description: rank of matrix
+@param {MatrixInt} *m
+@param {int} *rank
+@return {*}
+ ************************************************************/
+bool rank_matrix_int(MatrixInt *m, int *rank)
+{
+    if (m->rows > m->cols)
+    {
+        // malloc new res
+        MatrixInt *res = NULL;
+        res = (MatrixInt *)malloc(sizeof(MatrixInt));
+        if (res == NULL)
+        {
+            fprintf(stderr, "Memory allocation failed\n");
+            return false;
+        }
+        res->rows = m->cols;
+        res->cols = m->rows;
+        // malloc new data
+        res->data = (int *)malloc(sizeof(int) * res->rows * res->cols);
+        if (res->data == NULL)
+        {
+            free(res);
+            fprintf(stderr, "Memory allocation failed\n");
+            return false;
+        }
+        res = transpose_matrix_int(m);
+        memcpy(m->data, res->data, sizeof(int) * res->rows * res->cols);
+        m->rows = res->rows;
+        m->cols = res->cols;
+        free(res->data);
+        free(res);
+    }
+    // malloc new data
+    double *data = (double *)malloc(sizeof(double) * m->rows * m->cols);
+    if (data == NULL)
+    {
+        fprintf(stderr, "Memory allocation failed\n");
+        return false;
+    }
+    for (size_t i = 0; i < m->rows * m->cols; i++)
+    {
+        data[i] = m->data[i] * 1.0;
+    }
+
+    // use guass elimination
+    for (size_t rows = 0, cols = 0; rows < m->rows; cols++)
+    {
+        // find main element
+        size_t pivot = rows;
+        while (fabs(data[rows * m->cols + cols]) < 1e-6 && pivot < m->rows)
+        {
+            pivot++;
+        }
+        // that means this column is zero of all
+        if (pivot == m->rows)
+        {
+            continue;
+        }
+
+        // exchange lines
+        if (pivot != rows)
+        {
+            for (size_t j = 0; j < m->cols; j++)
+            {
+                double temp = data[pivot * m->cols + j];
+                data[pivot * m->cols + j] = data[rows * m->cols + j];
+                data[rows * m->cols + j] = temp;
+            }
+        }
+
+        // elimination below line
+        for (int i = rows + 1; i < m->rows; i++)
+        {
+            double factor = data[i * m->cols + cols] / data[rows * m->cols + cols];
+            for (int j = cols; j < m->cols; j++)
+            {
+                data[i * m->cols + j] -= factor * data[rows * m->cols + j];
+            }
+        }
+        rows++;
+    }
+
+    // calc non zero lines
+    int rank_number = 0;
+    // check line by line
+    for (size_t i = 0; i < m->rows; i++)
+    {
+        bool flag = false;
+        // check one by one
+        for (size_t j = 0; j < m->cols; j++)
+        {
+            if (fabs(data[i * m->rows + j]) >= 1e-6)
+            {
+                flag = true;
+                break;
+            }
+        }
+        // check flag, if true means this line has non-zero number
+        if (flag)
+        {
+            rank_number++;
+        }
+    }
+    *rank = rank_number;
+    free(data);
+    return true;
+}
+
+/***********************************************************
+@description: trace of matrix
+@param {MatrixInt} *m
+@param {int} *trace
+@return {*}
+ ************************************************************/
+bool trace_matrix_int(MatrixInt *m, int *trace)
+{
+    if (m->cols != m->rows)
+    {
+        fprintf(stderr, "It is not a square!\n");
+        return false;
+    }
+    int sum = 0;
+    for (size_t i = 0; i < m->rows; i++)
+    {
+        sum += m->data[i * m->cols + i];
+    }
+    *trace = sum;
+    return true;
+}
