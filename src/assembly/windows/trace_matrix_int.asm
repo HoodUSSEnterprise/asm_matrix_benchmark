@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-18 23:26:34
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-18 23:41:00
+; @LastEditTime: 2026-06-19 10:46:33
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\trace_matrix_int.asm
 ; @Description: the trace of matrix nasm code on windows
 ;-------------------------------------------------------------
@@ -40,13 +40,17 @@ trace_matrix_int:
     test r14, r14
     jz null_ptr
 
-    ; restore r14 and r15
+    ; restore r14
     mov r14, rcx
 
     ; check is or not a square
     mov r8, [r14 + 8]   ; m->rows
     mov r9, [r14 + 16]  ; m->cols
 
+    cmp r9, 0  ; m->rows == 0
+    je null_ptr
+    cmp r9, 0  ; m->cols == 0
+    je null_ptr
     cmp r8, r9 ; m->rows == m->cols
     jne not_a_square
 
