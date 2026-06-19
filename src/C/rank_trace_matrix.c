@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-17 20:28:22
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-18 23:31:32
+@LastEditTime: 2026-06-19 10:31:58
 @FilePath: \asm_matrix_benchmark\src\C\rank_trace_matrix.c
 @Description: rank and trace of matrix
 *************************************************************/
@@ -22,33 +22,6 @@ bool rank_matrix_int(MatrixInt *m, int *rank)
     {
         fprintf(stderr, "Invalid param!\n");
         return NULL;
-    }
-    if (m->rows > m->cols)
-    {
-        // malloc new res
-        MatrixInt *res = NULL;
-        res = (MatrixInt *)malloc(sizeof(MatrixInt));
-        if (res == NULL)
-        {
-            fprintf(stderr, "Memory allocation failed\n");
-            return false;
-        }
-        res->rows = m->cols;
-        res->cols = m->rows;
-        // malloc new data
-        res->data = (int *)malloc(sizeof(int) * res->rows * res->cols);
-        if (res->data == NULL)
-        {
-            free(res);
-            fprintf(stderr, "Memory allocation failed\n");
-            return false;
-        }
-        res = transpose_matrix_int(m);
-        memcpy(m->data, res->data, sizeof(int) * res->rows * res->cols);
-        m->rows = res->rows;
-        m->cols = res->cols;
-        free(res->data);
-        free(res);
     }
     // malloc new data
     double *data = (double *)malloc(sizeof(double) * m->rows * m->cols);
