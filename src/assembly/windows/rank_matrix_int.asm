@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-18 23:25:45
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-18 23:42:07
+; @LastEditTime: 2026-06-19 11:03:46
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\rank_matrix_int.asm
 ; @Description: rank matrix int nasm code on windows
 ;-------------------------------------------------------------
@@ -10,7 +10,7 @@ global rank_matrix_int
 extern puts
 extern malloc
 
-global .rodata
+section .rodata
     malloc_failed db "Memory allocation failed", 0                         ; malloc failed msg
     invalid_param db "Invalid param!", 0                                   ; invalid param msg
 
