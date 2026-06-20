@@ -157,7 +157,7 @@ greater_than_zero:
     jne dimension_mismatch
 
     ; malloc new res
-    mov rcx, 24 ; sizeof(MatrixInt) = 24
+    mov rdi, 24 ; sizeof(MatrixInt) = 24
     call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_struct
@@ -171,8 +171,7 @@ greater_than_zero:
     mov r12, [r14 + 16] ; m1->cols
     add r12, [r15 + 16] ; m1->cols + m2->cols
     imul rdi, r12 ; res->rows * res->cols
-    mov rcx, rdi ; number of sizeof(int)
-    shl rcx, 2 ; rcx *= 4
+    shl rdi, 2 ; rdi *= 4
     call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_data
