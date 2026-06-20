@@ -18,7 +18,7 @@ section .rodata
 section .text
 
 ; bool find_elem_int(MatrixInt *m, int elem, Point *pos);
-; rcx = m, edx = elem, r8 = pos
+; rdi = m, rsi = elem, rdx = pos (System V)
 find_elem_int:
 
     ; save callee_register
@@ -30,15 +30,15 @@ find_elem_int:
     push r15
     sub rsp, 32 ; allocate shadow space for puts
 
-    mov r14, rcx    ; r14 = m
-    mov r15d, edx   ; r15d = elem
-    mov r13, r8     ; r13 = pos
+    mov r14, rdi    ; r14 = m
+    mov r15d, esi   ; r15d = elem
+    mov r13, rdx    ; r13 = pos
 
     ; check m
     test r14, r14
     jz null_ptr
 
-    mov r14, [rcx] ; r14 = m->data
+    mov r14, [rdi] ; r14 = m->data
 
     ; check m->data
     test r14, r14
@@ -60,6 +60,7 @@ malloc_pos:
     ; } Point; 
     ; sizeof(Point) = 16
     mov rcx, 16
+    mov rdi, rcx
     call malloc
     test rax, rax
     jz malloc_fail
@@ -95,14 +96,18 @@ inc_rdi:
     jmp loop1
 
 null_ptr:
-    lea rcx, [rel invalid_param] ; rcx = invalid_param
+    lea rdi, [rel invalid_param] ; rdi = invalid_param
+    sub rsp, 8
     call puts
+    add rsp, 8
     mov rax, 0 ; return NULL
     jmp cleanup
 
 malloc_fail:
-    lea rcx, [rel malloc_failed] ; rcx = invalid_param
+    lea rdi, [rel malloc_failed] ; rdi = invalid_param
+    sub rsp, 8
     call puts
+    add rsp, 8
     mov rax, 0 ; return NULL
     jmp cleanup
 
