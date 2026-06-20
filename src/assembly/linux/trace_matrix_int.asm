@@ -1,11 +1,12 @@
 ;-------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
-; @Date: 2026-06-18 23:26:34
+; @Date: 2026-06-20 16:10:25
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-19 10:46:33
-; @FilePath: \asm_matrix_benchmark\src\assembly\windows\trace_matrix_int.asm
-; @Description: the trace of matrix nasm code on windows
+; @LastEditTime: 2026-06-20 16:12:43
+; @FilePath: \asm_matrix_benchmark\src\assembly\linux\trace_matrix_int.asm
+; @Description:the trace of matrix nasm code on linux 
 ;-------------------------------------------------------------
+
 global trace_matrix_int
 extern puts
 
