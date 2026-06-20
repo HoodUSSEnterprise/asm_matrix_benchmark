@@ -1,12 +1,13 @@
 ;-------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
-; @Date: 2026-06-17 17:22:48
+; @Date: 2026-06-20 16:10:25
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-17 20:27:23
-; @FilePath: \asm_matrix_benchmark\src\assembly\windows\special_matrix_int.asm
+; @LastEditTime: 2026-06-20 16:16:11
+; @FilePath: \asm_matrix_benchmark\src\assembly\linux\special_matrix_int.asm
 ; @Description: some special matrix like identity matrix, diag matrix,
-; eye_matrix and zero matrix nasm code on windows
+; eye_matrix and zero matrix nasm code on linux
 ;-------------------------------------------------------------
+
 global identity_matrix_int, diag_matrix_int, eye_matrix_int, zero_matrix_int
 extern malloc
 extern free
