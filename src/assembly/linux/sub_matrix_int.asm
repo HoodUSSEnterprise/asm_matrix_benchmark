@@ -20,7 +20,7 @@ section .rodata
 section .text
 
 ; MatrixInt *sub_matrix_int(MatrixInt *m1, MatrixInt *m2);
-; rcx = m1, rdx = m2
+; rdi = m1, rsi = m2
 sub_matrix_int:
 
     ; save callee_register
@@ -31,8 +31,8 @@ sub_matrix_int:
     push r15
     sub rsp, 32 ; allocate shadow space for printf
 
-    mov r14, rcx ; r14 = m1
-    mov r15, rdx ; r15 = m2
+    mov r14, rdi ; r14 = m1
+    mov r15, rsi ; r15 = m2
 
     ; check param m1 and m2
     test r14, r14
@@ -40,8 +40,8 @@ sub_matrix_int:
     test r15, r15
     jz null_ptr
 
-    mov r14, [rcx] ; r14 = m1->data
-    mov r15, [rdx] ; r15 = m2->data
+    mov r14, [rdi] ; r14 = m1->data
+    mov r15, [rsi] ; r15 = m2->data
 
     ; check m1->data and m2->data
     test r14, r14
@@ -50,8 +50,8 @@ sub_matrix_int:
     jz null_ptr
 
     ; restore r14 and r15
-    mov r14, rcx
-    mov r15, rdx
+    mov r14, rdi
+    mov r15, rsi
 
     ; check dimension
     mov r8, [r14 + 8]   ; m1->rows
@@ -70,7 +70,7 @@ sub_matrix_int:
     mov r12, rdi    ; preserve count across malloc
 
     ; malloc res 24 bytes
-    mov rcx, 24 
+    mov rdi, 24 
     call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_struct
@@ -78,8 +78,8 @@ sub_matrix_int:
     mov rbx, rax
 
     ; malloc res->data
-    mov rcx, rdi
-    shl rcx, 2 ; rcx *= 4
+    mov rdi, r12
+    shl rdi, 2 ; rdi *= 4
     call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_data
@@ -98,7 +98,7 @@ sub_matrix_int:
     mov r10, [r15] ; r10 = m2->data
 
 on_loop:
-    cmp rcx, rdi ; i < rdi
+    cmp rcx, r12 ; i < r12
     jge end
 
     ; res->data[rcx] = m1->data[rcx] + m2->data[rcx]
@@ -111,32 +111,31 @@ on_loop:
 
 
 malloc_fail_struct:
-    lea rcx, [rel malloc_failed] ; rcx = malloc_failed
+    lea rdi, [rel malloc_failed] ; rdi = malloc_failed
     call printf wrt ..plt
     mov rax, 0
     jmp cleanup
 
 malloc_fail_data:
-    lea rcx, [rel malloc_failed] ; rcx = malloc_failed
+    lea rdi, [rel malloc_failed] ; rdi = malloc_failed
     call printf wrt ..plt
-    mov rcx, rbx
+    mov rdi, rbx
     call free wrt ..plt
     mov rax, 0
     jmp cleanup
 
 null_ptr:
-    lea rcx, [rel invalid_param] ; rcx = invalid_param
+    lea rdi, [rel invalid_param] ; rdi = invalid_param
     call printf wrt ..plt
     mov rax, 0 ; return NULL
     jmp cleanup
 
 dimension_mismatch:
-    lea rcx, [rel dim_mismatch] 
-    mov rdx, [r14 + 8]          ; m1.rows
-    mov r8, [r14 + 16]          ; m1.cols
-    mov r9, [r15 + 8]           ; m2.rows
-    mov r10, [r15 + 16]         ; m2.cols
-    mov [rsp + 32], r10         ; fifth parament
+    lea rdi, [rel dim_mismatch] 
+    mov rsi, [r14 + 8]          ; m1.rows
+    mov rdx, [r14 + 16]          ; m1.cols
+    mov rcx, [r15 + 8]           ; m2.rows
+    mov r8, [r15 + 16]         ; m2.cols
     call printf wrt ..plt
     mov rax, 0                  ; return NULL
     jmp cleanup
