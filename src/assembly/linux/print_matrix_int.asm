@@ -24,8 +24,6 @@ section .text
 ; void print_matrix(MatrixInt *m);
 ; rdi = m (System V)
 print_matrix:
-    push rdi
-    push rsi
     push r12
     push r13
     push r14
@@ -111,6 +109,4 @@ end:
     pop r14
     pop r13
     pop r12
-    pop rsi
-    pop rdi
     ret
