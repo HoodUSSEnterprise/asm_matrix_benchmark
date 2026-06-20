@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-18 23:25:45
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-19 23:42:49
+; @LastEditTime: 2026-06-20 10:50:51
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\rank_matrix_int.asm
 ; @Description: rank matrix int nasm code on windows
 ;-------------------------------------------------------------
@@ -103,6 +103,9 @@ loop1:
         comisd xmm0, xmm2
         jb pivot_zero              ; if fabs(value) < epsilon, try next row
 
+        ; found non-zero pivot
+        jmp pivot_found
+
     pivot_zero:
         inc r11                    ; pivot++
         jmp find_pivot
@@ -110,7 +113,101 @@ loop1:
     col_zero:
         inc rdx ; cols++
         jmp loop1
+    
+    pivot_found:
+        ; check if row swap needed
+        cmp r11, rcx               ; pivot != rows?
+        je no_swap
 
+        ; swap rows: pivot <-> rows
+        xor r15, r15               ; j = 0
+        
+    swap_loop:
+        cmp r15, r9                ; j < cols?
+        jge no_swap
+        
+        ; calculate offsets
+        mov rax, r11               ; rax = pivot
+        imul rax, r9               ; rax = pivot * cols
+        add rax, r15               ; rax = pivot * cols + j
+        shl rax, 3                 ; byte offset
+        
+        mov rbx, rcx               ; rbx = rows
+        imul rbx, r9               ; rbx = rows * cols
+        add rbx, r15               ; rbx = rows * cols + j
+        shl rbx, 3                 ; byte offset
+        
+        ; swap data[pivot][j] and data[rows][j]
+        movsd xmm0, [r12 + rax]    ; temp = data[pivot][j]
+        movsd xmm1, [r12 + rbx]    ; xmm1 = data[rows][j]
+        movsd [r12 + rax], xmm1    ; data[pivot][j] = data[rows][j]
+        movsd [r12 + rbx], xmm0    ; data[rows][j] = temp
+        
+        inc r15
+        jmp swap_loop
+
+    no_swap:
+        ; elimination below pivot row
+        mov r15, rcx               ; r15 = i = rows + 1
+        inc r15
+
+    elim_outer:
+        cmp r15, r8                ; i < rows?
+        jge elim_done
+        
+        ; calculate factor = data[i][cols] / data[rows][cols]
+        ; offset for data[rows][cols]
+        mov rax, rcx               ; rax = rows
+        imul rax, r9               ; rax = rows * cols
+        add rax, rdx               ; rax = rows * cols + cols
+        shl rax, 3                 ; byte offset
+        movsd xmm0, [r12 + rax]    ; xmm0 = data[rows][cols]
+        
+        ; offset for data[i][cols]
+        mov rbx, r15               ; rbx = i
+        imul rbx, r9               ; rbx = i * cols
+        add rbx, rdx               ; rbx = i * cols + cols
+        shl rbx, 3                 ; byte offset
+        movsd xmm1, [r12 + rbx]    ; xmm1 = data[i][cols]
+        
+        divsd xmm1, xmm0           ; xmm1 = factor
+        
+        ; inner loop: j = cols to cols-1
+        mov r10, rdx               ; r10 = j = cols
+
+        elim_inner:
+            cmp r10, r9                ; j < cols?
+            jge elim_inner_done
+            
+            ; data[i][j] -= factor * data[rows][j]
+            ; offset for data[rows][j]
+            mov rax, rcx               ; rax = rows
+            imul rax, r9               ; rax = rows * cols
+            add rax, r10               ; rax = rows * cols + j
+            shl rax, 3                 ; byte offset
+            movsd xmm2, [r12 + rax]    ; xmm2 = data[rows][j]
+            mulsd xmm2, xmm1           ; xmm2 = factor * data[rows][j]
+            
+            ; offset for data[i][j]
+            mov rbx, r15               ; rbx = i
+            imul rbx, r9               ; rbx = i * cols
+            add rbx, r10               ; rbx = i * cols + j
+            shl rbx, 3                 ; byte offset
+            movsd xmm3, [r12 + rbx]    ; xmm3 = data[i][j]
+            subsd xmm3, xmm2           ; xmm3 = data[i][j] - factor * data[rows][j]
+            movsd [r12 + rbx], xmm3    ; store result
+            
+            inc r10
+            jmp elim_inner
+
+    elim_inner_done:
+        inc r15                    ; i++
+        jmp elim_outer
+
+    elim_done:
+        inc rcx                    ; rows++
+        inc rdx                    ; cols++
+        jmp loop1
 
 calc_rank:
 
