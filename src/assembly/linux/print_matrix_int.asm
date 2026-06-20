@@ -22,7 +22,7 @@ section .rodata
 section .text
 
 ; void print_matrix(MatrixInt *m);
-; rcx = m
+; rdi = m (System V)
 print_matrix:
     push rdi
     push rsi
@@ -32,25 +32,32 @@ print_matrix:
     push r15
     sub rsp, 32 ;  allocate shadow space for printf and puts
 
-    mov r12, rcx ; r12 = m
+    mov r12, rdi ; r12 = m
 
     ; check matrix
     test r12, r12
     jz error
 
     ; print matrix_info
-    lea rcx, [rel matrix_info] ; rcx = matrix_info
+    lea rdi, [rel matrix_info] ; rdi = matrix_info
+    sub rsp, 8
     call puts ; puts("------------------matrix info------------------\n");
+    add rsp, 8
 
     ; print matrix size
-    lea rcx, [rel matrix_size] ; rcx = matrix_size
-    mov rdx, [r12 + 8] ; rdx = matrix->rows
-    mov r8, [r12 + 16] ; r8 = matrix->cols
+    lea rdi, [rel matrix_size] ; rdi = matrix_size
+    mov rsi, [r12 + 8] ; rsi = matrix->rows
+    mov rdx, [r12 + 16] ; rdx = matrix->cols
+    xor eax, eax
+    sub rsp, 8
     call printf ; printf("matrix size: (%d, %d)\n", matrix->rows, matrix->cols);
+    add rsp, 8
 
     ; print matrix_data
-    lea rcx, [rel matrix_data] ; rcx = matrix_data
+    lea rdi, [rel matrix_data] ; rdi = matrix_data
+    sub rsp, 8
     call puts ; puts("matrix data:"\n);
+    add rsp, 8
 
     ; init loop condition
     xor r13, r13 ; i = 0
@@ -69,25 +76,32 @@ loop2:
     jge change_line
 
     ; print data
-    lea rcx, [rel fmt] ;
+    lea rdi, [rel fmt] ;
     mov r11, rsi ; r11 = matrix->cols
     imul r11, r13 ; r11 *= i
     add r11, r14  ; now r11 = i * matrix->cols + j
-    mov rdx, [r15 + r11 * 4]
+    mov esi, [r15 + r11 * 4]
+    xor eax, eax
+    sub rsp, 8
     call printf ; printf("%d ", matrix->data[i * matrix->cols + j]);
+    add rsp, 8
     inc r14; j++
     jmp loop2
 
 change_line:
     inc r13 ; i++
     ; print change line
-    mov rcx, 10
+    mov edi, 10
+    sub rsp, 8
     call putchar ; putchar('\n');
+    add rsp, 8
     jmp loop1
 
 error:
-    lea rcx, [rel invalid_param]
+    lea rdi, [rel invalid_param]
+    sub rsp, 8
     call puts
+    add rsp, 8
     jmp end
 
 end:
