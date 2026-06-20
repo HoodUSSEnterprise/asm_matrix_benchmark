@@ -19,7 +19,7 @@ section .rodata
 section .text
 
 ; MatrixInt *scale_matrix_int(MatrixInt *m, int scale);
-; rcx = m, edx = scale
+; rdi = m, rsi = scale (System V)
 
 scale_matrix_int:
     ; save callee_register
@@ -31,21 +31,21 @@ scale_matrix_int:
     push r15
     sub rsp, 32 ; allocate shadow space for printf
 
-    mov r14, rcx ; r14 = m
-    mov r15d, edx ; r15d = scale
+    mov r14, rdi ; r14 = m
+    mov r15d, esi ; r15d = scale
 
     ; check param m
     test r14, r14
     jz null_ptr
 
-    mov r14, [rcx] ; r14 = m->data
+    mov r14, [rdi] ; r14 = m->data
 
     ; check m->data
     test r14, r14
     jz null_ptr
 
     ; restore r14
-    mov r14, rcx
+    mov r14, rdi
 
     ; get dimension
     mov r8, [r14 + 8]   ; m->rows
@@ -57,6 +57,7 @@ scale_matrix_int:
 
     ; malloc res 24 bytes
     mov rcx, 24 
+    mov rdi, rcx
     call malloc
     test rax, rax
     jz malloc_fail_struct
@@ -66,6 +67,7 @@ scale_matrix_int:
     ; malloc res->data
     mov rcx, rdi
     shl rcx, 2 ; rcx *= 4
+    mov rdi, rcx
     call malloc
     test rax, rax
     jz malloc_fail_data
@@ -95,22 +97,31 @@ on_loop:
 
 
 malloc_fail_struct:
-    lea rcx, [rel malloc_failed] ; rcx = malloc_failed
+    lea rdi, [rel malloc_failed] ; rdi = malloc_failed
+    xor eax, eax
+    sub rsp, 8
     call printf
+    add rsp, 8
     mov rax, 0
     jmp cleanup
 
 malloc_fail_data:
-    lea rcx, [rel malloc_failed] ; rcx = malloc_failed
+    lea rdi, [rel malloc_failed] ; rdi = malloc_failed
+    xor eax, eax
+    sub rsp, 8
     call printf
-    mov rcx, rbx
+    add rsp, 8
+    mov rdi, rbx
     call free
     mov rax, 0
     jmp cleanup
 
 null_ptr:
-    lea rcx, [rel invalid_param] ; rcx = invalid_param
+    lea rdi, [rel invalid_param] ; rdi = invalid_param
+    xor eax, eax
+    sub rsp, 8
     call printf
+    add rsp, 8
     mov rax, 0 ; return NULL
     jmp cleanup
 
