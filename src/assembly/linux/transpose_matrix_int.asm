@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-20 16:10:25
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-20 16:12:22
+; @LastEditTime: 2026-06-20 16:47:48
 ; @FilePath: \asm_matrix_benchmark\src\assembly\linux\transpose_matrix_int.asm
 ; @Description: get transpose matrix nasm code on linux
 ;-------------------------------------------------------------
@@ -33,34 +33,56 @@ transpose_matrix_int:
 
     mov r14, rcx ; r14 = m
 
+    ; MatrixInt *transpose_matrix_int(MatrixInt *m);
+    ; rdi = m (System V)
+    ; check param m
+    test r14, r14
+; rdi = m (System V)
+
+    mov r14, [rcx] ; r14 = m->data
+    ; save callee_register
+    push rbx
+    push rdi
+    push r12
+    push r13
+    push r14
+    push r15
+    sub rsp, 32 ; allocate shadow space for printf
+
+    mov r14, rdi ; r14 = m
+
     ; check param m
     test r14, r14
     jz null_ptr
 
-    mov r14, [rcx] ; r14 = m->data
+    mov r14, [rdi] ; r14 = m->data
 
     ; check m->data
     test r14, r14
     jz null_ptr
 
-    ; restore r14
-    mov r14, rcx
+    ; load dims
+    mov r8, [r14 + 8]   ; rows
+    mov r9, [r14 + 16]  ; cols
+    cmp r8, 0
+    je null_ptr
+    cmp r9, 0
+    je null_ptr
 
-    ; save the data len in rdi
-    mov rdi, [r14 + 8]     ; rdi = m1->rows
-    imul rdi, [r14 + 16]    ; rdi = m1->rows * m1->cols
+    ; preserve total count in r12
+    mov r12, r8
+    imul r12, r9        ; r12 = rows * cols
 
-    ; malloc res 24 bytes
-    mov rcx, 24 
+    ; malloc res struct
+    mov rdi, 24
     call malloc
     test rax, rax
     jz malloc_fail_struct
-
     mov rbx, rax
 
-    ; malloc res->data
-    mov rcx, rdi
-    shl rcx, 2 ; rcx *= 4
+    ; malloc res->data (count * 4)
+    mov rdi, r12
+    shl rdi, 2
     call malloc
     test rax, rax
     jz malloc_fail_data
@@ -68,64 +90,68 @@ transpose_matrix_int:
     mov [rbx], rax      ; res->data = new malloc data
     mov r9, [r14 + 8]   ; r9 = m->rows
     mov r10, [r14 + 16] ; r10 = m->cols
-    mov [rbx + 8], r10  ; res->rows = m->cols
-    mov [rbx + 16], r9  ; res->cols = m->rows
+    mov dword [rbx + 8], r10  ; res->rows = m->cols
+    mov dword [rbx + 16], r9  ; res->cols = m->rows
 
-    ; init loop conditino
+    ; init loop
     xor rdi, rdi ; i = 0
-    ; xor rsi, rsi ; j = 0
     mov r11, [r14] ; r11 = m->data
-    mov r12, [rbx] ; r13 = res->data
+    mov r13, [rbx] ; r13 = res->data
 
 loop1:
-    cmp rdi, r10 ; i < res->rows
+    cmp rdi, r10 ; i < res->rows (m->cols)
     jge end
-    xor rsi ,rsi
-    loop2:
-        cmp rsi, r9 ; j < res->cols
-        jge inc_rdi
+    xor rsi, rsi
+loop2:
+    cmp rsi, r9 ; j < res->cols (m->rows)
+    jge inc_rdi
 
-        ; calc index of m
-        mov r8, r10      ; r8 = m->cols
-        imul r8, rsi    ; r8 *= j
-        add r8, rdi     ; r8 += i
+    ; index of m: j * m->cols + i
+    mov r8, r10
+    imul r8, rsi
+    add r8, rdi
+    mov ecx, [r11 + r8*4]
 
-        ; ecx = m->data[j * m->cols + i]
-        mov ecx, [r11 + r8 * 4]
+    ; index of res: i * res->cols + j
+    mov r8, r9
+    imul r8, rdi
+    add r8, rsi
+    mov [r13 + r8*4], ecx
 
-        ; calc index of res
-        mov r8, r9     ; r8 = res->cols
-        imul r8, rdi    ; r8 *= i
-        add r8, rsi     ; r8 += j
-
-        ; m->data[i * res->cols + j] = rcx
-        mov [r12 + r8 * 4], ecx
-        inc rsi ; j++
-        jmp loop2
+    inc rsi
+    jmp loop2
 
 inc_rdi:
-    inc rdi; i++
+    inc rdi
     jmp loop1
 
-
 malloc_fail_struct:
-    lea rcx, [rel malloc_failed] ; rcx = malloc_failed
+    lea rdi, [rel malloc_failed]
+    xor eax, eax
+    sub rsp, 8
     call printf
+    add rsp, 8
     mov rax, 0
     jmp cleanup
 
 malloc_fail_data:
-    lea rcx, [rel malloc_failed] ; rcx = malloc_failed
+    lea rdi, [rel malloc_failed]
+    xor eax, eax
+    sub rsp, 8
     call printf
-    mov rcx, rbx
+    add rsp, 8
+    mov rdi, rbx
     call free
     mov rax, 0
     jmp cleanup
 
 null_ptr:
-    lea rcx, [rel invalid_param] ; rcx = invalid_param
+    lea rdi, [rel invalid_param]
+    xor eax, eax
+    sub rsp, 8
     call printf
-    mov rax, 0 ; return NULL
+    add rsp, 8
+    mov rax, 0
     jmp cleanup
 
 end:
