@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-20 16:10:25
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-20 16:15:14
+; @LastEditTime: 2026-06-20 16:39:07
 ; @FilePath: \asm_matrix_benchmark\src\assembly\linux\cat_matrix_int.asm
 ; @Description:  cat matrix nasm code on linux
 ;-------------------------------------------------------------
@@ -22,7 +22,7 @@ section .rodata
 section .text
 
 ; MatrixInt *cat_matrix_int(MatrixInt *m1, MatrixInt *m2, int axis);
-; rcx = m1, rdx = m2, r8d = axis
+; rdi = m1, rsi = m2, edx = axis (System V)
 ; axis : 1 means horizon, 0 means vertical
 cat_matrix_int:
     
@@ -35,9 +35,9 @@ cat_matrix_int:
     push r15
     sub rsp, 32 ; allocate shadow space for printf
 
-    mov r14, rcx ; r14 = m1
-    mov r15, rdx ; r15 = m2
-    mov r13d, r8d ; r13d = axis
+    mov r14, rdi ; r14 = m1
+    mov r15, rsi ; r15 = m2
+    mov r13d, edx ; r13d = axis
 
     ; check param m1 and m2
     test r14, r14
@@ -45,8 +45,8 @@ cat_matrix_int:
     test r15, r15
     jz null_ptr
 
-    mov r14, [rcx] ; r14 = m1->data
-    mov r15, [rdx] ; r15 = m2->data
+    mov r14, [rdi] ; r14 = m1->data
+    mov r15, [rsi] ; r15 = m2->data
 
     ; check m1->data and m2->data
     test r14, r14
@@ -55,8 +55,8 @@ cat_matrix_int:
     jz null_ptr
 
     ; restore r14 and r15
-    mov r14, rcx
-    mov r15, rdx
+    mov r14, rdi
+    mov r15, rsi
 
     cmp r13d, 0
     jne greater_than_zero
@@ -71,6 +71,7 @@ cat_matrix_int:
 
     ; malloc new res
     mov rcx, 24 ; sizeof(MatrixInt) = 24
+    mov rdi, rcx
     call malloc
     test rax, rax
     jz malloc_fail_struct
@@ -86,6 +87,7 @@ cat_matrix_int:
     imul rdi, r12 ; res->rows * res->cols
     mov rcx, rdi ; number of sizeof(int)
     shl rcx, 2 ; rcx *= 4
+    mov rdi, rcx
     call malloc
     test rax, rax
     jz malloc_fail_data
@@ -232,27 +234,38 @@ loop1out11:
     jmp loop11
 
 invalid_axis:
-    lea rcx, [rel wrong_params] ; rcx = wrong_params
+    lea rdi, [rel wrong_params] ; rdi = wrong_params
+    sub rsp, 8
     call puts
+    add rsp, 8
     jmp cleanup
 
 malloc_fail_struct:
-    lea rcx, [rel malloc_failed] ; rcx = malloc_failed
+    lea rdi, [rel malloc_failed] ; rdi = malloc_failed
+    xor eax, eax
+    sub rsp, 8
     call printf
+    add rsp, 8
     mov rax, 0
     jmp cleanup
 
 malloc_fail_data:
-    lea rcx, [rel malloc_failed] ; rcx = malloc_failed
+    lea rdi, [rel malloc_failed] ; rdi = malloc_failed
+    xor eax, eax
+    sub rsp, 8
     call printf
-    mov rcx, rbx
+    add rsp, 8
+    mov rdi, rbx
     call free
     mov rax, 0
     jmp cleanup
 
 null_ptr:
-    lea rcx, [rel invalid_param] ; rcx = invalid_param
+    lea rdi, [rel invalid_param] ; rdi = invalid_param
+    xor eax, eax
+    sub rsp, 8
     call printf
+    add rsp, 8
     mov rax, 0 ; return NULL
     jmp cleanup
 
@@ -261,13 +274,15 @@ end:
     jmp cleanup
 
 dimension_mismatch:
-    lea rcx, [rel dim_mismatch] 
-    mov rdx, [r14 + 8]          ; m1.rows
-    mov r8, [r14 + 16]          ; m1.cols
-    mov r9, [r15 + 8]           ; m2.rows
-    mov r10, [r15 + 16]         ; m2.cols
-    mov [rsp + 32], r10         ; fifth parament
+    lea rdi, [rel dim_mismatch]
+    mov rsi, [r14 + 8]          ; m1.rows
+    mov rdx, [r14 + 16]         ; m1.cols
+    mov rcx, [r15 + 8]          ; m2.rows
+    mov r8,  [r15 + 16]         ; m2.cols
+    xor eax, eax
+    sub rsp, 8
     call printf
+    add rsp, 8
     mov rax, 0                  ; return NULL
     jmp cleanup
 
