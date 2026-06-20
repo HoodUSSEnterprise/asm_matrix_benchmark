@@ -61,7 +61,7 @@ malloc_pos:
     ; sizeof(Point) = 16
     mov rcx, 16
     mov rdi, rcx
-    call malloc
+    call malloc wrt ..plt
     test rax, rax
     jz malloc_fail
     mov r13, rax

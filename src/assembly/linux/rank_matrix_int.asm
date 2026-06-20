@@ -63,7 +63,7 @@ rank_matrix_int:
     ; new data array type is double
     mov rcx, rdi  ; rcx = len of array
     shl rcx, 3    ; rcx *= 8
-    call malloc
+    call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_data
     

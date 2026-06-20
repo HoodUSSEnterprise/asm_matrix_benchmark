@@ -72,7 +72,7 @@ sub_matrix_int:
 
     ; malloc res 24 bytes
     mov rcx, 24 
-    call malloc
+    call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_struct
 
@@ -81,7 +81,7 @@ sub_matrix_int:
     ; malloc res->data
     mov rcx, rdi
     shl rcx, 2 ; rcx *= 4
-    call malloc
+    call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_data
 
@@ -121,7 +121,7 @@ malloc_fail_data:
     lea rcx, [rel malloc_failed] ; rcx = malloc_failed
     call printf
     mov rcx, rbx
-    call free
+    call free wrt ..plt
     mov rax, 0
     jmp cleanup
 

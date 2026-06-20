@@ -40,7 +40,7 @@ identity_matrix_int:
 
     ; alloc struct
     mov rdi, 24
-    call malloc
+    call malloc wrt ..plt
     test rax, rax
     jz id_malloc_fail
     mov rbx, rax
@@ -48,7 +48,7 @@ identity_matrix_int:
     ; alloc data (count * 4)
     mov rdi, r8
     shl rdi, 2
-    call malloc
+    call malloc wrt ..plt
     test rax, rax
     jz id_malloc_fail_data
     mov r12, rax
@@ -85,7 +85,7 @@ id_malloc_fail_data:
     call puts
     add rsp, 8
     mov rdi, rbx
-    call free
+    call free wrt ..plt
     mov rax, 0
     jmp id_cleanup
 
@@ -134,14 +134,14 @@ diag_matrix_int:
     imul r8, r15    ; r8 = len*len
 
     mov rdi, 24
-    call malloc
+    call malloc wrt ..plt
     test rax, rax
     jz diag_malloc_fail
     mov rbx, rax
 
     mov rdi, r8
     shl rdi, 2
-    call malloc
+    call malloc wrt ..plt
     test rax, rax
     jz diag_malloc_fail_data
     mov r12, rax
@@ -178,7 +178,7 @@ diag_malloc_fail_data:
     call puts
     add rsp, 8
     mov rdi, rbx
-    call free
+    call free wrt ..plt
     mov rax, 0
     jmp diag_cleanup
 
@@ -227,14 +227,14 @@ eye_matrix_int:
     imul r8d, r15d    ; r8 = rows*cols
 
     mov rdi, 24
-    call malloc
+    call malloc wrt ..plt
     test rax, rax
     jz eye_malloc_fail
     mov rbx, rax
 
     mov rdi, r8
     shl rdi, 2
-    call malloc
+    call malloc wrt ..plt
     test rax, rax
     jz eye_malloc_fail_data
     mov r12, rax
@@ -277,7 +277,7 @@ eye_malloc_fail_data:
     call puts
     add rsp, 8
     mov rdi, rbx
-    call free
+    call free wrt ..plt
     mov rax, 0
     jmp eye_cleanup
 
@@ -326,14 +326,14 @@ zero_matrix_int:
     imul r8d, r15d
 
     mov rdi, 24
-    call malloc
+    call malloc wrt ..plt
     test rax, rax
     jz zero_malloc_fail
     mov rbx, rax
 
     mov rdi, r8
     shl rdi, 2
-    call malloc
+    call malloc wrt ..plt
     test rax, rax
     jz zero_malloc_fail_data
     mov r12, rax
@@ -356,7 +356,7 @@ zero_malloc_fail_data:
     call puts
     add rsp, 8
     mov rdi, rbx
-    call free
+    call free wrt ..plt
     mov rax, 0
     jmp zero_cleanup
 

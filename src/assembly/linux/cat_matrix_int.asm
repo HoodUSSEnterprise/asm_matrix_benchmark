@@ -72,7 +72,7 @@ cat_matrix_int:
     ; malloc new res
     mov rcx, 24 ; sizeof(MatrixInt) = 24
     mov rdi, rcx
-    call malloc
+    call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_struct
 
@@ -88,7 +88,7 @@ cat_matrix_int:
     mov rcx, rdi ; number of sizeof(int)
     shl rcx, 2 ; rcx *= 4
     mov rdi, rcx
-    call malloc
+    call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_data
 
@@ -159,7 +159,7 @@ greater_than_zero:
 
     ; malloc new res
     mov rcx, 24 ; sizeof(MatrixInt) = 24
-    call malloc
+    call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_struct
 
@@ -174,7 +174,7 @@ greater_than_zero:
     imul rdi, r12 ; res->rows * res->cols
     mov rcx, rdi ; number of sizeof(int)
     shl rcx, 2 ; rcx *= 4
-    call malloc
+    call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_data
 
@@ -256,7 +256,7 @@ malloc_fail_data:
     call printf
     add rsp, 8
     mov rdi, rbx
-    call free
+    call free wrt ..plt
     mov rax, 0
     jmp cleanup
 

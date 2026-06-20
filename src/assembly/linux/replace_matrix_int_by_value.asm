@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-20 16:10:25
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-20 16:16:10
+; @LastEditTime: 2026-06-20 17:05:24
 ; @FilePath: \asm_matrix_benchmark\src\assembly\linux\replace_matrix_int_by_value.asm
 ; @Description: replace matrix int by value nasm code on linux
 ;-------------------------------------------------------------
@@ -49,7 +49,7 @@ replace_matrix_int_by_value:
     mov r14, rcx
 
     mov rdi, r14
-    mov rsi, r15d
+    mov esi, r15d
     lea rdx, [rsp + 32]
     call find_elem_int
     cmp rax, 0
@@ -65,7 +65,7 @@ replace_matrix_int_by_value:
 
 loop_replace:
     mov rdi, r14
-    mov rsi, r15d
+    mov esi, r15d
     lea rdx, [rsp + 32]
     call find_elem_int
     cmp rax, 1

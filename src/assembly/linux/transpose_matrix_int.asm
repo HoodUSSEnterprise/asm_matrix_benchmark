@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-20 16:10:25
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-20 16:47:48
+; @LastEditTime: 2026-06-20 17:03:36
 ; @FilePath: \asm_matrix_benchmark\src\assembly\linux\transpose_matrix_int.asm
 ; @Description: get transpose matrix nasm code on linux
 ;-------------------------------------------------------------
@@ -75,7 +75,7 @@ transpose_matrix_int:
 
     ; malloc res struct
     mov rdi, 24
-    call malloc
+    call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_struct
     mov rbx, rax
@@ -83,15 +83,15 @@ transpose_matrix_int:
     ; malloc res->data (count * 4)
     mov rdi, r12
     shl rdi, 2
-    call malloc
+    call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_data
 
     mov [rbx], rax      ; res->data = new malloc data
     mov r9, [r14 + 8]   ; r9 = m->rows
     mov r10, [r14 + 16] ; r10 = m->cols
-    mov dword [rbx + 8], r10  ; res->rows = m->cols
-    mov dword [rbx + 16], r9  ; res->cols = m->rows
+    mov [rbx + 8], r10  ; res->rows = m->cols
+    mov [rbx + 16], r9  ; res->cols = m->rows
 
     ; init loop
     xor rdi, rdi ; i = 0
@@ -141,7 +141,7 @@ malloc_fail_data:
     call printf
     add rsp, 8
     mov rdi, rbx
-    call free
+    call free wrt ..plt
     mov rax, 0
     jmp cleanup
 

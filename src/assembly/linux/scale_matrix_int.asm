@@ -58,7 +58,7 @@ scale_matrix_int:
     ; malloc res 24 bytes
     mov rcx, 24 
     mov rdi, rcx
-    call malloc
+    call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_struct
 
@@ -68,7 +68,7 @@ scale_matrix_int:
     mov rcx, rdi
     shl rcx, 2 ; rcx *= 4
     mov rdi, rcx
-    call malloc
+    call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_data
 
@@ -112,7 +112,7 @@ malloc_fail_data:
     call printf
     add rsp, 8
     mov rdi, rbx
-    call free
+    call free wrt ..plt
     mov rax, 0
     jmp cleanup
 
