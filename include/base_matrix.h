@@ -1,9 +1,9 @@
 /************************************************************
  *@Author: HoodUSSEnterprise
  *@Date: 2026-06-15 20:51:36
- *@LastEditors: HoodUSSEnterprise
- *@LastEditTime: 2026-06-15 22:24:37
- *@FilePath: \asm_matrix_benchmark\include\base_matrix.h
+@LastEditors: HoodUSSEnterprise
+@LastEditTime: 2026-06-20 13:33:08
+@FilePath: \asm_matrix_benchmark\include\base_matrix.h
  *@Description:Define struct matrix
  *************************************************************/
 
@@ -20,5 +20,19 @@ typedef struct MatrixInt
     size_t rows;
     size_t cols;
 } MatrixInt;
+
+typedef struct MatrixFloat
+{
+    float *data;
+    size_t rows;
+    size_t cols;
+} MatrixFloat;
+
+typedef struct MatrixDouble
+{
+    double *data;
+    size_t rows;
+    size_t cols;
+} MatrixDouble;
 
 #endif // BASE_MATRIX_H
