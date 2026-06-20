@@ -50,13 +50,12 @@ scale_matrix_int:
     mov r8, [r14 + 8]   ; m->rows
     mov r9, [r14 + 16]  ; m->cols
 
-    ; save the data len in rdi
-    mov rdi, r8     ; rdi = m1->rows
-    imul rdi, r9    ; rdi = m1->rows * m1->cols
+    ; save the data len in r13
+    mov r13, r8     ; rdi = m1->rows
+    imul r13, r9    ; rdi = m1->rows * m1->cols
 
-    ; malloc res 24 bytes
-    mov rcx, 24 
-    mov rdi, rcx
+    ; malloc res 24 bytes 
+    mov rdi, 24
     call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_struct
@@ -64,33 +63,32 @@ scale_matrix_int:
     mov rbx, rax
 
     ; malloc res->data
-    mov rcx, rdi
-    shl rcx, 2 ; rcx *= 4
-    mov rdi, rcx
+    mov rdi, r13
+    shl rdi, 2 ; rdi *= 4
     call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_data
 
     mov [rbx], rax      ; res->data = new malloc data
     mov r9, [r14 + 8]   ; r9 = m1->rows
-    mov r10, [r14 + 16] ; r10 = m2->cols
+    mov r10, [r14 + 16] ; r10 = m1->cols
     mov [rbx + 8], r9   ; res->rows = m1->rows
     mov [rbx + 16], r10 ; res->cols = m1->cols
 
     ; scale m
     xor rcx, rcx ; i = 0
-    mov r13, [rbx]
+    mov r12, [rbx]
     mov r9, [r14] ; r9 = m->data
 
 on_loop:
-    cmp rcx, rdi ; i < rdi
+    cmp rcx, r13 ; i < r13
     jge end
 
     ; res->data[rcx] = m->data[rcx] * scale
     mov r8d, [r9 + rcx * 4]
     imul r8d, r15d
 
-    mov [r13 + rcx * 4], r8d
+    mov [r12 + rcx * 4], r8d
     inc rcx ; i++
     jmp on_loop
 
