@@ -1,10 +1,10 @@
 ;-------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
-; @Date: 2026-06-16 16:47:06
+; @Date: 2026-06-20 16:10:25
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-16 18:41:57
-; @FilePath: \asm_matrix_benchmark\src\assembly\windows\mul_matrix_int.asm
-; @Description: mul matrix nasm code on windows
+; @LastEditTime: 2026-06-20 16:16:08
+; @FilePath: \asm_matrix_benchmark\src\assembly\linux\mul_matrix_int.asm
+; @Description: mul matrix nasm code on linux
 ;-------------------------------------------------------------
 
 global mul_matrix_int
