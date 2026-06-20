@@ -1,10 +1,10 @@
 ;-------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
-; @Date: 2026-06-16 08:56:25
+; @Date: 2026-06-20 16:10:25
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-17 15:55:06
-; @FilePath: \asm_matrix_benchmark\src\assembly\windows\add_matrix_int.asm
-; @Description: add matrix nasm code on windows
+; @LastEditTime: 2026-06-20 16:11:03
+; @FilePath: \asm_matrix_benchmark\src\assembly\linux\add_matrix_int.asm
+; @Description: add matrix nasm code on linux
 ;-------------------------------------------------------------
 
 global add_matrix_int
