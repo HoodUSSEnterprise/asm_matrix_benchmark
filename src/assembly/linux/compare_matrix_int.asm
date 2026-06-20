@@ -1,11 +1,12 @@
 ;-------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
-; @Date: 2026-06-19 11:10:25
+; @Date: 2026-06-20 16:10:25
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-20 10:38:19
-; @FilePath: \asm_matrix_benchmark\src\assembly\windows\compare_matrix_int.asm
-; @Description: compare two matrix int nasm code on windows
+; @LastEditTime: 2026-06-20 16:16:05
+; @FilePath: \asm_matrix_benchmark\src\assembly\linux\compare_matrix_int.asm
+; @Description: compare two matrix int nasm code on linux
 ;-------------------------------------------------------------
+
 global is_equal_matrix_int
 
 extern printf
