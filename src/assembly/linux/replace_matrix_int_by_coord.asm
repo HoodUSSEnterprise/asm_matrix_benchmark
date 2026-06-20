@@ -1,11 +1,12 @@
 ;-------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
-; @Date: 2026-06-17 13:23:47
+; @Date: 2026-06-20 16:10:25
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-17 13:48:38
-; @FilePath: \asm_matrix_benchmark\src\assembly\windows\replace_matrix_int_by_coord.asm
-; @Description: replace matrix by coord nasm code on windows
+; @LastEditTime: 2026-06-20 16:16:09
+; @FilePath: \asm_matrix_benchmark\src\assembly\linux\replace_matrix_int_by_coord.asm
+; @Description: replace matrix by coord nasm code on linux
 ;-------------------------------------------------------------
+
 global replace_matrix_int_by_coord
 extern puts
 
