@@ -1,10 +1,10 @@
 ;-------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
-; @Date: 2026-06-16 15:39:42
+; @Date: 2026-06-20 16:10:25
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-16 16:35:02
-; @FilePath: \asm_matrix_benchmark\src\assembly\windows\print_matrix_int.asm
-; @Description: print matrix nasm code on windows
+; @LastEditTime: 2026-06-20 16:16:08
+; @FilePath: \asm_matrix_benchmark\src\assembly\linux\print_matrix_int.asm
+; @Description: print matrix nasm code on linux
 ;-------------------------------------------------------------
 
 global print_matrix
