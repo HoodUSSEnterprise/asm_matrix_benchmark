@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-15 21:56:03
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-18 23:22:29
+@LastEditTime: 2026-06-20 10:39:12
 @FilePath: \asm_matrix_benchmark\example\matrix_int.c
 @Description:example of matrix int
 *************************************************************/
@@ -154,6 +154,38 @@ int main(void)
     {
         print_matrix(&trace_matrix);
         printf("matrix trace = %d \n", trace);
+    }
+    puts("----------------------------------------------------------------------------------------");
+    puts("-------------------------------------compare matrix-------------------------------------");
+    int compare_data1[6] = {1, 2, 3, 4, 5, 6};
+    int compare_data2[6] = {6, 5, 4, 3, 2, 1};
+    MatrixInt compare_matrix1 = {compare_data1, 2, 3};
+    MatrixInt compare_matrix2 = {compare_data1, 2, 3};
+    MatrixInt compare_matrix3 = {compare_data2, 2, 3};
+    MatrixInt compare_matrix4 = {compare_data1, 3, 2};
+    if (is_equal_matrix_int(&compare_matrix1, &compare_matrix2))
+    {
+        puts("Two matrix equals\n");
+    }
+    else
+    {
+        puts("Two matrix not equals\n");
+    }
+    if (is_equal_matrix_int(&compare_matrix1, &compare_matrix3))
+    {
+        puts("Two matrix equals\n");
+    }
+    else
+    {
+        puts("Two matrix not equals\n");
+    }
+    if (is_equal_matrix_int(&compare_matrix1, &compare_matrix4))
+    {
+        puts("Two matrix equals\n");
+    }
+    else
+    {
+        puts("Two matrix not equals\n");
     }
     return 0;
 }
