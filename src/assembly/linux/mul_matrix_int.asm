@@ -68,8 +68,7 @@ mul_matrix_int:
     mov r12, rdi    ; preserve count across malloc
 
     ; malloc res 24 bytes
-    mov rcx, 24 
-    mov rdi, rcx
+    mov rdi, 24
     call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_struct
@@ -77,9 +76,8 @@ mul_matrix_int:
     mov rbx, rax
 
     ; malloc res->data
-    mov rcx, rdi
-    shl rcx, 2 ; rcx *= 4
-    mov rdi, rcx
+    mov rdi, r12
+    shl rdi, 2 ; rdi *= 4
     call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_data
