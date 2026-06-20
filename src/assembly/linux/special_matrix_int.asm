@@ -58,7 +58,7 @@ identity_matrix_int:
     mov esi, 0
     mov rdx, r8
     shl rdx, 2
-    call memset
+    call memset wrt ..plt
 
     mov [rbx], r12
     mov dword [rbx + 8], r14d
@@ -150,7 +150,7 @@ diag_matrix_int:
     mov esi, 0
     mov rdx, r8
     shl rdx, 2
-    call memset
+    call memset wrt ..plt
 
     mov [rbx], r12
     mov qword [rbx + 8], r15
@@ -243,7 +243,7 @@ eye_matrix_int:
     mov esi, 0
     mov rdx, r8
     shl rdx, 2
-    call memset
+    call memset wrt ..plt
 
     mov [rbx], r12
     mov dword [rbx + 8], r14d
@@ -342,7 +342,7 @@ zero_matrix_int:
     mov esi, 0
     mov rdx, r8
     shl rdx, 2
-    call memset
+    call memset wrt ..plt
 
     mov [rbx], r12
     mov dword [rbx + 8], r14d
