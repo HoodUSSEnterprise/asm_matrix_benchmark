@@ -24,7 +24,6 @@ section .text
 replace_matrix_int_by_value:
     ; save callee_register
     push rbx
-    push rdi
     push r12
     push r13
     push r14
@@ -103,6 +102,5 @@ cleanup:
     pop r14
     pop r13
     pop r12
-    pop rdi
     pop rbx
     ret
