@@ -1,3 +1,11 @@
+;-------------------------------------------------------------
+; @Author: HoodUSSEnterprise
+; @Date: 2026-06-20 16:10:25
+; @LastEditors: HoodUSSEnterprise
+; @LastEditTime: 2026-06-20 16:12:22
+; @FilePath: \asm_matrix_benchmark\src\assembly\linux\transpose_matrix_int.asm
+; @Description: get transpose matrix nasm code on linux
+;-------------------------------------------------------------
 global transpose_matrix_int
 extern malloc
 extern free
