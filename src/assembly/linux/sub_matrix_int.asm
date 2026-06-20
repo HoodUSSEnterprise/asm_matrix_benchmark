@@ -68,6 +68,7 @@ sub_matrix_int:
     ; save the data len in rdi
     mov rdi, r8     ; rdi = m1->rows
     imul rdi, r9    ; rdi = m1->rows * m1->cols
+    mov r12, rdi    ; preserve count across malloc
 
     ; malloc res 24 bytes
     mov rcx, 24 
@@ -90,7 +91,8 @@ sub_matrix_int:
     mov [rbx + 8], r9   ; res->rows = m1->rows
     mov [rbx + 16], r10 ; res->cols = m1->cols
 
-    ; add m1 and m2
+    ; restore data count to rdi and start loop
+    mov rdi, r12
     xor rcx, rcx ; i = 0
     mov r13, [rbx]
     mov r9, [r14] ; r9 = m1->data
