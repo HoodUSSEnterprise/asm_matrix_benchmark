@@ -20,8 +20,10 @@ section .rodata
 
 section .text
 
+; ---------------------------------------------------------------------------------------------
 ; MatrixInt *identity_matrix_int(int order);
-; rdi = order
+; edi = order
+; ---------------------------------------------------------------------------------------------
 identity_matrix_int:
     push rbx
     push r12
@@ -34,19 +36,20 @@ identity_matrix_int:
     cmp r14d, 0
     jle id_null 
 
-    ; count = order * order
-    mov r8d, r14d
-    imul r8d, r14d           ; r8 = count
-
-    ; alloc struct
+    ; malloc struct
     mov rdi, 24
     call malloc wrt ..plt
     test rax, rax
     jz id_malloc_fail
     mov rbx, rax
 
-    ; alloc data (count * 4)
-    mov rdi, r8
+
+    ; count = order * order
+    mov r11d, r14d
+    imul r11d, r14d           ; r11 = count
+
+    ; malloc data (count * 4)
+    mov rdi, r11
     shl rdi, 2
     call malloc wrt ..plt
     test rax, rax
@@ -56,7 +59,7 @@ identity_matrix_int:
     ; memset(data, 0, count*4)
     mov rdi, r12
     mov esi, 0
-    mov rdx, r8
+    mov rdx, r11
     shl rdx, 2
     call memset wrt ..plt
 
@@ -113,8 +116,10 @@ id_cleanup:
     pop rbx
     ret
 
+; ---------------------------------------------------------------------------------------------
 ; MatrixInt *diag_matrix_int(int *data, size_t len);
 ; rdi = data, rsi = len
+; ---------------------------------------------------------------------------------------------
 diag_matrix_int:
     push rbx
     push r12
@@ -130,8 +135,8 @@ diag_matrix_int:
     cmp r15, 0
     jle diag_null
 
-    mov r8, r15
-    imul r8, r15    ; r8 = len*len
+    mov r11, r15
+    imul r11, r15    ; r11 = len*len
 
     mov rdi, 24
     call malloc wrt ..plt
@@ -139,7 +144,7 @@ diag_matrix_int:
     jz diag_malloc_fail
     mov rbx, rax
 
-    mov rdi, r8
+    mov rdi, r11
     shl rdi, 2
     call malloc wrt ..plt
     test rax, rax
@@ -148,7 +153,7 @@ diag_matrix_int:
 
     mov rdi, r12
     mov esi, 0
-    mov rdx, r8
+    mov rdx, r11
     shl rdx, 2
     call memset wrt ..plt
 
@@ -156,16 +161,16 @@ diag_matrix_int:
     mov qword [rbx + 8], r15
     mov qword [rbx + 16], r15
 
-    xor r13d, r13d
+    xor r13, r13
 diag_loop:
-    cmp r13d, edi
+    cmp r13, r11
     jge diag_end
-    mov eax, r13d
-    imul eax, r15d
-    add eax, r13d
+    mov rax, r13
+    imul rax, r15
+    add rax, r13
     mov edx, [r14 + r13*4]
     mov [r12 + rax*4], edx
-    inc r13d
+    inc r13
     jmp diag_loop
 
 diag_end:
@@ -206,8 +211,10 @@ diag_cleanup:
     pop rbx
     ret
 
+; ---------------------------------------------------------------------------------------------
 ; MatrixInt *eye_matrix_int(int rows, int cols);
 ; rdi = rows, rsi = cols
+; ---------------------------------------------------------------------------------------------
 eye_matrix_int:
     push rbx
     push r12
@@ -223,8 +230,8 @@ eye_matrix_int:
     cmp r15d, 0
     jle eye_null
 
-    mov r8d, r14d
-    imul r8d, r15d    ; r8 = rows*cols
+    mov r11d, r14d
+    imul r11d, r15d    ; r11 = rows*cols
 
     mov rdi, 24
     call malloc wrt ..plt
@@ -232,7 +239,7 @@ eye_matrix_int:
     jz eye_malloc_fail
     mov rbx, rax
 
-    mov rdi, r8
+    mov rdi, r11
     shl rdi, 2
     call malloc wrt ..plt
     test rax, rax
@@ -241,7 +248,7 @@ eye_matrix_int:
 
     mov rdi, r12
     mov esi, 0
-    mov rdx, r8
+    mov rdx, r11
     shl rdx, 2
     call memset wrt ..plt
 
@@ -305,8 +312,10 @@ eye_cleanup:
     pop rbx
     ret
 
+; ---------------------------------------------------------------------------------------------
 ; MatrixInt *zero_matrix_int(int rows, int cols);
 ; rdi = rows, rsi = cols
+; ---------------------------------------------------------------------------------------------
 zero_matrix_int:
     push rbx
     push r12
@@ -322,8 +331,8 @@ zero_matrix_int:
     cmp r15d, 0
     jle zero_null
 
-    mov r8d, r14d
-    imul r8d, r15d
+    mov r11d, r14d
+    imul r11d, r15d
 
     mov rdi, 24
     call malloc wrt ..plt
@@ -331,7 +340,7 @@ zero_matrix_int:
     jz zero_malloc_fail
     mov rbx, rax
 
-    mov rdi, r8
+    mov rdi, r11
     shl rdi, 2
     call malloc wrt ..plt
     test rax, rax
@@ -340,7 +349,7 @@ zero_matrix_int:
 
     mov rdi, r12
     mov esi, 0
-    mov rdx, r8
+    mov rdx, r11
     shl rdx, 2
     call memset wrt ..plt
 
