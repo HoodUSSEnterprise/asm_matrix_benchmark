@@ -24,6 +24,7 @@ section .text
 ; void print_matrix(MatrixInt *m);
 ; rdi = m (System V)
 print_matrix:
+
     push r12
     push r13
     push r14
@@ -61,21 +62,21 @@ print_matrix:
     xor r13, r13 ; i = 0
     xor r14, r14 ; j = 0
     mov r15, [r12] ; r15 = matrix->data
-    mov rdi, [r12 + 8] ; rdi = matrix->rows
-    mov rsi, [r12 + 16] ; rsi = matrix->cols
+    ;mov rdi, [r12 + 8] ; rdi = matrix->rows
+    ;mov rsi, [r12 + 16] ; rsi = matrix->cols
 
 loop1:
-    cmp r13, rdi ; i < rdi
+    cmp r13, [r12 + 8] ; i < rdi
     jge end
 
     xor r14, r14
 loop2:
-    cmp r14, rsi ; j < rsi
+    cmp r14, [r12 + 16] ; j < rsi
     jge change_line
 
     ; print data
     lea rdi, [rel fmt] ;
-    mov r11, rsi ; r11 = matrix->cols
+    mov r11, [r12 + 16] ; r11 = matrix->cols
     imul r11, r13 ; r11 *= i
     add r11, r14  ; now r11 = i * matrix->cols + j
     mov esi, [r15 + r11 * 4]
