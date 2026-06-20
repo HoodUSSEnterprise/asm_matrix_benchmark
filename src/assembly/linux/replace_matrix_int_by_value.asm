@@ -20,7 +20,7 @@ section .rodata
 section .text
 
 ; bool replace_matrix_int_by_value(MatrixInt *m, int old_data, int new_data);
-; rdi = m, rsi = old_data, rdx = new_data (System V)
+; rdi = m, esi = old_data, edx = new_data (System V)
 replace_matrix_int_by_value:
     ; save callee_register
     push rbx
@@ -45,7 +45,7 @@ replace_matrix_int_by_value:
     jz null_ptr
 
     ; restore r14
-    mov r14, rcx
+    mov r14, rdi
 
     mov rdi, r14
     mov esi, r15d
