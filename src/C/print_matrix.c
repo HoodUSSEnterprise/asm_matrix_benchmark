@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-16 19:15:53
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-16 19:19:24
+@LastEditTime: 2026-06-20 17:09:25
 @FilePath: \asm_matrix_benchmark\src\C\print_matrix.c
 @Description: print matrix c code
 *************************************************************/
@@ -21,7 +21,7 @@ void print_matrix(MatrixInt *m)
         return;
     }
     puts("------------------matrix info------------------");
-    printf("matrix size: (%d, %d)\n", m->rows, m->cols);
+    printf("matrix size: (%zu, %zu)\n", m->rows, m->cols);
     puts("matrix data:");
     for (size_t i = 0; i < m->rows; i++)
     {
