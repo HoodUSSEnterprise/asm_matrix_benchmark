@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-20 14:37:33
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-20 15:28:43
+@LastEditTime: 2026-06-20 16:19:30
 @FilePath: \asm_matrix_benchmark\src\C\inv_matrix.c
 @Description: inverse matrix c code
 *************************************************************/
@@ -95,8 +95,7 @@ MatrixDouble *inv_matrix_int(MatrixInt *m)
     {
         // find main element
         size_t pivot = rows;
-        while (fabs(aug_matrix->data[rows * aug_matrix->cols + cols]) < 1e-6 &&
-               pivot < aug_matrix->rows)
+        while (fabs(aug_matrix->data[rows * aug_matrix->cols + cols]) < 1e-6 && pivot < aug_matrix->rows)
         {
             pivot++;
         }
@@ -112,8 +111,7 @@ MatrixDouble *inv_matrix_int(MatrixInt *m)
             for (size_t j = 0; j < aug_matrix->cols; j++)
             {
                 double temp = aug_matrix->data[pivot * aug_matrix->cols + j];
-                aug_matrix->data[pivot * aug_matrix->cols + j] =
-                    aug_matrix->data[rows * aug_matrix->cols + j];
+                aug_matrix->data[pivot * aug_matrix->cols + j] = aug_matrix->data[rows * aug_matrix->cols + j];
                 aug_matrix->data[rows * aug_matrix->cols + j] = temp;
             }
         }
@@ -125,12 +123,10 @@ MatrixDouble *inv_matrix_int(MatrixInt *m)
             {
                 continue;
             }
-            double factor = aug_matrix->data[i * aug_matrix->cols + cols] /
-                            aug_matrix->data[rows * aug_matrix->cols + cols];
+            double factor = aug_matrix->data[i * aug_matrix->cols + cols] / aug_matrix->data[rows * aug_matrix->cols + cols];
             for (int j = cols; j < aug_matrix->cols; j++)
             {
-                aug_matrix->data[i * aug_matrix->cols + j] -=
-                    factor * aug_matrix->data[rows * aug_matrix->cols + j];
+                aug_matrix->data[i * aug_matrix->cols + j] -= factor * aug_matrix->data[rows * aug_matrix->cols + j];
             }
         }
         rows++;
