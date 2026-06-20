@@ -44,7 +44,7 @@ find_elem_int:
     jz null_ptr
 
     ; restore r14
-    mov r14, rcx
+    mov r14, rdi
 
     ; check pos, if pos is null, malloc for pos
     test r13, r13
@@ -58,8 +58,7 @@ malloc_pos:
     ;     size_t y;
     ; } Point; 
     ; sizeof(Point) = 16
-    mov rcx, 16
-    mov rdi, rcx
+    mov rdi, 16
     call malloc wrt ..plt
     test rax, rax
     jz malloc_fail
