@@ -17,7 +17,7 @@ section .rodata
 section .text
 
 ; bool replace_matrix_int_by_coord(MatrixInt *m, Point *pos, int new_data);
-; rcx = m, rdx = pos, r8d = new_data
+; rdi = m, rsi = pos, edx = new_data (System V)
 replace_matrix_int_by_coord:
 
     ; save callee_register
@@ -29,9 +29,9 @@ replace_matrix_int_by_coord:
     push r15
     sub rsp, 32 ; allocate shadow space for puts
 
-    mov r14, rcx ; r14 = m
-    mov r15, rdx ; r15 = pos
-    mov r13d, r8d ; r13d = new_data
+    mov r14, rdi ; r14 = m
+    mov r15, rsi ; r15 = pos
+    mov r13d, edx ; r13d = new_data
 
     ; check m and pos
     test r14, r14
@@ -39,14 +39,14 @@ replace_matrix_int_by_coord:
     test r15, r15
     jz null_ptr
 
-    mov r14, [rcx] ; r14 = m->data
+    mov r14, [rdi] ; r14 = m->data
 
     ; check m->data
     test r14, r14
     jz null_ptr
 
     ; restore r14
-    mov r14, rcx
+    mov r14, rdi
 
     mov r8, [r15] ; r8 = pos.x
     mov r9, [r15 + 8] ; r9 = pos.y
@@ -78,14 +78,18 @@ replace_matrix_int_by_coord:
     jmp cleanup
 
 null_ptr:
-    lea rcx, [rel invalid_param] ; rcx = invalid_param
+    lea rdi, [rel invalid_param] ; rdi = invalid_param
+    sub rsp, 8
     call puts
+    add rsp, 8
     mov rax, 0 ; return false
     jmp cleanup
 
 index_out_of_range:
-    lea rcx, [rel index_out]
+    lea rdi, [rel index_out]
+    sub rsp, 8
     call puts
+    add rsp, 8
     mov rax, 0 ; return false
     jmp cleanup
 
