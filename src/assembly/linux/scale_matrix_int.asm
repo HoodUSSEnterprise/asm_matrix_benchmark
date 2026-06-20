@@ -2,10 +2,11 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-16 18:45:24
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-16 18:53:16
-; @FilePath: \asm_matrix_benchmark\src\assembly\windows\scale_matrix_int.asm
-; @Description: scale matrix nasm code on windows
+; @LastEditTime: 2026-06-20 16:16:10
+; @FilePath: \asm_matrix_benchmark\src\assembly\linux\scale_matrix_int.asm
+; @Description: scale matrix nasm code on linux
 ;-------------------------------------------------------------
+
 global scale_matrix_int
 extern printf
 extern malloc
