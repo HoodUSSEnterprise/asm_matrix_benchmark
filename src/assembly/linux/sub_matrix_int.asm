@@ -1,10 +1,10 @@
 ;-------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
-; @Date: 2026-06-16 16:36:24
+; @Date: 2026-06-20 16:10:25
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-16 17:24:26
-; @FilePath: \asm_matrix_benchmark\src\assembly\windows\sub_matrix_int.asm
-; @Description: sub matrix nasm code on windows
+; @LastEditTime: 2026-06-20 16:13:08
+; @FilePath: \asm_matrix_benchmark\src\assembly\linux\sub_matrix_int.asm
+; @Description: sub matrix nasm code on linux
 ;-------------------------------------------------------------
 
 global sub_matrix_int
