@@ -1,11 +1,12 @@
 ;-------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
-; @Date: 2026-06-18 23:25:45
+; @Date: 2026-06-20 16:10:25
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-20 10:50:51
-; @FilePath: \asm_matrix_benchmark\src\assembly\windows\rank_matrix_int.asm
-; @Description: rank matrix int nasm code on windows
+; @LastEditTime: 2026-06-20 16:16:09
+; @FilePath: \asm_matrix_benchmark\src\assembly\linux\rank_matrix_int.asm
+; @Description: rank matrix int nasm code on linux
 ;-------------------------------------------------------------
+
 global rank_matrix_int
 extern puts
 extern malloc
