@@ -25,7 +25,6 @@ mul_matrix_int:
 
     ; save callee_register
     push rbx
-    push rdi
     push r12
     push r13
     push r14
@@ -199,7 +198,6 @@ cleanup:
     pop r14
     pop r13
     pop r12
-    pop rdi
     pop rbx
     ret
     
