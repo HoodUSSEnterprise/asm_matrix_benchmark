@@ -1,11 +1,12 @@
 ;-------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
-; @Date: 2026-06-17 13:48:54
+; @Date: 2026-06-20 16:10:25
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-17 17:06:28
-; @FilePath: \asm_matrix_benchmark\src\assembly\windows\replace_matrix_int_by_value.asm
-; @Description: replace matrix int by value nasm code on windows
+; @LastEditTime: 2026-06-20 16:16:10
+; @FilePath: \asm_matrix_benchmark\src\assembly\linux\replace_matrix_int_by_value.asm
+; @Description: replace matrix int by value nasm code on linux
 ;-------------------------------------------------------------
+
 global replace_matrix_int_by_value
 
 ; bool find_elem_int(MatrixInt *m, int elem, Point *pos);
