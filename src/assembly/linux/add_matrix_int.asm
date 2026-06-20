@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-20 16:10:25
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-20 16:11:03
+; @LastEditTime: 2026-06-20 17:16:25
 ; @FilePath: \asm_matrix_benchmark\src\assembly\linux\add_matrix_int.asm
 ; @Description: add matrix nasm code on linux
 ;-------------------------------------------------------------
@@ -25,7 +25,6 @@ add_matrix_int:
 
     ; save callee_register
     push rbx
-    push rdi
     push r12
     push r13
     push r14
@@ -117,7 +116,7 @@ malloc_fail_struct:
     lea rdi, [rel malloc_failed] ; rdi = malloc_failed
     xor eax, eax
     sub rsp, 8
-    call printf wrt ..plt
+    call printf
     add rsp, 8
     mov rax, 0
     jmp cleanup
@@ -126,7 +125,7 @@ malloc_fail_data:
     lea rdi, [rel malloc_failed] ; rdi = malloc_failed
     xor eax, eax
     sub rsp, 8
-    call printf wrt ..plt
+    call printf
     add rsp, 8
     mov rdi, rbx
     call free wrt ..plt
@@ -137,7 +136,7 @@ null_ptr:
     lea rdi, [rel invalid_param] ; rdi = invalid_param
     xor eax, eax
     sub rsp, 8
-    call printf wrt ..plt
+    call printf
     add rsp, 8
     mov rax, 0 ; return NULL
     jmp cleanup
@@ -150,7 +149,7 @@ dimension_mismatch:
     mov r8,  [r15 + 16]         ; m2.cols
     xor eax, eax
     sub rsp, 8
-    call printf wrt ..plt
+    call printf
     add rsp, 8
     mov rax, 0                  ; return NULL
     jmp cleanup
@@ -166,6 +165,5 @@ cleanup:
     pop r14
     pop r13
     pop r12
-    pop rdi
     pop rbx
     ret
