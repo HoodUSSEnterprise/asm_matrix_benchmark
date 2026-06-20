@@ -32,7 +32,7 @@ identity_matrix_int:
 
     ; malloc res 24 bytes
     mov rdi, 24 
-    call malloc
+    call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_struct
 
@@ -45,7 +45,7 @@ identity_matrix_int:
     ; malloc res->data
     mov rdi, r11
     shl rdi, 2 ; rdi *= 4
-    call malloc
+    call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_data
 
@@ -55,7 +55,7 @@ identity_matrix_int:
     mov esi, 0   ; memset value = 0
     mov r8, rdi  ; number sizeof int
     shl r8, 2    ; sizeof res data
-    call memset
+    call memset wrt ..plt
 
     ; init res param
     mov [rbx], rax          ; res->data = new malloc data
@@ -75,7 +75,7 @@ loopidentity:
     add r8, rdi ; r8 += i
 
     ; means res->data[i][i]
-    mov [rsi + r8 * 4], 1 ; res->data[i * order + i]
+    mov dword [rsi + r8 * 4], 1 ; res->data[i * order + i]
     inc rdi
     jmp loopidentity
 
@@ -106,7 +106,7 @@ diag_matrix_int:
 
     ; malloc res 24 bytes
     mov rdi, 24 
-    call malloc
+    call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_struct
 
@@ -119,7 +119,7 @@ diag_matrix_int:
     ; malloc res->data
     mov rdi, r11
     shl rdi, 2 ; rdi *= 4
-    call malloc
+    call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_data
 
@@ -129,7 +129,7 @@ diag_matrix_int:
     mov esi, 0   ; memset value = 0
     mov r8, rdi  ; number sizeof int
     shl r8, 2    ; sizeof res data
-    call memset
+    call memset wrt ..plt
 
     ; init res param
     mov [rbx], rax          ; res->data = new malloc data
@@ -181,7 +181,7 @@ eye_matrix_int:
 
     ; malloc res 24 bytes
     mov rdi, 24 
-    call malloc
+    call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_struct
 
@@ -194,7 +194,7 @@ eye_matrix_int:
     ; malloc res->data
     mov edi, r11d
     shl edi, 2 ; edi *= 4
-    call malloc
+    call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_data
 
@@ -204,7 +204,7 @@ eye_matrix_int:
     mov esi, 0   ; memset value = 0
     mov r8, rdi  ; number sizeof int
     shl r8, 2    ; sizeof res data
-    call memset
+    call memset wrt ..plt
 
     ; init res param
     mov [rbx], rax          ; res->data = new malloc data
@@ -231,7 +231,7 @@ loopeye:
     imul r8, rdi ; r8 *= i
     add r8, rdi ; r8 += i
 
-    mov [rsi + r8 * 4], 1 ; res->data[i * cols + i] = 1
+    mov dword [rsi + r8 * 4], 1 ; res->data[i * cols + i] = 1
     inc rdi
     jmp loopeye
 
@@ -262,7 +262,7 @@ zero_matrix_int:
 
     ; malloc res 24 bytes
     mov rdi, 24 
-    call malloc
+    call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_struct
 
@@ -273,9 +273,9 @@ zero_matrix_int:
     imul r11d, r15d    ; r11d = rows * cols
 
     ; malloc res->data
-    mov edi, edi
+    mov edi, r11d
     shl edi, 2 ; edi *= 4
-    call malloc
+    call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_data
 
@@ -285,7 +285,7 @@ zero_matrix_int:
     mov esi, 0   ; memset value = 0
     mov r8, rdi  ; number sizeof int
     shl r8, 2    ; sizeof res data
-    call memset
+    call memset wrt ..plt
 
     ; init res param
     mov [rbx], rax          ; res->data = new malloc data
@@ -295,21 +295,21 @@ zero_matrix_int:
 
 malloc_fail_struct:
     lea rdi, [rel malloc_failed] ; rdi = malloc_failed
-    call puts
+    call puts wrt ..plt
     mov rax, 0
     jmp cleanup
 
 malloc_fail_data:
     lea rdi, [rel malloc_failed] ; rdi = malloc_failed
-    call puts
+    call puts wrt ..plt
     mov rdi, rbx
-    call free
+    call free wrt ..plt
     mov rax, 0
     jmp cleanup
 
 null_ptr:
     lea rdi, [rel invalid_param] ; rdi = invalid_param
-    call puts
+    call puts wrt ..plt
     mov rax, 0 ; return NULL
     jmp cleanup
 
