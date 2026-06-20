@@ -42,6 +42,9 @@ transpose_matrix_int:
     test r14, r14
     jz null_ptr
 
+    ; restore r14
+    mov r14, rdi	
+
     ; load dims
     mov r8, [r14 + 8]   ; rows
     mov r9, [r14 + 16]  ; cols
