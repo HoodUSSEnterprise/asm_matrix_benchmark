@@ -1,11 +1,12 @@
 ;-------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
-; @Date: 2026-06-17 10:39:56
+; @Date: 2026-06-20 16:10:25
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-17 15:05:15
-; @FilePath: \asm_matrix_benchmark\src\assembly\windows\find_matrix_int.asm
-; @Description: find elem position in matrix nasm code on windows
+; @LastEditTime: 2026-06-20 16:16:05
+; @FilePath: \asm_matrix_benchmark\src\assembly\linux\find_matrix_int.asm
+; @Description: find elem position in matrix nasm code on linux
 ;-------------------------------------------------------------
+
 global find_elem_int
 extern puts
 extern malloc
