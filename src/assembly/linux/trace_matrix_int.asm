@@ -75,7 +75,7 @@ loop1:
 null_ptr:
     lea rdi, [rel invalid_param] ; rdi = invalid_param
     sub rsp, 8
-    call puts
+    call puts wrt ..plt
     add rsp, 8
     mov rax, 0 ; return false
     jmp cleanup
@@ -83,7 +83,7 @@ null_ptr:
 not_a_square:
     lea rdi, [rel no_square]
     sub rsp, 8
-    call puts
+    call puts wrt ..plt
     add rsp, 8
     mov rax, 0                  ; return false
     jmp cleanup

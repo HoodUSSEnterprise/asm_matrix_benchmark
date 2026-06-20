@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-20 16:10:25
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-20 17:05:24
+; @LastEditTime: 2026-06-20 17:07:24
 ; @FilePath: \asm_matrix_benchmark\src\assembly\linux\replace_matrix_int_by_value.asm
 ; @Description: replace matrix int by value nasm code on linux
 ;-------------------------------------------------------------
@@ -84,7 +84,7 @@ replace_data:
 null_ptr:
     lea rdi, [rel invalid_param] ; rdi = invalid_param
     sub rsp, 8
-    call puts
+    call puts wrt ..plt
     add rsp, 8
     mov rax, 0 ; return false
     jmp cleanup

@@ -236,7 +236,7 @@ loop1out11:
 invalid_axis:
     lea rdi, [rel wrong_params] ; rdi = wrong_params
     sub rsp, 8
-    call puts
+    call puts wrt ..plt
     add rsp, 8
     jmp cleanup
 
@@ -244,7 +244,7 @@ malloc_fail_struct:
     lea rdi, [rel malloc_failed] ; rdi = malloc_failed
     xor eax, eax
     sub rsp, 8
-    call printf
+    call printf wrt ..plt
     add rsp, 8
     mov rax, 0
     jmp cleanup
@@ -253,7 +253,7 @@ malloc_fail_data:
     lea rdi, [rel malloc_failed] ; rdi = malloc_failed
     xor eax, eax
     sub rsp, 8
-    call printf
+    call printf wrt ..plt
     add rsp, 8
     mov rdi, rbx
     call free wrt ..plt
@@ -264,7 +264,7 @@ null_ptr:
     lea rdi, [rel invalid_param] ; rdi = invalid_param
     xor eax, eax
     sub rsp, 8
-    call printf
+    call printf wrt ..plt
     add rsp, 8
     mov rax, 0 ; return NULL
     jmp cleanup
@@ -281,7 +281,7 @@ dimension_mismatch:
     mov r8,  [r15 + 16]         ; m2.cols
     xor eax, eax
     sub rsp, 8
-    call printf
+    call printf wrt ..plt
     add rsp, 8
     mov rax, 0                  ; return NULL
     jmp cleanup

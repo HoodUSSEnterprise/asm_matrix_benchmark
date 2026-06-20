@@ -113,13 +113,13 @@ on_loop:
 
 malloc_fail_struct:
     lea rcx, [rel malloc_failed] ; rcx = malloc_failed
-    call printf
+    call printf wrt ..plt
     mov rax, 0
     jmp cleanup
 
 malloc_fail_data:
     lea rcx, [rel malloc_failed] ; rcx = malloc_failed
-    call printf
+    call printf wrt ..plt
     mov rcx, rbx
     call free wrt ..plt
     mov rax, 0
@@ -127,7 +127,7 @@ malloc_fail_data:
 
 null_ptr:
     lea rcx, [rel invalid_param] ; rcx = invalid_param
-    call printf
+    call printf wrt ..plt
     mov rax, 0 ; return NULL
     jmp cleanup
 
@@ -138,7 +138,7 @@ dimension_mismatch:
     mov r9, [r15 + 8]           ; m2.rows
     mov r10, [r15 + 16]         ; m2.cols
     mov [rsp + 32], r10         ; fifth parament
-    call printf
+    call printf wrt ..plt
     mov rax, 0                  ; return NULL
     jmp cleanup
 

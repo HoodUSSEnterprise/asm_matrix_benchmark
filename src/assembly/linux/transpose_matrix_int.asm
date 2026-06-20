@@ -129,7 +129,7 @@ malloc_fail_struct:
     lea rdi, [rel malloc_failed]
     xor eax, eax
     sub rsp, 8
-    call printf
+    call printf wrt ..plt
     add rsp, 8
     mov rax, 0
     jmp cleanup
@@ -138,7 +138,7 @@ malloc_fail_data:
     lea rdi, [rel malloc_failed]
     xor eax, eax
     sub rsp, 8
-    call printf
+    call printf wrt ..plt
     add rsp, 8
     mov rdi, rbx
     call free wrt ..plt
@@ -149,7 +149,7 @@ null_ptr:
     lea rdi, [rel invalid_param]
     xor eax, eax
     sub rsp, 8
-    call printf
+    call printf wrt ..plt
     add rsp, 8
     mov rax, 0
     jmp cleanup

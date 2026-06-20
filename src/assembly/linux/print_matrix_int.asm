@@ -41,7 +41,7 @@ print_matrix:
     ; print matrix_info
     lea rdi, [rel matrix_info] ; rdi = matrix_info
     sub rsp, 8
-    call puts ; puts("------------------matrix info------------------\n");
+    call puts wrt ..plt ; puts("------------------matrix info------------------\n");
     add rsp, 8
 
     ; print matrix size
@@ -50,13 +50,13 @@ print_matrix:
     mov rdx, [r12 + 16] ; rdx = matrix->cols
     xor eax, eax
     sub rsp, 8
-    call printf ; printf("matrix size: (%d, %d)\n", matrix->rows, matrix->cols);
+    call printf wrt ..plt ; printf("matrix size: (%d, %d)\n", matrix->rows, matrix->cols);
     add rsp, 8
 
     ; print matrix_data
     lea rdi, [rel matrix_data] ; rdi = matrix_data
     sub rsp, 8
-    call puts ; puts("matrix data:"\n);
+    call puts wrt ..plt ; puts("matrix data:"\n);
     add rsp, 8
 
     ; init loop condition
@@ -83,7 +83,7 @@ loop2:
     mov esi, [r15 + r11 * 4]
     xor eax, eax
     sub rsp, 8
-    call printf ; printf("%d ", matrix->data[i * matrix->cols + j]);
+    call printf wrt ..plt ; printf("%d ", matrix->data[i * matrix->cols + j]);
     add rsp, 8
     inc r14; j++
     jmp loop2
@@ -93,14 +93,14 @@ change_line:
     ; print change line
     mov edi, 10
     sub rsp, 8
-    call putchar ; putchar('\n');
+    call putchar wrt ..plt ; putchar('\n');
     add rsp, 8
     jmp loop1
 
 error:
     lea rdi, [rel invalid_param]
     sub rsp, 8
-    call puts
+    call puts wrt ..plt
     add rsp, 8
     jmp end
 

@@ -98,7 +98,7 @@ inc_rdi:
 null_ptr:
     lea rdi, [rel invalid_param] ; rdi = invalid_param
     sub rsp, 8
-    call puts
+    call puts wrt ..plt
     add rsp, 8
     mov rax, 0 ; return NULL
     jmp cleanup
@@ -106,7 +106,7 @@ null_ptr:
 malloc_fail:
     lea rdi, [rel malloc_failed] ; rdi = invalid_param
     sub rsp, 8
-    call puts
+    call puts wrt ..plt
     add rsp, 8
     mov rax, 0 ; return NULL
     jmp cleanup

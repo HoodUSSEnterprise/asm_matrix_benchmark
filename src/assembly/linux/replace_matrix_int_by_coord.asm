@@ -80,7 +80,7 @@ replace_matrix_int_by_coord:
 null_ptr:
     lea rdi, [rel invalid_param] ; rdi = invalid_param
     sub rsp, 8
-    call puts
+    call puts wrt ..plt
     add rsp, 8
     mov rax, 0 ; return false
     jmp cleanup
@@ -88,7 +88,7 @@ null_ptr:
 index_out_of_range:
     lea rdi, [rel index_out]
     sub rsp, 8
-    call puts
+    call puts wrt ..plt
     add rsp, 8
     mov rax, 0 ; return false
     jmp cleanup

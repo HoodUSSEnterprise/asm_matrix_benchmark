@@ -230,13 +230,13 @@ next:
 
 null_ptr:
     lea rcx, [rel invalid_param] ; rcx = invalid_param
-    call puts
+    call puts wrt ..plt
     mov rax, 0 ; return false
     jmp cleanup
 
 malloc_fail_data:
     lea rcx, [rel malloc_failed] ; rcx = malloc_failed
-    call puts
+    call puts wrt ..plt
     mov rax, 0
     jmp cleanup
 

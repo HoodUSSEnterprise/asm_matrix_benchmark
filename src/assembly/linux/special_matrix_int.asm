@@ -82,7 +82,7 @@ id_end:
 id_malloc_fail_data:
     lea rdi, [rel malloc_failed]
     sub rsp, 8
-    call puts
+    call puts wrt ..plt
     add rsp, 8
     mov rdi, rbx
     call free wrt ..plt
@@ -92,7 +92,7 @@ id_malloc_fail_data:
 id_malloc_fail:
     lea rdi, [rel malloc_failed]
     sub rsp, 8
-    call puts
+    call puts wrt ..plt
     add rsp, 8
     mov rax, 0
     jmp id_cleanup
@@ -100,7 +100,7 @@ id_malloc_fail:
 id_null :
     lea rdi, [rel invalid_param]
     sub rsp, 8
-    call puts
+    call puts wrt ..plt
     add rsp, 8
     mov rax, 0
 
@@ -175,7 +175,7 @@ diag_end:
 diag_malloc_fail_data:
     lea rdi, [rel malloc_failed]
     sub rsp, 8
-    call puts
+    call puts wrt ..plt
     add rsp, 8
     mov rdi, rbx
     call free wrt ..plt
@@ -185,7 +185,7 @@ diag_malloc_fail_data:
 diag_malloc_fail:
     lea rdi, [rel malloc_failed]
     sub rsp, 8
-    call puts
+    call puts wrt ..plt
     add rsp, 8
     mov rax, 0
     jmp diag_cleanup
@@ -193,7 +193,7 @@ diag_malloc_fail:
 diag_null:
     lea rdi, [rel invalid_param]
     sub rsp, 8
-    call puts
+    call puts wrt ..plt
     add rsp, 8
     mov rax, 0
 
@@ -274,7 +274,7 @@ eye_done:
 eye_malloc_fail_data:
     lea rdi, [rel malloc_failed]
     sub rsp, 8
-    call puts
+    call puts wrt ..plt
     add rsp, 8
     mov rdi, rbx
     call free wrt ..plt
@@ -284,7 +284,7 @@ eye_malloc_fail_data:
 eye_malloc_fail:
     lea rdi, [rel malloc_failed]
     sub rsp, 8
-    call puts
+    call puts wrt ..plt
     add rsp, 8
     mov rax, 0
     jmp eye_cleanup
@@ -292,7 +292,7 @@ eye_malloc_fail:
 eye_null:
     lea rdi, [rel invalid_param]
     sub rsp, 8
-    call puts
+    call puts wrt ..plt
     add rsp, 8
     mov rax, 0
 
@@ -353,7 +353,7 @@ zero_matrix_int:
 zero_malloc_fail_data:
     lea rdi, [rel malloc_failed]
     sub rsp, 8
-    call puts
+    call puts wrt ..plt
     add rsp, 8
     mov rdi, rbx
     call free wrt ..plt
@@ -363,7 +363,7 @@ zero_malloc_fail_data:
 zero_malloc_fail:
     lea rdi, [rel malloc_failed]
     sub rsp, 8
-    call puts
+    call puts wrt ..plt
     add rsp, 8
     mov rax, 0
     jmp zero_cleanup
@@ -371,7 +371,7 @@ zero_malloc_fail:
 zero_null:
     lea rdi, [rel invalid_param]
     sub rsp, 8
-    call puts
+    call puts wrt ..plt
     add rsp, 8
     mov rax, 0
 
