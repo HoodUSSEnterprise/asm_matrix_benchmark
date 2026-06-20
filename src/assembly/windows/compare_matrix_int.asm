@@ -2,11 +2,11 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-19 11:10:25
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-20 10:31:33
+; @LastEditTime: 2026-06-20 10:38:19
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\compare_matrix_int.asm
 ; @Description: compare two matrix int nasm code on windows
 ;-------------------------------------------------------------
-global compare_matrix_int
+global is_equal_matrix_int
 
 extern printf
 extern puts
@@ -19,7 +19,7 @@ section .text
 
 ; bool is_equal_matrix_int(MatrixInt *m1, MatrixInt *m2)
 ; rcx = m1, rdx = m2
-compare_matrix_int:
+is_equal_matrix_int:
 
     ; save callee_register
     push rbx
