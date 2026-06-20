@@ -17,7 +17,7 @@ section .rodata
 section .text
 
 ; bool trace_matrix_int(MatrixInt *m, int *trace)
-; rcx = m, rdx = trace
+; rdi = m, rsi = trace (System V)
 trace_matrix_int:
     ; save callee_register
     push rbx
@@ -28,27 +28,27 @@ trace_matrix_int:
     push r15
     sub rsp, 32 ; allocate shadow space for puts
 
-    mov r14, rcx ; r14 = m
-    mov r15, rdx ; r15 = trace
+    mov r14, rdi ; r14 = m
+    mov r15, rsi ; r15 = trace
 
     ; check param m
     test r14, r14
     jz null_ptr
 
-    mov r14, [rcx] ; r14 = m->data
+    mov r14, [rdi] ; r14 = m->data
 
     ; check m->data
     test r14, r14
     jz null_ptr
 
     ; restore r14
-    mov r14, rcx
+    mov r14, rdi
 
     ; check is or not a square
     mov r8, [r14 + 8]   ; m->rows
     mov r9, [r14 + 16]  ; m->cols
 
-    cmp r9, 0  ; m->rows == 0
+    cmp r8, 0  ; m->rows == 0
     je null_ptr
     cmp r9, 0  ; m->cols == 0
     je null_ptr
@@ -73,14 +73,18 @@ loop1:
     jmp loop1
 
 null_ptr:
-    lea rcx, [rel invalid_param] ; rcx = invalid_param
+    lea rdi, [rel invalid_param] ; rdi = invalid_param
+    sub rsp, 8
     call puts
+    add rsp, 8
     mov rax, 0 ; return false
     jmp cleanup
 
 not_a_square:
-    lea rcx, [rel no_square] 
+    lea rdi, [rel no_square]
+    sub rsp, 8
     call puts
+    add rsp, 8
     mov rax, 0                  ; return false
     jmp cleanup
 
