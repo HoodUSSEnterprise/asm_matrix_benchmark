@@ -2,46 +2,57 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-20 14:37:33
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-20 15:19:36
-@FilePath: src/C/inv_matrix.c
-@Description:
+@LastEditTime: 2026-06-20 15:28:43
+@FilePath: \asm_matrix_benchmark\src\C\inv_matrix.c
+@Description: inverse matrix c code
 *************************************************************/
 
 #include "inv_matrix.h"
 
 #include <math.h>
 
-MatrixDouble* inv_matrix_int(MatrixInt* m) {
+/***********************************************************
+@description: inv matrix int
+@param {MatrixInt*} m
+@return {*}
+ ************************************************************/
+MatrixDouble *inv_matrix_int(MatrixInt *m)
+{
     // check m and m->data
-    if (m == NULL || m->data == NULL) {
+    if (m == NULL || m->data == NULL)
+    {
         fprintf(stderr, "Invalid param!\n");
         return NULL;
     }
     // check dimension
-    if (m->cols != m->rows) {
+    if (m->cols != m->rows)
+    {
         puts("It's not a square");
         return 0;
     }
     // malloc for new res
-    MatrixDouble* res = NULL;
-    res = (MatrixDouble*)malloc(sizeof(MatrixDouble));
-    if (res == NULL) {
+    MatrixDouble *res = NULL;
+    res = (MatrixDouble *)malloc(sizeof(MatrixDouble));
+    if (res == NULL)
+    {
         fprintf(stderr, "Memory allocation failed\n");
         return NULL;
     }
     res->rows = m->rows;
     res->cols = m->cols;
     // malloc for new res data
-    res->data = (double*)malloc(sizeof(double) * res->rows * res->cols);
-    if (res->data == NULL) {
+    res->data = (double *)malloc(sizeof(double) * res->rows * res->cols);
+    if (res->data == NULL)
+    {
         free(res);
         fprintf(stderr, "Memory allocation failed\n");
         return NULL;
     }
     // malloc new augmented matrix
-    MatrixDouble* aug_matrix = NULL;
-    aug_matrix = (MatrixDouble*)malloc(sizeof(MatrixDouble));
-    if (aug_matrix == NULL) {
+    MatrixDouble *aug_matrix = NULL;
+    aug_matrix = (MatrixDouble *)malloc(sizeof(MatrixDouble));
+    if (aug_matrix == NULL)
+    {
         fprintf(stderr, "Memory allocation failed\n");
         return NULL;
     }
@@ -49,43 +60,57 @@ MatrixDouble* inv_matrix_int(MatrixInt* m) {
     aug_matrix->cols = m->cols * 2;
     // malloc for new aug_matrix data
     aug_matrix->data =
-        (double*)malloc(sizeof(double) * aug_matrix->rows * aug_matrix->cols);
-    if (aug_matrix->data == NULL) {
+        (double *)malloc(sizeof(double) * aug_matrix->rows * aug_matrix->cols);
+    if (aug_matrix->data == NULL)
+    {
         free(aug_matrix);
         fprintf(stderr, "Memory allocation failed\n");
         return NULL;
     }
     // init aug_matrix
-    for (size_t i = 0; i < aug_matrix->rows; ++i) {
-        for (size_t j = 0; j < aug_matrix->cols; ++j) {
-            if (j < m->cols) {
+    for (size_t i = 0; i < aug_matrix->rows; ++i)
+    {
+        for (size_t j = 0; j < aug_matrix->cols; ++j)
+        {
+            if (j < m->cols)
+            {
                 aug_matrix->data[i * aug_matrix->cols + j] =
                     m->data[i * m->cols + j] * 1.0;
-            } else {
-                if (j - i == m->rows) {
+            }
+            else
+            {
+                if (j - i == m->rows)
+                {
                     aug_matrix->data[i * aug_matrix->cols + j] = 1;
-                } else {
+                }
+                else
+                {
                     aug_matrix->data[i * aug_matrix->cols + j] = 0;
                 }
             }
         }
     }
     // use guass elimination
-    for (size_t rows = 0, cols = 0; rows < aug_matrix->rows; cols++) {
+    for (size_t rows = 0, cols = 0; rows < aug_matrix->rows; cols++)
+    {
         // find main element
         size_t pivot = rows;
         while (fabs(aug_matrix->data[rows * aug_matrix->cols + cols]) < 1e-6 &&
-               pivot < aug_matrix->rows) {
+               pivot < aug_matrix->rows)
+        {
             pivot++;
         }
         // that means this column is zero of all
-        if (pivot == aug_matrix->rows) {
+        if (pivot == aug_matrix->rows)
+        {
             continue;
         }
 
         // exchange lines
-        if (pivot != rows) {
-            for (size_t j = 0; j < aug_matrix->cols; j++) {
+        if (pivot != rows)
+        {
+            for (size_t j = 0; j < aug_matrix->cols; j++)
+            {
                 double temp = aug_matrix->data[pivot * aug_matrix->cols + j];
                 aug_matrix->data[pivot * aug_matrix->cols + j] =
                     aug_matrix->data[rows * aug_matrix->cols + j];
@@ -94,14 +119,16 @@ MatrixDouble* inv_matrix_int(MatrixInt* m) {
         }
 
         // elimination this line
-        for (int i = 0; i < aug_matrix->rows; i++) {
-            if(i == rows)
+        for (int i = 0; i < aug_matrix->rows; i++)
+        {
+            if (i == rows)
             {
                 continue;
             }
             double factor = aug_matrix->data[i * aug_matrix->cols + cols] /
                             aug_matrix->data[rows * aug_matrix->cols + cols];
-            for (int j = cols; j < aug_matrix->cols; j++) {
+            for (int j = cols; j < aug_matrix->cols; j++)
+            {
                 aug_matrix->data[i * aug_matrix->cols + j] -=
                     factor * aug_matrix->data[rows * aug_matrix->cols + j];
             }
@@ -109,13 +136,14 @@ MatrixDouble* inv_matrix_int(MatrixInt* m) {
         rows++;
     }
     // extract res
-    for(size_t i = 0; i < res->rows; i++)
+    for (size_t i = 0; i < res->rows; i++)
     {
-        for (size_t j = 0; j < res->cols; j++) {
+        for (size_t j = 0; j < res->cols; j++)
+        {
             m->data[i * res->cols + j] = aug_matrix->data[i * aug_matrix->cols + m->cols + j];
         }
     }
-    // free aug_matrix 
+    // free aug_matrix
     free(aug_matrix->data);
     free(aug_matrix);
     return res;
