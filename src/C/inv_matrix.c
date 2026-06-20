@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-20 14:37:33
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-20 15:08:03
+@LastEditTime: 2026-06-20 15:19:36
 @FilePath: src/C/inv_matrix.c
 @Description:
 *************************************************************/
@@ -93,8 +93,12 @@ MatrixDouble* inv_matrix_int(MatrixInt* m) {
             }
         }
 
-        // elimination below line
-        for (int i = rows + 1; i < aug_matrix->rows; i++) {
+        // elimination this line
+        for (int i = 0; i < aug_matrix->rows; i++) {
+            if(i == rows)
+            {
+                continue;
+            }
             double factor = aug_matrix->data[i * aug_matrix->cols + cols] /
                             aug_matrix->data[rows * aug_matrix->cols + cols];
             for (int j = cols; j < aug_matrix->cols; j++) {
@@ -104,5 +108,15 @@ MatrixDouble* inv_matrix_int(MatrixInt* m) {
         }
         rows++;
     }
+    // extract res
+    for(size_t i = 0; i < res->rows; i++)
+    {
+        for (size_t j = 0; j < res->cols; j++) {
+            m->data[i * res->cols + j] = aug_matrix->data[i * aug_matrix->cols + m->cols + j];
+        }
+    }
+    // free aug_matrix 
+    free(aug_matrix->data);
+    free(aug_matrix);
     return res;
 }
