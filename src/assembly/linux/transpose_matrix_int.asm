@@ -24,25 +24,6 @@ transpose_matrix_int:
 
     ; save callee_register
     push rbx
-    push rdi
-    push r12
-    push r13
-    push r14
-    push r15
-    sub rsp, 32 ; allocate shadow space for printf
-
-    mov r14, rcx ; r14 = m
-
-    ; MatrixInt *transpose_matrix_int(MatrixInt *m);
-    ; rdi = m (System V)
-    ; check param m
-    test r14, r14
-; rdi = m (System V)
-
-    mov r14, [rcx] ; r14 = m->data
-    ; save callee_register
-    push rbx
-    push rdi
     push r12
     push r13
     push r14
@@ -164,6 +145,5 @@ cleanup:
     pop r14
     pop r13
     pop r12
-    pop rdi
     pop rbx
     ret
