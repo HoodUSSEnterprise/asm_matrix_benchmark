@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-18 23:25:45
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-19 11:03:46
+; @LastEditTime: 2026-06-19 23:42:49
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\rank_matrix_int.asm
 ; @Description: rank matrix int nasm code on windows
 ;-------------------------------------------------------------
@@ -11,6 +11,7 @@ extern puts
 extern malloc
 
 section .rodata
+    epsilon dq 1e-6
     malloc_failed db "Memory allocation failed", 0                         ; malloc failed msg
     invalid_param db "Invalid param!", 0                                   ; invalid param msg
 
@@ -69,8 +70,50 @@ rank_matrix_int:
     mov rbx, rax   ; rbx = data
 
     ; init loop
-    xor rdx, rdx ; i = 0
-    mov r12, [r14] ; r12 = res->data
+    mov r12, [r14] ; r12 = m->data
+    mov r8, [r14 + 8] ; r8 = m->rows
+    mov r9, [r14 + 16] ; r9 = m->cols
+    xor rcx, rcx ; rows = 0
+    xor rdx, rdx ; cols = 0
+
+loop1:
+    cmp rcx, r8 ; rows < m->rows
+    jge calc_rank
+
+    ; find main element
+    mov r11, rcx ; r11 = pivot
+    find_pivot:
+        cmp r11, r8  ; r11 < m->rows
+        jge col_zero
+
+        ; calculate offset: data[pivot * m->cols + cols]
+        mov rax, r11        ; rax = pivot
+        imul rax, r9        ; rax = pivot * m->cols
+        add rax, rdx        ; rax = pivot * m->cols + cols
+        
+        ; load value and take absolute value
+        movsd xmm0, [r12 + rax * 8]   ; xmm0 = data[pivot * cols + cols]
+        ; fabs: clear sign bit
+        mov r13, 0x7FFFFFFFFFFFFFFF
+        movq xmm1, r13
+        andps xmm0, xmm1          ; xmm0 = fabs(value)
+
+        ; compare fabs(value) < 1e-6
+        movsd xmm2, [rel epsilon]     ; xmm2 = 1e-6
+        comisd xmm0, xmm2
+        jb pivot_zero              ; if fabs(value) < epsilon, try next row
+
+    pivot_zero:
+        inc r11                    ; pivot++
+        jmp find_pivot
+
+    col_zero:
+        inc rdx ; cols++
+        jmp loop1
+
+
+calc_rank:
+
 
 loop_copy:
     cmp rdx, rdi  ; i < m->rows * m->cols
