@@ -1,13 +1,3 @@
-;-------------------------------------------------------------
-; @Author: HoodUSSEnterprise
-; @Date: 2026-06-20 16:34:28
-; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-20 16:46:35
-; @FilePath: \asm_matrix_benchmark\src\assembly\linux\special_matrix_int.asm
-; @Description: Special matrix helpers (System V x86-64, NASM)
-; identity_matrix_int, diag_matrix_int, eye_matrix_int, zero_matrix_int
-;-------------------------------------------------------------
-
 global identity_matrix_int, diag_matrix_int, eye_matrix_int, zero_matrix_int
 extern malloc
 extern free
@@ -15,8 +5,8 @@ extern puts
 extern memset
 
 section .rodata
-    malloc_failed db "Memory allocation failed", 0
-    invalid_param db "Invalid param!", 0
+    malloc_failed db "Memory allocation failed", 0                         ; malloc failed msg
+    invalid_param db "Invalid param!", 0                                   ; invalid param msg
 
 section .text
 
@@ -25,367 +15,310 @@ section .text
 ; edi = order
 ; ---------------------------------------------------------------------------------------------
 identity_matrix_int:
+    
+    ; save callee_register
     push rbx
     push r12
     push r13
     push r14
     push r15
-    sub rsp, 32
+    sub rsp, 40 ; allocate shadow space for printf
 
-    mov r14d, edi            ; r14 = order (32-bit)
+    mov r14d, edi ; r14 = order
+
+    ; check param order
     cmp r14d, 0
-    jle id_null 
+    jle null_ptr
 
-    ; malloc struct
-    mov rdi, 24
-    call malloc wrt ..plt
+    ; malloc res 24 bytes
+    mov rdi, 24 
+    call malloc
     test rax, rax
-    jz id_malloc_fail
+    jz malloc_fail_struct
+
     mov rbx, rax
 
+    ; save the data len in r11
+    mov r11, r14     ; r11 = order
+    imul r11, r14    ; r11 = order * order
 
-    ; count = order * order
-    mov r11d, r14d
-    imul r11d, r14d           ; r11 = count
-
-    ; malloc data (count * 4)
+    ; malloc res->data
     mov rdi, r11
-    shl rdi, 2
-    call malloc wrt ..plt
+    shl rdi, 2 ; rdi *= 4
+    call malloc
     test rax, rax
-    jz id_malloc_fail_data
-    mov r12, rax
+    jz malloc_fail_data
 
-    ; memset(data, 0, count*4)
-    mov rdi, r12
-    mov esi, 0
-    mov rdx, r11
-    shl rdx, 2
-    call memset wrt ..plt
+    ; init res->data with 0, use memset function
+    mov r12, rax ; r12 = malloc res data
+    mov rdi, r12 ; rdi = malloc res data
+    mov esi, 0   ; memset value = 0
+    mov r8, rdi  ; number sizeof int
+    shl r8, 2    ; sizeof res data
+    call memset
 
-    mov [rbx], r12
-    mov dword [rbx + 8], r14d
-    mov dword [rbx + 16], r14d
+    ; init res param
+    mov [rbx], rax          ; res->data = new malloc data
+    mov [rbx + 8], r14      ; res->rows = order
+    mov [rbx + 16], r14     ; res->cols = order
 
-    xor r13d, r13d           ; i = 0
-id_loop:
-    cmp r13d, r14d
-    jge id_end
-    mov eax, r13d
-    imul eax, r14d
-    add eax, r13d
-    mov dword [r12 + rax*4], 1
-    inc r13d
-    jmp id_loop
+    ; set data 
+    xor rdi, rdi ; i = 0
+    mov rsi, [rbx] ; rsi = res->data
 
-id_end:
-    mov rax, rbx
-    jmp id_cleanup
+loopidentity:
+    cmp rdi, r14 ; i < order
+    jge end
 
-id_malloc_fail_data:
-    lea rdi, [rel malloc_failed]
-    sub rsp, 8
-    call puts wrt ..plt
-    add rsp, 8
-    mov rdi, rbx
-    call free wrt ..plt
-    mov rax, 0
-    jmp id_cleanup
+    mov r8, r14 ; r8 = order
+    imul r8, rdi ; r8 *= i
+    add r8, rdi ; r8 += i
 
-id_malloc_fail:
-    lea rdi, [rel malloc_failed]
-    sub rsp, 8
-    call puts wrt ..plt
-    add rsp, 8
-    mov rax, 0
-    jmp id_cleanup
-
-id_null :
-    lea rdi, [rel invalid_param]
-    sub rsp, 8
-    call puts wrt ..plt
-    add rsp, 8
-    mov rax, 0
-
-id_cleanup:
-    add rsp, 32
-    pop r15
-    pop r14
-    pop r13
-    pop r12
-    pop rbx
-    ret
+    ; means res->data[i][i]
+    mov [rsi + r8 * 4], 1 ; res->data[i * order + i]
+    inc rdi
+    jmp loopidentity
 
 ; ---------------------------------------------------------------------------------------------
 ; MatrixInt *diag_matrix_int(int *data, size_t len);
 ; rdi = data, rsi = len
 ; ---------------------------------------------------------------------------------------------
 diag_matrix_int:
+
+    ; save callee_register
     push rbx
+    push rdi
     push r12
     push r13
     push r14
     push r15
-    sub rsp, 32
+    sub rsp, 32 ; allocate shadow space for printf
 
-    mov r14, rdi    ; r14 = data
-    mov r15, rsi    ; r15 = len
+    mov r14, rdi ; r14 = data
+    mov r15, rsi ; r15 = len
+
+    ; check param data
     test r14, r14
-    jz diag_null
+    jz null_ptr
+    ; check param len
     cmp r15, 0
-    jle diag_null
+    jle null_ptr
 
-    mov r11, r15
-    imul r11, r15    ; r11 = len*len
-
-    mov rdi, 24
-    call malloc wrt ..plt
+    ; malloc res 24 bytes
+    mov rdi, 24 
+    call malloc
     test rax, rax
-    jz diag_malloc_fail
+    jz malloc_fail_struct
+
     mov rbx, rax
 
+    ; save the data len in r11
+    mov r11, r15     ; r11 = order
+    imul r11, r15    ; r11 = order * order
+
+    ; malloc res->data
     mov rdi, r11
-    shl rdi, 2
-    call malloc wrt ..plt
+    shl rdi, 2 ; rdi *= 4
+    call malloc
     test rax, rax
-    jz diag_malloc_fail_data
-    mov r12, rax
+    jz malloc_fail_data
 
-    mov rdi, r12
-    mov esi, 0
-    mov rdx, r11
-    shl rdx, 2
-    call memset wrt ..plt
+    ; init res->data with 0, use memset function
+    mov r12, rax ; r12 = malloc res data
+    mov rdi, r12 ; rdi = malloc res data
+    mov esi, 0   ; memset value = 0
+    mov r8, rdi  ; number sizeof int
+    shl r8, 2    ; sizeof res data
+    call memset
 
-    mov [rbx], r12
-    mov qword [rbx + 8], r15
-    mov qword [rbx + 16], r15
+    ; init res param
+    mov [rbx], rax          ; res->data = new malloc data
+    mov [rbx + 8], r15      ; res->rows = len
+    mov [rbx + 16], r15     ; res->cols = len
 
-    xor r13, r13
-diag_loop:
-    cmp r13, r11
-    jge diag_end
-    mov rax, r13
-    imul rax, r15
-    add rax, r13
-    mov edx, [r14 + r13*4]
-    mov [r12 + rax*4], edx
-    inc r13
-    jmp diag_loop
+    ; set data 
+    xor rdi, rdi ; i = 0
+    mov rsi, [rbx] ; rsi = res->data
 
-diag_end:
-    mov rax, rbx
-    jmp diag_cleanup
+loopdiag:
+    cmp rdi, r15 ; i < len
+    jge end
 
-diag_malloc_fail_data:
-    lea rdi, [rel malloc_failed]
-    sub rsp, 8
-    call puts wrt ..plt
-    add rsp, 8
-    mov rdi, rbx
-    call free wrt ..plt
-    mov rax, 0
-    jmp diag_cleanup
+    mov r8, r15 ; r8 = len
+    imul r8, rdi ; r8 *= i
+    add r8, rdi ; r8 += i
 
-diag_malloc_fail:
-    lea rdi, [rel malloc_failed]
-    sub rsp, 8
-    call puts wrt ..plt
-    add rsp, 8
-    mov rax, 0
-    jmp diag_cleanup
-
-diag_null:
-    lea rdi, [rel invalid_param]
-    sub rsp, 8
-    call puts wrt ..plt
-    add rsp, 8
-    mov rax, 0
-
-diag_cleanup:
-    add rsp, 32
-    pop r15
-    pop r14
-    pop r13
-    pop r12
-    pop rbx
-    ret
+    ; means res->data[i][i]
+    mov r11d, [r14 + rdi * 4] ; r11d = data[i]
+    mov [rsi + r8 * 4], r11d ; res->data[i * len + i] = data[i]
+    inc rdi
+    jmp loopdiag
 
 ; ---------------------------------------------------------------------------------------------
 ; MatrixInt *eye_matrix_int(int rows, int cols);
-; rdi = rows, rsi = cols
+; edi = rows, esi = cols
 ; ---------------------------------------------------------------------------------------------
 eye_matrix_int:
+
+    ; save callee_register
     push rbx
+    push rdi
     push r12
     push r13
     push r14
     push r15
-    sub rsp, 32
+    sub rsp, 32 ; allocate shadow space for printf
 
-    mov r14d, edi
-    mov r15d, esi
+    mov r14d, edi ; r14d = rows
+    mov r15d, esi ; r15d = cols
+
+    ; check param rows
     cmp r14d, 0
-    jle eye_null
+    jle null_ptr
+    ; check param cols
     cmp r15d, 0
-    jle eye_null
+    jle null_ptr
 
-    mov r11d, r14d
-    imul r11d, r15d    ; r11 = rows*cols
-
-    mov rdi, 24
-    call malloc wrt ..plt
+    ; malloc res 24 bytes
+    mov rdi, 24 
+    call malloc
     test rax, rax
-    jz eye_malloc_fail
+    jz malloc_fail_struct
+
     mov rbx, rax
 
-    mov rdi, r11
-    shl rdi, 2
-    call malloc wrt ..plt
+    ; save the data len in r11d
+    mov r11d, r14d     ; r11d = rows
+    imul r11d, r15d    ; r11d = rows * cols
+
+    ; malloc res->data
+    mov edi, r11d
+    shl edi, 2 ; edi *= 4
+    call malloc
     test rax, rax
-    jz eye_malloc_fail_data
-    mov r12, rax
+    jz malloc_fail_data
 
-    mov rdi, r12
-    mov esi, 0
-    mov rdx, r11
-    shl rdx, 2
-    call memset wrt ..plt
+    ; init res->data with 0, use memset function
+    mov r12, rax ; r12 = malloc res data
+    mov rdi, r12 ; rdi = malloc res data
+    mov esi, 0   ; memset value = 0
+    mov r8, rdi  ; number sizeof int
+    shl r8, 2    ; sizeof res data
+    call memset
 
-    mov [rbx], r12
-    mov dword [rbx + 8], r14d
-    mov dword [rbx + 16], r15d
+    ; init res param
+    mov [rbx], rax          ; res->data = new malloc data
+    mov [rbx + 8], r14      ; res->rows = rows
+    mov [rbx + 16], r15     ; res->cols = cols
 
-    ; set diagonal up to min(rows,cols)
-    cmp r14d, r15d
-    jge eye_min_row
-    mov r9d, r14d
-    jmp eye_setup
-eye_min_row:
-    mov r9d, r15d
-eye_setup:
-    xor r13d, r13d
-eye_loop:
-    cmp r13d, r9d
-    jge eye_done
-    mov eax, r13d
-    imul eax, r15d
-    add eax, r13d
-    mov dword [r12 + rax*4], 1
-    inc r13d
-    jmp eye_loop
-eye_done:
-    mov rax, rbx
-    jmp eye_cleanup
+    ; set data 
+    xor rdi, rdi ; i = 0
+    mov rsi, [rbx] ; rsi = res->data
 
-eye_malloc_fail_data:
-    lea rdi, [rel malloc_failed]
-    sub rsp, 8
-    call puts wrt ..plt
-    add rsp, 8
-    mov rdi, rbx
-    call free wrt ..plt
-    mov rax, 0
-    jmp eye_cleanup
+    cmp r14d, r15d ; compare rows and cols
+    jge select_r15d
+    mov r9, r14
+    jmp loopeye
 
-eye_malloc_fail:
-    lea rdi, [rel malloc_failed]
-    sub rsp, 8
-    call puts wrt ..plt
-    add rsp, 8
-    mov rax, 0
-    jmp eye_cleanup
+select_r15d:
+    mov r9, r15
 
-eye_null:
-    lea rdi, [rel invalid_param]
-    sub rsp, 8
-    call puts wrt ..plt
-    add rsp, 8
-    mov rax, 0
+loopeye:
+    cmp rdi, r9 ; i < min(rows, cols)
+    jge end
 
-eye_cleanup:
-    add rsp, 32
-    pop r15
-    pop r14
-    pop r13
-    pop r12
-    pop rbx
-    ret
+    mov r8, r15 ; r8 = cols
+    imul r8, rdi ; r8 *= i
+    add r8, rdi ; r8 += i
+
+    mov [rsi + r8 * 4], 1 ; res->data[i * cols + i] = 1
+    inc rdi
+    jmp loopeye
 
 ; ---------------------------------------------------------------------------------------------
 ; MatrixInt *zero_matrix_int(int rows, int cols);
-; rdi = rows, rsi = cols
+; edi = rows, esi = cols
 ; ---------------------------------------------------------------------------------------------
 zero_matrix_int:
+
+    ; save callee_register
     push rbx
+    push rdi
     push r12
     push r13
     push r14
     push r15
-    sub rsp, 32
+    sub rsp, 32 ; allocate shadow space for printf
 
-    mov r14d, edi
-    mov r15d, esi
-    cmp r14d, 0
-    jle zero_null
-    cmp r15d, 0
-    jle zero_null
+    mov r14d, edi ; r14d = rows
+    mov r15d, esi ; r15d = cols
 
-    mov r11d, r14d
-    imul r11d, r15d
+    ; check param rows
+    cmp r14, 0
+    jle null_ptr
+    ; check param cols
+    cmp r15, 0
+    jle null_ptr
 
-    mov rdi, 24
-    call malloc wrt ..plt
+    ; malloc res 24 bytes
+    mov rdi, 24 
+    call malloc
     test rax, rax
-    jz zero_malloc_fail
+    jz malloc_fail_struct
+
     mov rbx, rax
 
-    mov rdi, r11
-    shl rdi, 2
-    call malloc wrt ..plt
+    ; save the data len in r11d
+    mov r11d, r14d     ; r11d = rows
+    imul r11d, r15d    ; r11d = rows * cols
+
+    ; malloc res->data
+    mov edi, edi
+    shl edi, 2 ; edi *= 4
+    call malloc
     test rax, rax
-    jz zero_malloc_fail_data
-    mov r12, rax
+    jz malloc_fail_data
 
-    mov rdi, r12
-    mov esi, 0
-    mov rdx, r11
-    shl rdx, 2
-    call memset wrt ..plt
+    ; init res->data with 0, use memset function
+    mov r12, rax ; r12 = malloc res data
+    mov rdi, r12 ; rdi = malloc res data
+    mov esi, 0   ; memset value = 0
+    mov r8, rdi  ; number sizeof int
+    shl r8, 2    ; sizeof res data
+    call memset
 
-    mov [rbx], r12
-    mov dword [rbx + 8], r14d
-    mov dword [rbx + 16], r15d
-    mov rax, rbx
-    jmp zero_cleanup
+    ; init res param
+    mov [rbx], rax          ; res->data = new malloc data
+    mov [rbx + 8], r14      ; res->rows = rows
+    mov [rbx + 16], r15     ; res->cols = cols
+    jmp end
 
-zero_malloc_fail_data:
-    lea rdi, [rel malloc_failed]
-    sub rsp, 8
-    call puts wrt ..plt
-    add rsp, 8
+malloc_fail_struct:
+    lea rdi, [rel malloc_failed] ; rdi = malloc_failed
+    call puts
+    mov rax, 0
+    jmp cleanup
+
+malloc_fail_data:
+    lea rdi, [rel malloc_failed] ; rdi = malloc_failed
+    call puts
     mov rdi, rbx
-    call free wrt ..plt
+    call free
     mov rax, 0
-    jmp zero_cleanup
+    jmp cleanup
 
-zero_malloc_fail:
-    lea rdi, [rel malloc_failed]
-    sub rsp, 8
-    call puts wrt ..plt
-    add rsp, 8
-    mov rax, 0
-    jmp zero_cleanup
+null_ptr:
+    lea rdi, [rel invalid_param] ; rdi = invalid_param
+    call puts
+    mov rax, 0 ; return NULL
+    jmp cleanup
 
-zero_null:
-    lea rdi, [rel invalid_param]
-    sub rsp, 8
-    call puts wrt ..plt
-    add rsp, 8
-    mov rax, 0
+end:
+    mov rax, rbx
 
-zero_cleanup:
-    add rsp, 32
+cleanup:
+    add rsp, 40 ; restore stack pointer
+    ; restore callee_register
     pop r15
     pop r14
     pop r13
