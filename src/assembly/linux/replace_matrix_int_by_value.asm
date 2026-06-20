@@ -20,7 +20,7 @@ section .rodata
 section .text
 
 ; bool replace_matrix_int_by_value(MatrixInt *m, int old_data, int new_data);
-; rcx = m, edx = old_data, r8d = new_data
+; rdi = m, rsi = old_data, rdx = new_data (System V)
 replace_matrix_int_by_value:
     ; save callee_register
     push rbx
@@ -31,15 +31,15 @@ replace_matrix_int_by_value:
     push r15
     sub rsp, 48 ; allocate shadow space for puts
 
-    mov r14, rcx ; r14 = m
-    mov r15d, edx ; r15d = old_data
-    mov r13d, r8d ; r13d = new_data
+    mov r14, rdi ; r14 = m
+    mov r15d, esi ; r15d = old_data
+    mov r13d, edx ; r13d = new_data
 
     ; check m
     test r14, r14
     jz null_ptr
 
-    mov r14, [rcx] ; r14 = m->data
+    mov r14, [rdi] ; r14 = m->data
 
     ; check m->data
     test r14, r14
@@ -48,9 +48,9 @@ replace_matrix_int_by_value:
     ; restore r14
     mov r14, rcx
 
-    mov rcx, r14
-    mov edx, r15d
-    lea r8, [rsp + 32]
+    mov rdi, r14
+    mov rsi, r15d
+    lea rdx, [rsp + 32]
     call find_elem_int
     cmp rax, 0
     je no_find
@@ -64,9 +64,9 @@ replace_matrix_int_by_value:
     mov [rsi + r10 * 4], r13d ; m->data[pos.x * m->cols + pos.y] = new_data
 
 loop_replace:
-    mov rcx, r14
-    mov edx, r15d
-    lea r8, [rsp + 32]
+    mov rdi, r14
+    mov rsi, r15d
+    lea rdx, [rsp + 32]
     call find_elem_int
     cmp rax, 1
     je replace_data
@@ -82,8 +82,10 @@ replace_data:
     jmp loop_replace
 
 null_ptr:
-    lea rcx, [rel invalid_param] ; rcx = invalid_param
+    lea rdi, [rel invalid_param] ; rdi = invalid_param
+    sub rsp, 8
     call puts
+    add rsp, 8
     mov rax, 0 ; return false
     jmp cleanup
 
