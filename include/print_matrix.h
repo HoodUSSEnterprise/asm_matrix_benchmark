@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-16 15:36:19
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-16 15:37:28
+@LastEditTime: 2026-06-21 12:56:06
 @FilePath: \asm_matrix_benchmark\include\print_matrix.h
 @Description:print matrix
 *************************************************************/
@@ -12,10 +12,17 @@
 #include "base_matrix.h"
 
 /***********************************************************
-@description: print matrix
+@description: print matrix int
 @param {MatrixInt} *m
 @return {*}
 *************************************************************/
-void print_matrix(MatrixInt *m);
+void print_matrix_int(MatrixInt *m);
+
+/***********************************************************
+@description: print matrix double
+@param {MatrixDouble} *m
+@return {*}
+ ************************************************************/
+void print_matrix_double(MatrixDouble *m);
 
 #endif // PRINT_MATRIX_H

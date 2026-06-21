@@ -7,7 +7,7 @@
 ; @Description: print matrix nasm code on linux
 ;-------------------------------------------------------------
 
-global print_matrix
+global print_matrix_int
 extern printf
 extern puts
 extern putchar
@@ -21,9 +21,9 @@ section .rodata
 
 section .text
 
-; void print_matrix(MatrixInt *m);
+; void print_matrix_int(MatrixInt *m);
 ; rdi = m (System V)
-print_matrix:
+print_matrix_int:
 
     push r12
     push r13
