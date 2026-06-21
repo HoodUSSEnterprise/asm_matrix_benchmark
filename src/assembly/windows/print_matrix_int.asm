@@ -2,12 +2,12 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-16 15:39:42
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-16 16:35:02
+; @LastEditTime: 2026-06-21 12:55:05
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\print_matrix_int.asm
 ; @Description: print matrix nasm code on windows
 ;-------------------------------------------------------------
 
-global print_matrix
+global print_matrix_int
 extern printf
 extern puts
 extern putchar
@@ -21,9 +21,9 @@ section .rodata
 
 section .text
 
-; void print_matrix(MatrixInt *m);
+; void print_matrix_int(MatrixInt *m);
 ; rcx = m
-print_matrix:
+print_matrix_int:
     push rdi
     push rsi
     push r12
