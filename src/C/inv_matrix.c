@@ -2,13 +2,13 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-20 14:37:33
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-20 16:19:30
+@LastEditTime: 2026-06-21 13:15:47
 @FilePath: \asm_matrix_benchmark\src\C\inv_matrix.c
-@Description: inverse matrix c code
+@Description: invertible matrix c code
 *************************************************************/
 
 #include "inv_matrix.h"
-
+#include "rank_trace_matrix.h"
 #include <math.h>
 
 /***********************************************************
@@ -28,7 +28,21 @@ MatrixDouble *inv_matrix_int(MatrixInt *m)
     if (m->cols != m->rows)
     {
         puts("It's not a square");
-        return 0;
+        return NULL;
+    }
+    // check the matrix is invertible or not
+    int rank = 0;
+    if (rank_matrix_int(m, &rank) == false)
+    {
+        return NULL;
+    }
+    else
+    {
+        if ((size_t)rank != m->cols)
+        {
+            fprintf(stderr, "It not invertible matrix\n");
+            return NULL;
+        }
     }
     // malloc for new res
     MatrixDouble *res = NULL;
@@ -59,8 +73,7 @@ MatrixDouble *inv_matrix_int(MatrixInt *m)
     aug_matrix->rows = m->rows;
     aug_matrix->cols = m->cols * 2;
     // malloc for new aug_matrix data
-    aug_matrix->data =
-        (double *)malloc(sizeof(double) * aug_matrix->rows * aug_matrix->cols);
+    aug_matrix->data = (double *)malloc(sizeof(double) * aug_matrix->rows * aug_matrix->cols);
     if (aug_matrix->data == NULL)
     {
         free(aug_matrix);
@@ -74,8 +87,7 @@ MatrixDouble *inv_matrix_int(MatrixInt *m)
         {
             if (j < m->cols)
             {
-                aug_matrix->data[i * aug_matrix->cols + j] =
-                    m->data[i * m->cols + j] * 1.0;
+                aug_matrix->data[i * aug_matrix->cols + j] = m->data[i * m->cols + j] * 1.0;
             }
             else
             {
@@ -117,14 +129,14 @@ MatrixDouble *inv_matrix_int(MatrixInt *m)
         }
 
         // elimination this line
-        for (int i = 0; i < aug_matrix->rows; i++)
+        for (size_t i = 0; i < aug_matrix->rows; i++)
         {
             if (i == rows)
             {
                 continue;
             }
             double factor = aug_matrix->data[i * aug_matrix->cols + cols] / aug_matrix->data[rows * aug_matrix->cols + cols];
-            for (int j = cols; j < aug_matrix->cols; j++)
+            for (size_t j = cols; j < aug_matrix->cols; j++)
             {
                 aug_matrix->data[i * aug_matrix->cols + j] -= factor * aug_matrix->data[rows * aug_matrix->cols + j];
             }
@@ -136,7 +148,7 @@ MatrixDouble *inv_matrix_int(MatrixInt *m)
     {
         for (size_t j = 0; j < res->cols; j++)
         {
-            m->data[i * res->cols + j] = aug_matrix->data[i * aug_matrix->cols + m->cols + j];
+            res->data[i * res->cols + j] = aug_matrix->data[i * aug_matrix->cols + m->cols + j];
         }
     }
     // free aug_matrix

@@ -4,7 +4,7 @@
 @LastEditors: HoodUSSEnterprise
 @LastEditTime: 2026-06-20 13:36:20
 @FilePath: \asm_matrix_benchmark\include\inv_matrix.h
-@Description: calculation of inverse matrix
+@Description: calculation of invertible matrix
 *************************************************************/
 #ifndef INV_MATRIX_H
 #define INV_MATRIX_H
@@ -12,7 +12,7 @@
 #include "base_matrix.h"
 
 /***********************************************************
-@description: inverse matrix
+@description: invertible matrix
 @param {MatrixInt} *m
 @return {*}
  ************************************************************/
