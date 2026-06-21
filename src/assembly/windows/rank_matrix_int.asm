@@ -2,12 +2,13 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-18 23:25:45
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-21 09:13:32
+; @LastEditTime: 2026-06-21 09:46:17
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\rank_matrix_int.asm
 ; @Description: rank matrix int nasm code on windows
 ;-------------------------------------------------------------
 global rank_matrix_int
 extern puts
+extern printf
 extern malloc
 extern free
 
@@ -15,6 +16,8 @@ section .rodata
     epsilon dq 1e-6
     malloc_failed db "Memory allocation failed", 0                         ; malloc failed msg
     invalid_param db "Invalid param!", 0                                   ; invalid param msg
+    fmt db "rank is %d ", 10, 0
+    fmt1 db "array is %p ", 10, 0
 
 section .text
 
@@ -237,7 +240,7 @@ calc_rank:
     xor rcx, rcx ; i = 0
     ; xor rdx. rdx ; j = 0
 
-    xor rsi, rsi  ; calc non zero lines
+    xor esi, esi  ; calc non zero lines
 
 loop_calc_rank1:
     cmp rcx, r8 ; i < m->rows ?
@@ -266,7 +269,7 @@ loop_calc_rank1:
         jmp loop_calc_rank2
 
     is_not_zero:
-        inc rsi ; rank++
+        inc esi ; rank++
         inc rcx ; i++
         jmp loop_calc_rank1
 
@@ -290,7 +293,7 @@ malloc_fail_data:
 end:
     mov rcx, r12 ; free new data
     call free
-    mov [r15], rsi
+    mov dword [r15], esi
     mov rax, 1 ; return true
     jmp cleanup
 
