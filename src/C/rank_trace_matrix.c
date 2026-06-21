@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-17 20:28:22
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-19 11:01:24
+@LastEditTime: 2026-06-21 09:19:13
 @FilePath: \asm_matrix_benchmark\src\C\rank_trace_matrix.c
 @Description: rank and trace of matrix
 *************************************************************/
@@ -41,12 +41,12 @@ bool rank_matrix_int(MatrixInt *m, int *rank)
         data[i] = m->data[i] * 1.0;
     }
 
-    // use guass elimination
+    // use gauss elimination
     for (size_t rows = 0, cols = 0; rows < m->rows; cols++)
     {
         // find main element
         size_t pivot = rows;
-        while (fabs(data[rows * m->cols + cols]) < 1e-6 && pivot < m->rows)
+        while (fabs(data[pivot * m->cols + cols]) < 1e-6 && pivot < m->rows)
         {
             pivot++;
         }
@@ -68,10 +68,10 @@ bool rank_matrix_int(MatrixInt *m, int *rank)
         }
 
         // elimination below line
-        for (int i = rows + 1; i < m->rows; i++)
+        for (size_t i = rows + 1; i < m->rows; i++)
         {
             double factor = data[i * m->cols + cols] / data[rows * m->cols + cols];
-            for (int j = cols; j < m->cols; j++)
+            for (size_t j = cols; j < m->cols; j++)
             {
                 data[i * m->cols + j] -= factor * data[rows * m->cols + j];
             }

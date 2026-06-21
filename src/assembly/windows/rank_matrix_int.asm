@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-18 23:25:45
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-21 08:58:26
+; @LastEditTime: 2026-06-21 09:13:32
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\rank_matrix_int.asm
 ; @Description: rank matrix int nasm code on windows
 ;-------------------------------------------------------------
@@ -25,6 +25,7 @@ rank_matrix_int:
     ; save callee_register
     push rbx
     push rdi
+    push rsi
     push r12
     push r13
     push r14
@@ -51,12 +52,12 @@ rank_matrix_int:
     mov r8, [r14 + 8]   ; m->rows
     mov r9, [r14 + 16]  ; m->cols
 
-    cmp r9, 0  ; m->rows == 0
+    cmp r8, 0  ; m->rows == 0
     je null_ptr
     cmp r9, 0  ; m->cols == 0
     je null_ptr
 
-    ; malloc new data, because elimination use exsits floating-point numbers
+    ; malloc new data, because elimination use exists floating-point numbers
     mov rdi, [r14 + 16] ; rdi = m->cols
     imul rdi, [r14 + 8] ; rdi *= m->rows
     ; now rdi is len of new data array
@@ -69,6 +70,9 @@ rank_matrix_int:
     
     ; save malloc res data
     mov rbx, rax   ; rbx = data
+    mov r12, [r14] ; r12 = m->data
+
+    xor rdx, rdx ; i = 0
 
 loop_copy:
     cmp rdx, rdi  ; i < m->rows * m->cols
@@ -82,7 +86,7 @@ loop_copy:
     jmp loop_copy
 
 next:
-    ; this part is guass elimination
+    ; this part is gauss elimination
     ; r12 = new data
     ; init loop
     mov r12, rbx ; r12 = new data
@@ -257,7 +261,7 @@ loop_calc_rank1:
         ; compare fabs(value) < 1e-6
         movsd xmm2, [rel epsilon]     ; xmm2 = 1e-6
         comisd xmm0, xmm2
-        jnb is_not_zero              ; if fabs(value) < epsilon, try next row
+        jnb is_not_zero              ; if fabs(value) >= 1e-6, try next row
         inc rdx ; j++
         jmp loop_calc_rank2
 
@@ -284,11 +288,11 @@ malloc_fail_data:
     jmp cleanup
 
 end:
-    mov rcx, rbx ; free new data
+    mov rcx, r12 ; free new data
     call free
     mov [r15], rsi
     mov rax, 1 ; return true
-    ret
+    jmp cleanup
 
 cleanup:
     add rsp, 32 ; restore stack pointer
@@ -297,6 +301,7 @@ cleanup:
     pop r14
     pop r13
     pop r12
+    pop rsi
     pop rdi
     pop rbx
     ret
