@@ -102,7 +102,7 @@ MatrixDouble *inv_matrix_int(MatrixInt *m)
             }
         }
     }
-    // use guass elimination
+    // use gauss elimination
     for (size_t rows = 0, cols = 0; rows < aug_matrix->rows; cols++)
     {
         // find main element
