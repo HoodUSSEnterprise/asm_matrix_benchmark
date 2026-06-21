@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-17 20:28:22
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-21 09:19:13
+@LastEditTime: 2026-06-21 11:07:09
 @FilePath: \asm_matrix_benchmark\src\C\rank_trace_matrix.c
 @Description: rank and trace of matrix
 *************************************************************/
@@ -42,7 +42,7 @@ bool rank_matrix_int(MatrixInt *m, int *rank)
     }
 
     // use gauss elimination
-    for (size_t rows = 0, cols = 0; rows < m->rows; cols++)
+    for (size_t rows = 0, cols = 0; rows < m->rows && cols < m->cols; cols++)
     {
         // find main element
         size_t pivot = rows;

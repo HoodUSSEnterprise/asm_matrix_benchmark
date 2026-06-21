@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-18 23:25:45
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-21 10:06:28
+; @LastEditTime: 2026-06-21 11:06:44
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\rank_matrix_int.asm
 ; @Description: rank matrix int nasm code on windows
 ;-------------------------------------------------------------
@@ -97,6 +97,9 @@ next:
 
 loop1:
     cmp rcx, r8 ; rows < m->rows
+    jge calc_rank
+
+    cmp rdx, r9
     jge calc_rank
 
     ; find main element
