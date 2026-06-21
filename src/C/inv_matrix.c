@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-20 14:37:33
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-21 13:15:47
+@LastEditTime: 2026-06-21 13:19:45
 @FilePath: \asm_matrix_benchmark\src\C\inv_matrix.c
 @Description: invertible matrix c code
 *************************************************************/
@@ -126,6 +126,13 @@ MatrixDouble *inv_matrix_int(MatrixInt *m)
                 aug_matrix->data[pivot * aug_matrix->cols + j] = aug_matrix->data[rows * aug_matrix->cols + j];
                 aug_matrix->data[rows * aug_matrix->cols + j] = temp;
             }
+        }
+
+        // normalization
+        double pivot_val = aug_matrix->data[rows * aug_matrix->cols + cols];
+        for (size_t j = cols; j < aug_matrix->cols; j++)
+        {
+            aug_matrix->data[rows * aug_matrix->cols + j] /= pivot_val;
         }
 
         // elimination this line
