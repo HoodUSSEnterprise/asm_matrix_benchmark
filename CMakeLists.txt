@@ -30,10 +30,11 @@ set(LIB_SOURCES_MATRIX_INT
     src/assembly/${PLATFORM_DIR}/cat_matrix_int.asm
     src/assembly/${PLATFORM_DIR}/compare_matrix_int.asm
     src/assembly/${PLATFORM_DIR}/find_matrix_int.asm
-    # src/assembly/${PLATFORM_DIR}/insert_matrix_int.asm
+    src/assembly/${PLATFORM_DIR}/inv_matrix_int.asm
     src/assembly/${PLATFORM_DIR}/mul_matrix_int.asm
     # src/assembly/${PLATFORM_DIR}/pop_matrix_int.asm
     # src/assembly/${PLATFORM_DIR}/push_back_matrix_int.asm
+    src/assembly/${PLATFORM_DIR}/print_matrix_double.asm
     src/assembly/${PLATFORM_DIR}/print_matrix_int.asm
     # src/assembly/${PLATFORM_DIR}/remove_matrix_int.asm
     src/assembly/${PLATFORM_DIR}/rank_matrix_int.asm
@@ -63,7 +64,7 @@ set(LIB_SOURCES_MATRIX_C
     src/C/cat_matrix.c
     src/C/compare_matrix.c
     src/C/find_matrix.c
-    # src/C/insert_matrix.c
+    src/C/inv_matrix.c
     src/C/mul_matrix.c
     # src/C/pop_matrix.c
     # src/C/push_back_matrix.c
