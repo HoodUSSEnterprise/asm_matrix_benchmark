@@ -9,7 +9,6 @@
 
 global rank_matrix_int
 extern puts
-extern printf
 extern malloc
 extern free
 
@@ -21,7 +20,7 @@ section .rodata
 section .text
 
 ; bool rank_matrix_int(MatrixInt *m, int *rank)
-; rcx = m, rdx = rank
+; rdi = m, rsi = rank
 rank_matrix_int:
 
     ; save callee_register
@@ -30,23 +29,23 @@ rank_matrix_int:
     push r13
     push r14
     push r15
-    sub rsp, 40 ; allocate shadow space for printf
+    sub rsp, 32 ; allocate shadow space for printf
 
-    mov r14, rcx ; r14 = m
-    mov r15, rdx ; r15 = rank
+    mov r14, rdi ; r14 = m
+    mov r15, rsi ; r15 = rank
 
     ; check param m
     test r14, r14
     jz null_ptr
 
-    mov r14, [rcx] ; r14 = m->data
+    mov r14, [rdi] ; r14 = m->data
 
     ; check m->data
     test r14, r14
     jz null_ptr
 
     ; restore r14
-    mov r14, rcx
+    mov r14, rdi
 
     ; check dimension
     mov r8, [r14 + 8]   ; m->rows
@@ -58,13 +57,13 @@ rank_matrix_int:
     je null_ptr
 
     ; malloc new data, because elimination use exists floating-point numbers
-    mov rdi, [r14 + 16] ; rdi = m->cols
-    imul rdi, [r14 + 8] ; rdi *= m->rows
-    ; now rdi is len of new data array
+    mov rcx, [r14 + 16] ; rcx = m->cols
+    imul rcx, [r14 + 8] ; rcx *= m->rows
+    ; now rcx is len of new data array
     ; new data array type is double
-    mov rcx, rdi  ; rcx = len of array
-    shl rcx, 3    ; rcx *= 8
-    call malloc
+    mov rdi, rcx  ; rdi = len of array
+    shl rdi, 3    ; rdi *= 8
+    call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_data
     
@@ -73,6 +72,9 @@ rank_matrix_int:
     mov r12, [r14] ; r12 = m->data
 
     xor rdx, rdx ; i = 0
+
+    mov rdi, [r14 + 16] ; rdi = m->cols
+    imul rdi, [r14 + 8] ; rdi *= m->rows
 
 loop_copy:
     cmp rdx, rdi  ; i < m->rows * m->cols
@@ -97,6 +99,9 @@ next:
 
 loop1:
     cmp rcx, r8 ; rows < m->rows
+    jge calc_rank
+
+    cmp rdx, r9
     jge calc_rank
 
     ; find main element
@@ -235,9 +240,8 @@ calc_rank:
     ; r8 = m->rows
     ; r9 = m->cols
     xor rcx, rcx ; i = 0
-    ; xor rdx. rdx ; j = 0
-
-    xor esi, esi  ; calc non zero lines
+    ; xor rdx, rdx ; j = 0
+    xor ebx, ebx  ; calc non zero lines
 
 loop_calc_rank1:
     cmp rcx, r8 ; i < m->rows ?
@@ -266,7 +270,7 @@ loop_calc_rank1:
         jmp loop_calc_rank2
 
     is_not_zero:
-        inc esi ; rank++
+        inc ebx ; rank++
         inc rcx ; i++
         jmp loop_calc_rank1
 
@@ -276,26 +280,26 @@ inc_rcx_calc_rank:
 
 
 null_ptr:
-    lea rcx, [rel invalid_param] ; rcx = invalid_param
-    call puts
+    lea rdi, [rel invalid_param] ; rdi = invalid_param
+    call puts wrt ..plt
     mov rax, 0 ; return false
     jmp cleanup
 
 malloc_fail_data:
-    lea rcx, [rel malloc_failed] ; rcx = malloc_failed
-    call puts
+    lea rdi, [rel malloc_failed] ; rdi = malloc_failed
+    call puts wrt ..plt
     mov rax, 0 ; return false
     jmp cleanup
 
 end:
-    mov rcx, r12 ; free new data
-    call free
-    mov dword [r15], esi
+    mov rdi, r12 ; free new data
+    call free wrt ..plt
+    mov dword [r15], ebx
     mov rax, 1 ; return true
     jmp cleanup
 
 cleanup:
-    add rsp, 40 ; restore stack pointer
+    add rsp, 32 ; restore stack pointer
     ; restore callee_register
     pop r15
     pop r14
