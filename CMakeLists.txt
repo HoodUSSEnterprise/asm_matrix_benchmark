@@ -31,6 +31,7 @@ set(LIB_SOURCES_MATRIX_INT
     src/assembly/${PLATFORM_DIR}/compare_matrix_int.asm
     src/assembly/${PLATFORM_DIR}/find_matrix_int.asm
     src/assembly/${PLATFORM_DIR}/inv_matrix_int.asm
+    src/assembly/${PLATFORM_DIR}/leading_minors_int.asm
     src/assembly/${PLATFORM_DIR}/mul_matrix_int.asm
     # src/assembly/${PLATFORM_DIR}/pop_matrix_int.asm
     # src/assembly/${PLATFORM_DIR}/push_back_matrix_int.asm
