@@ -1,11 +1,3 @@
-<!--
- * @Author: HoodUSSEnterprise
- * @Date: 2026-06-22 13:37:35
- * @LastEditors: HoodUSSEnterprise
- * @LastEditTime: 2026-06-22 13:45:46
- * @FilePath: \asm_matrix_benchmark\README.md
- * @Description: 
--->
 # asm_matrix_benchmark
 
 A cross-language matrix operations benchmark comparing performance across **Assembly (NASM)**, **C**, **C++**, and **Python**.
