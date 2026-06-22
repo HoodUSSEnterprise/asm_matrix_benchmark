@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-21 23:11:41
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-21 23:16:35
+; @LastEditTime: 2026-06-22 12:43:17
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\leading_minors_int.asm
 ; @Description:get leading principal minor nasm code on windows 
 ;-------------------------------------------------------------
@@ -63,6 +63,11 @@ get_leading_minors_int:
     jne not_a_square
 
     ; ========== allocate res (Leading_Minors_Int) ==========
+    ;typedef struct Leading_Minors_Int
+    ; {
+    ;     MatrixInt *matrix_data;
+    ;     size_t len;
+    ; } Leading_Minors_Int;
     mov rcx, 16 ; sizeof(Leading_Minors_Int)
     call malloc
     test rax, rax
