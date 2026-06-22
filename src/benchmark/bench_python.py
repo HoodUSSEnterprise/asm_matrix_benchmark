@@ -2,7 +2,7 @@
 # @Author: HoodUSSEnterprise
 # @Date: 2026-06-16 20:18:25
 # @LastEditors: HoodUSSEnterprise
-# @LastEditTime: 2026-06-16 20:48:47
+# @LastEditTime: 2026-06-22 13:06:47
 # @FilePath: \asm_matrix_benchmark\src\benchmark\bench_python.py
 # @Description: test four language run time
 ###########################################################
@@ -30,7 +30,7 @@ PROJECT_ROOT = os.path.abspath(os.path.join(THIS_DIR, "..", ".."))
 if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
-from src.Python import matrix as matrix_module
+from src.Python import base_matrix as matrix_module
 
 Matrix = matrix_module.Matrix
 
