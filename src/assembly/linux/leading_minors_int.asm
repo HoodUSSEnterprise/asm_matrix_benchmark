@@ -58,7 +58,7 @@ get_leading_minors_int:
 
     ; check square
     cmp r8, r9 ; m->rows == m->cols?
-    jne not_square
+    jne not_a_square
 
     ; ========== allocate res (Leading_Minors_Int) ==========
     mov rdi, 16 ; sizeof(Leading_Minors_Int)
@@ -213,7 +213,7 @@ null_ptr:
     mov rax, 0
     jmp cleanup
 
-not_square:
+not_a_square:
     lea rdi, [rel not_square]
     call puts wrt ..plt
     mov rax, 0
