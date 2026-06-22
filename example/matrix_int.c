@@ -188,10 +188,32 @@ int main(void)
         puts("Two matrix not equals\n");
     }
     puts("----------------------------------------------------------------------------------------");
+    puts("-------------------------------------leading minors-------------------------------------");
+    int leading_data[9] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+    MatrixInt leading_matrix = {leading_data, 3, 3};
+    Leading_Minors_Int *leading_minors = get_leading_minors_int(&leading_matrix);
+    if (leading_minors != NULL)
+    {
+        for (size_t i = 0; i < leading_minors->len; i++)
+        {
+            print_matrix_int(&leading_minors->matrix_data[i]);
+        }
+    }
+    puts("----------------------------------------------------------------------------------------");
     puts("-------------------------------------invertible matrix-------------------------------------");
     int inv_matrix[9] = {1, 2, 3, 0, 4, 5, 1, 0, 6};
     MatrixInt matrix_orgin = {inv_matrix, 3, 3};
     MatrixDouble *matrix_inv = inv_matrix_int(&matrix_orgin);
     print_matrix_double(matrix_inv);
+    puts("----------------------------------------------------------------------------------------");
+    puts("-------------------------------------lu decomposition-------------------------------------");
+    int lu_data[9] = {1, 2, 3, 0, 4, 5, 1, 0, 6};
+    MatrixInt lu_matrix = {lu_data, 3, 3};
+    LU_Result lu_res;
+    if (LU_Decomposition_int(&lu_matrix, &lu_res))
+    {
+        print_matrix_double(lu_res.L);
+        print_matrix_double(lu_res.U);
+    }
     return 0;
 }
