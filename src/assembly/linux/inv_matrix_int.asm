@@ -16,10 +16,14 @@ extern rank_matrix_int
 
 section .rodata
     epsilon          dq 1e-6
+    one              dq 1.0
+    zero             dq 0.0
     malloc_failed    db "Memory allocation failed", 0
     invalid_param    db "Invalid param!", 0
     not_square       db "It's not a square", 0
     not_invertible   db "It not invertible matrix", 0
+    fmt db "%lf ", 10, 0
+    fmt1 db "%p ", 10, 0
 
 section .text
 
@@ -55,7 +59,7 @@ inv_matrix_int:
     mov r9, [r14 + 16]  ; r9 = m->cols
 
     cmp r8, r9 ; m->rows == m->cols
-    jne not_square
+    jne not_a_square
 
     ; check rank (must be full rank)
     lea rsi, [rsp + 24] ; rsi = &rank (local var)
@@ -68,9 +72,9 @@ inv_matrix_int:
     mov r8, [r14 + 8]   ; r8 = m->rows
     mov r9, [r14 + 16]  ; r9 = m->cols
 
-    mov rax, [rsp + 24] ; rax = rank
+    mov eax, [rsp + 24] ; eax = rank
     cmp rax, r8         ; rank == m->rows?
-    jne not_invertible
+    jne not_invertible_matrix
 
     ; ========== allocate res (MatrixDouble) ==========
     mov rdi, 24
@@ -391,13 +395,19 @@ extract_inc_i:
     jmp extract_i
 
 free_aug:
+    mov r14, rdi
+    lea rdi, [rel fmt1]
+    mov rsi, r14
+    call printf wrt ..plt
+    lea rdi, [rel fmt1]
+    mov rsi, [rbx]
+    call printf wrt ..plt
     ; free aug_matrix->data
     mov rdi, [r15]
     call free wrt ..plt
     ; free aug_matrix struct
     mov rdi, r15
     call free wrt ..plt
-
     mov rax, rbx ; return res
     jmp cleanup
 
@@ -443,13 +453,13 @@ null_ptr:
     mov rax, 0 ; return NULL
     jmp cleanup
 
-not_square:
-    lea rdi, [rel not_square] ; rdi = not_square
+not_a_square:
+    lea rdi, [rel not_square] ; rdi = not square
     call puts wrt ..plt
     mov rax, 0 ; return NULL
     jmp cleanup
 
-not_invertible:
+not_invertible_matrix:
     lea rdi, [rel not_invertible] ; rdi = not invertible
     call puts wrt ..plt
     mov rax, 0 ; return NULL
