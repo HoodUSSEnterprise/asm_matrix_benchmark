@@ -1,3 +1,11 @@
+<!--
+ * @Author: HoodUSSEnterprise
+ * @Date: 2026-06-22 13:37:35
+ * @LastEditors: HoodUSSEnterprise
+ * @LastEditTime: 2026-06-22 13:45:46
+ * @FilePath: \asm_matrix_benchmark\README.md
+ * @Description: 
+-->
 # asm_matrix_benchmark
 
 A cross-language matrix operations benchmark comparing performance across **Assembly (NASM)**, **C**, **C++**, and **Python**.
@@ -5,30 +13,6 @@ A cross-language matrix operations benchmark comparing performance across **Asse
 ## Overview
 
 This project implements a comprehensive set of matrix operations in multiple languages and provides benchmarking infrastructure to compare their performance. The goal is to measure and visualize the performance differences between low-level (assembly, C/C++) and high-level (Python) implementations.
-
-## Supported Operations
-
-| Operation | C | C++ | Python | Assembly (Linux) | Assembly (Windows) |
-|---|---|---|---|---|---|
-| Add | ✓ | ✓ | ✓ | ✓ | ✓ |
-| Subtract | ✓ | ✓ | ✓ | ✓ | ✓ |
-| Multiply | ✓ | ✓ | ✓ | ✓ | ✓ |
-| Scale | ✓ | ✓ | ✓ | ✓ | ✓ |
-| Transpose | ✓ | | ✓ | ✓ | ✓ |
-| Concatenate | ✓ | | ✓ | ✓ | ✓ |
-| Extract submatrix | ✓ | | ✓ | ✓ | |
-| Find element | ✓ | | ✓ | ✓ | ✓ |
-| Replace by coord | ✓ | | ✓ | ✓ | ✓ |
-| Replace by value | ✓ | | ✓ | | |
-| Compare | ✓ | | | ✓ | ✓ |
-| Print | ✓ | ✓ | ✓ | ✓ | ✓ |
-| Random matrix | ✓ | | ✓ | ✓ | |
-| Special matrices | ✓ | | ✓ | ✓ | |
-| Leading minors | ✓ | | ✓ | ✓ | ✓ |
-| Rank | ✓ | | ✓ | ✓ | |
-| Trace | ✓ | | ✓ | ✓ | ✓ |
-| Inverse | ✓ | | | ✓ | ✓ |
-| LU decomposition | ✓ | | | ✓ | ✓ |
 
 ## Project Structure
 
