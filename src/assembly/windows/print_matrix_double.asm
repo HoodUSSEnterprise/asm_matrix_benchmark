@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-16 15:39:42
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-21 13:00:11
+; @LastEditTime: 2026-06-22 11:13:05
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\print_matrix_double.asm
 ; @Description: print matrix nasm code on windows 
 ;-------------------------------------------------------------
@@ -13,6 +13,7 @@ extern puts
 extern putchar
 
 section .rodata
+    one dq 1.0
     matrix_info db "------------------matrix info------------------", 0
     invalid_param db "Invalid param!", 0                                   ; invalid param msg
     matrix_size db "matrix size: (%d, %d)", 10, 0
@@ -73,7 +74,9 @@ loop2:
     mov r11, rsi ; r11 = matrix->cols
     imul r11, r13 ; r11 *= i
     add r11, r14  ; now r11 = i * matrix->cols + j
-    movsd xmm1, [r15 + r11 * 8]
+    ; Pay attention to the calling method of printf and parameter passing
+    mov rdx, [r15 + r11 * 8]
+    movq xmm1, rdx
     call printf ; printf("%lf ", matrix->data[i * matrix->cols + j]);
     inc r14; j++
     jmp loop2
