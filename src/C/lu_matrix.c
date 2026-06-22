@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-21 14:13:48
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-21 20:16:04
+@LastEditTime: 2026-06-22 12:52:51
 @FilePath: \asm_matrix_benchmark\src\C\lu_matrix.c
 @Description: lu decomposition of matrix c code
 *************************************************************/
@@ -151,7 +151,7 @@ bool LU_Decomposition_int(MatrixInt *m, LU_Result *res)
     u_{1j} = a_{1j},  j = 1:n
     l_{i1} = a_{i1} / u_{11},  i = 2:n
     */
-    for (int i = 1; i < L->rows; i++)
+    for (size_t i = 1; i < L->rows; i++)
     {
         L->data[i * L->cols + 0] = m->data[i * m->cols + 0] / U->data[0 * U->cols + 0];
     }
@@ -160,21 +160,21 @@ bool LU_Decomposition_int(MatrixInt *m, LU_Result *res)
     u_{ij} = a_{ij} - sum_{k=1}^{i-1} l_{ik} u_{kj},  j = i:n
     l_{ij} = (a_{ij} - sum_{k=1}^{j-1} l_{ik} u_{kj}) / u_{jj},  i = j+1:n
     */
-    for (int i = 1; i < L->rows; i++)
+    for (size_t i = 1; i < L->rows; i++)
     {
-        for (int j = i; j < L->rows; j++)
+        for (size_t j = i; j < L->rows; j++)
         {
             double sum = 0;
-            for (int k = 0; k < j; k++)
+            for (size_t k = 0; k < j; k++)
             {
                 sum += (L->data[i * L->cols + k] * U->data[k * U->cols + j]);
             }
             U->data[i * U->cols + j] = m->data[i * m->cols + j] - sum;
         }
-        for (int j = i + 1; j < L->rows; j++)
+        for (size_t j = i + 1; j < L->rows; j++)
         {
             double sum = 0;
-            for (int k = 0; k < j; k++)
+            for (size_t k = 0; k < j; k++)
             {
                 sum += (L->data[j * L->cols + k] * U->data[k * U->cols + i]);
             }
