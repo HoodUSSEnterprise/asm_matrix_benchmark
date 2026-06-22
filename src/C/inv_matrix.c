@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-20 14:37:33
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-21 13:19:45
+@LastEditTime: 2026-06-22 09:32:25
 @FilePath: \asm_matrix_benchmark\src\C\inv_matrix.c
 @Description: invertible matrix c code
 *************************************************************/
@@ -107,7 +107,7 @@ MatrixDouble *inv_matrix_int(MatrixInt *m)
     {
         // find main element
         size_t pivot = rows;
-        while (fabs(aug_matrix->data[rows * aug_matrix->cols + cols]) < 1e-6 && pivot < aug_matrix->rows)
+        while (fabs(aug_matrix->data[pivot * aug_matrix->cols + cols]) < 1e-6 && pivot < aug_matrix->rows)
         {
             pivot++;
         }
