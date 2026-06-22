@@ -16,6 +16,8 @@
 #include "compare_matrix.h"
 #include "find_matrix.h"
 #include "inv_matrix.h"
+#include "leading_minors.h"
+#include "lu_matrix.h"
 #include "mul_matrix.h"
 #include "print_matrix.h"
 #include "rank_trace_matrix.h"
