@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-21 14:13:48
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-23 13:59:22
+@LastEditTime: 2026-06-23 16:59:31
 @FilePath: \asm_matrix_benchmark\src\C\lu_matrix.c
 @Description: lu decomposition of matrix c code
 *************************************************************/
@@ -51,6 +51,14 @@ bool LU_Decomposition_int(MatrixInt *m, LU_Result *res)
             }
         }
     }
+
+    // free leading_minors
+    for (size_t i = 0; i < leading_minors->len; i++)
+    {
+        free((leading_minors->matrix_data + i)->data);
+    }
+    free(leading_minors->matrix_data);
+    free(leading_minors);
 
     // malloc new L
     MatrixDouble *L = NULL;
