@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-16 19:25:31
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-16 19:46:08
+@LastEditTime: 2026-06-23 19:19:44
 @FilePath: \asm_matrix_benchmark\src\C++\add_matrix.cpp
 @Description: add matrix c++ code
 *************************************************************/
@@ -10,22 +10,38 @@
 #include <stdexcept>
 
 /***********************************************************
-@description: add matrix function
-@param {MatrixInt} m1
-@param {MatrixInt} m2
+@description: add matrix
 @return {*}
- ************************************************************/
-MatrixInt MatrixInt::add_matrix(MatrixInt m1, MatrixInt m2)
+*************************************************************/
+MatrixInt MatrixInt::operator+(const MatrixInt &other) const
 {
-    if (m1.rows != m2.rows || m1.cols != m2.cols)
+    if (rows != other.rows || cols != other.cols)
     {
-        throw std::invalid_argument("add_matrix: dimension mismatch");
+        throw std::invalid_argument("operator+: dimension mismatch");
     }
 
-    MatrixInt res(m1.rows, m1.cols);
-    for (size_t i = 0; i < m1.rows * m1.cols; ++i)
+    MatrixInt res(rows, cols);
+    for (size_t i = 0; i < rows * cols; ++i)
     {
-        res.data[i] = m1.data[i] + m2.data[i];
+        res.data[i] = data[i] + other.data[i];
     }
     return res;
+}
+
+/***********************************************************
+@description: +=
+@return {*}
+*************************************************************/
+MatrixInt &MatrixInt::operator+=(const MatrixInt &other)
+{
+    if (rows != other.rows || cols != other.cols)
+    {
+        throw std::invalid_argument("operator+=: dimension mismatch");
+    }
+
+    for (size_t i = 0; i < rows * cols; ++i)
+    {
+        data[i] += other.data[i];
+    }
+    return *this;
 }
