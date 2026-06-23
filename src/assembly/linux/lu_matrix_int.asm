@@ -17,6 +17,7 @@ extern rank_matrix_int
 
 section .rodata
     zero             dq 0.0
+    one              dq 1.0
     malloc_failed    db "Memory allocation failed", 0
     invalid_param    db "Invalid param!", 0
     not_square       db "It's not a square", 0
@@ -72,15 +73,15 @@ LU_Decomposition_int:
     mov r8, [r14 + 8] ; r8 = m->rows
 
     ; check each leading minor rank == order
-    xor rcx, rcx ; i = 0
+    xor r12, r12 ; i = 0
 
 check_lm_loop:
-    cmp rcx, [r15 + 8] ; i < leading_minors->len?
+    cmp r12, [r15 + 8] ; i < leading_minors->len?
     jae check_lm_done
 
     ; &leading_minors->matrix_data[i]
     mov rax, [r15]  ; rax = matrix_data array pointer
-    mov rdi, rcx
+    mov rdi, r12
     imul rdi, 24   ; rdi = i * sizeof(MatrixInt)
     add rdi, rax   ; rdi = &matrix_data[i]
 
@@ -89,12 +90,12 @@ check_lm_loop:
     test rax, rax
     jz check_lm_fail
 
-    mov rax, [rsp + 24] ; rax = rank
-    lea rdx, [rcx + 1]  ; rdx = i + 1
+    movsxd rax, dword [rsp + 24] ; rax = rank
+    lea rdx, [r12 + 1]  ; rdx = i + 1
     cmp rax, rdx        ; rank == i + 1?
     jne check_lm_fail
 
-    inc rcx ; i++
+    inc r12 ; i++
     jmp check_lm_loop
 
 check_lm_done:
@@ -196,19 +197,27 @@ init_L_i:
     cmp rdi, r8 ; i < n?
     jge init_L_done
 
-    lea rsi, [rdi + 1] ; j = i + 1
+    xor rsi, rsi ; j = 0
 
 init_L_j:
     cmp rsi, r8 ; j < n?
     jge init_L_i_inc
 
-    ; L->data[i * n + j] = 0.0
     mov rax, rdi
     imul rax, r8
     add rax, rsi
+
+    cmp rsi, rdi ; i == j?
+    je L_set_one
+    ; L->data[i * n + j] = 0.0
     movsd xmm0, [rel zero]
     movsd [r10 + rax * 8], xmm0
+    jmp next
 
+L_set_one:
+    movsd xmm0, [rel one]
+    movsd [r10 + rax * 8], xmm0
+next:
     inc rsi
     jmp init_L_j
 
@@ -316,7 +325,7 @@ doolittle_u_j:
     xor rcx, rcx ; k = 0
 
 doolittle_u_sum:
-    cmp rcx, rsi ; k < j?
+    cmp rcx, rdi ; k < i?
     jge doolittle_u_store
 
     ; L[i][k]
