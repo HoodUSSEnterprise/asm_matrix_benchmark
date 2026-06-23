@@ -2,38 +2,59 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-16 19:42:50
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-16 19:44:21
+@LastEditTime: 2026-06-23 19:20:45
 @FilePath: \asm_matrix_benchmark\src\C++\mul_matrix.cpp
 @Description: mul matrix c++ code
 *************************************************************/
-
 #include "matrix_cpp.h"
+#include <stdexcept>
 
 /***********************************************************
-@description: mul matrix function
-@param {MatrixInt} m1
-@param {MatrixInt} m2
+@description: mul with new matrix
 @return {*}
- ************************************************************/
-MatrixInt MatrixInt::mul_matrix(MatrixInt m1, MatrixInt m2)
+*************************************************************/
+MatrixInt MatrixInt::operator*(const MatrixInt &other) const
 {
-    if (m1.cols != m2.rows)
+    if (cols != other.rows)
     {
-        throw std::invalid_argument("mul_matrix: inner dimensions must match");
+        throw std::invalid_argument("operator*: inner dimensions must match");
     }
 
-    MatrixInt res(m1.rows, m2.cols);
-    for (size_t i = 0; i < m1.rows; ++i)
+    MatrixInt res(rows, other.cols);
+    for (size_t i = 0; i < rows; ++i)
     {
-        for (size_t j = 0; j < m2.cols; ++j)
+        for (size_t j = 0; j < other.cols; ++j)
         {
             long long sum = 0;
-            for (size_t k = 0; k < m1.cols; ++k)
+            for (size_t k = 0; k < cols; ++k)
             {
-                sum += static_cast<long long>(m1.data[i * m1.cols + k]) * m2.data[k * m2.cols + j];
+                sum += static_cast<long long>(data[i * cols + k]) * other.data[k * other.cols + j];
             }
             res.data[i * res.cols + j] = static_cast<int>(sum);
         }
     }
     return res;
+}
+
+/***********************************************************
+@description: *=
+@return {*}
+*************************************************************/
+MatrixInt &MatrixInt::operator*=(const MatrixInt &other)
+{
+    *this = *this * other;
+    return *this;
+}
+
+/***********************************************************
+@description: mul with const number
+@return {*}
+*************************************************************/
+MatrixInt &MatrixInt::operator*=(int scalar)
+{
+    for (size_t i = 0; i < rows * cols; ++i)
+    {
+        data[i] *= scalar;
+    }
+    return *this;
 }
