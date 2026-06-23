@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-21 14:13:48
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-22 12:52:51
+@LastEditTime: 2026-06-23 13:59:22
 @FilePath: \asm_matrix_benchmark\src\C\lu_matrix.c
 @Description: lu decomposition of matrix c code
 *************************************************************/
@@ -128,22 +128,18 @@ bool LU_Decomposition_int(MatrixInt *m, LU_Result *res)
     // init L matrix upper triangle
     for (size_t i = 0; i < L->rows; i++)
     {
-        for (size_t j = i + 1; j < L->cols; j++)
+        for (size_t j = i; j < L->cols; j++)
         {
             L->data[i * L->cols + j] = (i == j ? 1.0 : 0.0);
         }
     }
 
     // init U matrix lower triangle
-    for (size_t i = 0; i < U->cols; i++)
-    {
-        U->data[i] = m->data[i];
-    }
     for (size_t i = 0; i < U->rows; i++)
     {
         for (size_t j = 0; j < i; j++)
         {
-            U->data[i * U->cols + j] = 0;
+            U->data[i * U->cols + j] = 0.0;
         }
     }
 
@@ -151,6 +147,10 @@ bool LU_Decomposition_int(MatrixInt *m, LU_Result *res)
     u_{1j} = a_{1j},  j = 1:n
     l_{i1} = a_{i1} / u_{11},  i = 2:n
     */
+    for (size_t i = 0; i < U->cols; i++)
+    {
+        U->data[i] = m->data[i];
+    }
     for (size_t i = 1; i < L->rows; i++)
     {
         L->data[i * L->cols + 0] = m->data[i * m->cols + 0] / U->data[0 * U->cols + 0];
@@ -165,7 +165,7 @@ bool LU_Decomposition_int(MatrixInt *m, LU_Result *res)
         for (size_t j = i; j < L->rows; j++)
         {
             double sum = 0;
-            for (size_t k = 0; k < j; k++)
+            for (size_t k = 0; k < i; k++)
             {
                 sum += (L->data[i * L->cols + k] * U->data[k * U->cols + j]);
             }
