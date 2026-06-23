@@ -24,9 +24,9 @@ MatrixInt MatrixInt::cat(const MatrixInt &other, int axis) const
             throw std::invalid_argument("cat(axis=0): column mismatch");
         }
         MatrixInt res(rows + other.rows, cols);
-        for (size_t i = 0; i < rows + other.rows; ++i)
+        for (size_t i = 0; i < rows + other.rows; i++)
         {
-            for (size_t j = 0; j < cols; ++j)
+            for (size_t j = 0; j < cols; j++)
             {
                 if (i < rows)
                 {
@@ -48,13 +48,13 @@ MatrixInt MatrixInt::cat(const MatrixInt &other, int axis) const
         }
         size_t res_cols = cols + other.cols;
         MatrixInt res(rows, res_cols);
-        for (size_t i = 0; i < rows; ++i)
+        for (size_t i = 0; i < rows; i++)
         {
-            for (size_t j = 0; j < cols; ++j)
+            for (size_t j = 0; j < cols; j++)
             {
                 res.data[i * res_cols + j] = data[i * cols + j];
             }
-            for (size_t j = 0; j < other.cols; ++j)
+            for (size_t j = 0; j < other.cols; j++)
             {
                 res.data[i * res_cols + cols + j] = other.data[i * other.cols + j];
             }

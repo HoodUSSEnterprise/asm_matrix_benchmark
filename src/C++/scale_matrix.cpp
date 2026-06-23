@@ -15,7 +15,7 @@
 MatrixInt MatrixInt::operator*(int scalar) const
 {
     MatrixInt res(rows, cols);
-    for (size_t i = 0; i < rows * cols; ++i)
+    for (size_t i = 0; i < rows * cols; i++)
     {
         res.data[i] = data[i] * scalar;
     }

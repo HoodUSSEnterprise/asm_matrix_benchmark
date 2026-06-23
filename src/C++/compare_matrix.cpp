@@ -19,7 +19,7 @@ bool MatrixInt::operator==(const MatrixInt &other) const
     {
         return false;
     }
-    for (size_t i = 0; i < rows * cols; ++i)
+    for (size_t i = 0; i < rows * cols; i++)
     {
         if (data[i] != other.data[i])
         {

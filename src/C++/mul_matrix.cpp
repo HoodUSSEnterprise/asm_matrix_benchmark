@@ -21,12 +21,12 @@ MatrixInt MatrixInt::operator*(const MatrixInt &other) const
     }
 
     MatrixInt res(rows, other.cols);
-    for (size_t i = 0; i < rows; ++i)
+    for (size_t i = 0; i < rows; i++)
     {
-        for (size_t j = 0; j < other.cols; ++j)
+        for (size_t j = 0; j < other.cols; j++)
         {
             long long sum = 0;
-            for (size_t k = 0; k < cols; ++k)
+            for (size_t k = 0; k < cols; k++)
             {
                 sum += static_cast<long long>(data[i * cols + k]) * other.data[k * other.cols + j];
             }
@@ -52,7 +52,7 @@ MatrixInt &MatrixInt::operator*=(const MatrixInt &other)
 *************************************************************/
 MatrixInt &MatrixInt::operator*=(int scalar)
 {
-    for (size_t i = 0; i < rows * cols; ++i)
+    for (size_t i = 0; i < rows * cols; i++)
     {
         data[i] *= scalar;
     }

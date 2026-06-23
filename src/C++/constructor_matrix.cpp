@@ -36,7 +36,7 @@ MatrixInt::MatrixInt(const int *arr, size_t r, size_t c) : rows(r), cols(c), dat
 {
     if (arr)
     {
-        for (size_t i = 0; i < r * c; ++i)
+        for (size_t i = 0; i < r * c; i++)
         {
             data[i] = arr[i];
         }

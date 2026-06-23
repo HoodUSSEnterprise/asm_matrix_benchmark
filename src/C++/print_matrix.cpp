@@ -17,9 +17,9 @@ std::ostream &operator<<(std::ostream &os, const MatrixInt &m)
     os << "--------------------------------------------" << std::endl;
     os << "matrix size: (" << m.rows << ", " << m.cols << ")" << std::endl;
     os << "matrix data:" << std::endl;
-    for (size_t i = 0; i < m.rows; ++i)
+    for (size_t i = 0; i < m.rows; i++)
     {
-        for (size_t j = 0; j < m.cols; ++j)
+        for (size_t j = 0; j < m.cols; j++)
         {
             os << m.data[i * m.cols + j];
             if (j + 1 < m.cols)

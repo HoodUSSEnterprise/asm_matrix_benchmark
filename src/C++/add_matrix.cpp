@@ -21,7 +21,7 @@ MatrixInt MatrixInt::operator+(const MatrixInt &other) const
     }
 
     MatrixInt res(rows, cols);
-    for (size_t i = 0; i < rows * cols; ++i)
+    for (size_t i = 0; i < rows * cols; i++)
     {
         res.data[i] = data[i] + other.data[i];
     }
@@ -39,7 +39,7 @@ MatrixInt &MatrixInt::operator+=(const MatrixInt &other)
         throw std::invalid_argument("operator+=: dimension mismatch");
     }
 
-    for (size_t i = 0; i < rows * cols; ++i)
+    for (size_t i = 0; i < rows * cols; i++)
     {
         data[i] += other.data[i];
     }

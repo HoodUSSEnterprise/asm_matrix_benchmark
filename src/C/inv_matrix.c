@@ -81,9 +81,9 @@ MatrixDouble *inv_matrix_int(MatrixInt *m)
         return NULL;
     }
     // init aug_matrix
-    for (size_t i = 0; i < aug_matrix->rows; ++i)
+    for (size_t i = 0; i < aug_matrix->rows; i++)
     {
-        for (size_t j = 0; j < aug_matrix->cols; ++j)
+        for (size_t j = 0; j < aug_matrix->cols; j++)
         {
             if (j < m->cols)
             {
