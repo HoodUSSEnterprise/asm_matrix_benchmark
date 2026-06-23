@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-22 12:45:34
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-23 16:14:50
+; @LastEditTime: 2026-06-23 16:45:25
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\lu_matrix_int.asm
 ; @Description: lu decomposition nasm code on windows 
 ;-------------------------------------------------------------
@@ -17,6 +17,7 @@ extern rank_matrix_int
 
 section .rodata
     zero             dq 0.0
+    one              dq 1.0
     malloc_failed    db "Memory allocation failed", 0
     invalid_param    db "Invalid param!", 0
     not_square       db "It's not a square", 0
@@ -223,21 +224,28 @@ init_L_i:
     cmp rdi, r8 ; i < n?
     jge init_L_done
 
-    lea rsi, [rdi + 1] ; j = i + 1
+    xor rsi, rsi ; j = 0
 
-init_L_j:
-    cmp rsi, r8 ; j < n?
-    jge init_L_i_inc
+    init_L_j:
+        cmp rsi, r8 ; j < n?
+        jge init_L_i_inc
 
-    ; L->data[i * n + j] = 0.0
-    mov rax, rdi
-    imul rax, r8
-    add rax, rsi
-    movsd xmm0, [rel zero]
-    movsd [r10 + rax * 8], xmm0
+        mov rax, rdi
+        imul rax, r8
+        add rax, rsi
 
-    inc rsi
-    jmp init_L_j
+        cmp rsi, rdi ; i == j?
+        je L_set_one
+        ; L->data[i * n + j] = 0.0
+        movsd xmm0, [rel zero]
+        movsd [r10 + rax * 8], xmm0
+        jmp next
+    L_set_one:
+        movsd xmm0, [rel one]
+        movsd [r10 + rax * 8], xmm0
+    next:
+        inc rsi
+        jmp init_L_j
 
 init_L_i_inc:
     inc rdi
