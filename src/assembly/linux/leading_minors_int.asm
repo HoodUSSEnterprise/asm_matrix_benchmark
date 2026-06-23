@@ -30,7 +30,7 @@ get_leading_minors_int:
     push r13
     push r14
     push r15
-    sub rsp, 32 ; allocate shadow space
+    sub rsp, 48 ; allocate shadow space
 
     mov r14, rdi ; r14 = m
 
@@ -66,6 +66,7 @@ get_leading_minors_int:
     test rax, rax
     jz malloc_fail_struct
 
+    mov r8, [r14 + 8]
     mov r15, rax ; r15 = res
     mov [r15 + 8], r8 ; res->len = m->rows
 
@@ -90,11 +91,14 @@ get_leading_minors_int:
     mov rbx, 1 ; rbx = order (1-indexed)
 
 order_loop:
+    mov r8, [r14 + 8]
     cmp rbx, r8 ; order <= m->rows?
     ja all_done
 
     ; idx = order - 1
-    lea r10, [rbx - 1] ; r10 = idx (0-indexed)
+    mov r10, rbx ; r10 = order
+    dec r10      ; r10 = order - 1
+    ;lea r10, [rbx - 1] ; r10 = idx (0-indexed)
 
     ; matrix_data[idx].rows = order
     ; matrix_data[idx].cols = order
@@ -105,6 +109,8 @@ order_loop:
     mov [r11 + 8], rbx ; matrix_data[idx].rows = order
     mov [r11 + 16], rbx ; matrix_data[idx].cols = order
 
+    ; store r11 register
+    mov [rsp + 40], r11
     ; allocate matrix_data[idx].data (order * order * 4)
     mov rdi, rbx
     imul rdi, rbx ; rdi = order * order
@@ -113,6 +119,7 @@ order_loop:
     test rax, rax
     jz malloc_fail_subdata
 
+    mov r11, [rsp + 40]
     ; store data pointer immediately
     mov [r11], rax ; matrix_data[idx].data = new malloc data
 
@@ -135,7 +142,7 @@ copy_loop_j:
 
     ; src: m->data[i * m->cols + j]
     mov rax, rcx   ; rax = i
-    imul rax, r9   ; rax = i * m->cols
+    imul rax, [r14 + 16]   ; rax = i * m->cols
     add rax, rsi   ; rax = i * m->cols + j
     mov edi, [r13 + rax * 4] ; edi = m->data[i * m->cols + j]
 
@@ -220,7 +227,7 @@ not_a_square:
     jmp cleanup
 
 cleanup:
-    add rsp, 32 ; restore stack pointer
+    add rsp, 48 ; restore stack pointer
     ; restore callee_register
     pop r15
     pop r14
