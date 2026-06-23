@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-21 23:09:02
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-22 12:31:20
+; @LastEditTime: 2026-06-23 16:53:31
 ; @FilePath: \asm_matrix_benchmark\src\assembly\linux\leading_minors_int.asm
 ; @Description:get leading principal minor nasm code on linux 
 ;-------------------------------------------------------------
@@ -130,36 +130,36 @@ order_loop:
     ; matrix_data[idx].data[i * order + j] = m->data[i * m->cols + j]
     xor rcx, rcx ; i = 0
 
-copy_loop_i:
-    cmp rcx, rbx ; i < order?
-    jge copy_done
+    copy_loop_i:
+        cmp rcx, rbx ; i < order?
+        jge copy_done
 
-    xor rsi, rsi ; j = 0
+        xor rsi, rsi ; j = 0
 
-copy_loop_j:
-    cmp rsi, rbx ; j < order?
-    jge copy_inc_i
+        copy_loop_j:
+            cmp rsi, rbx ; j < order?
+            jge copy_inc_i
 
-    ; src: m->data[i * m->cols + j]
-    mov rax, rcx   ; rax = i
-    imul rax, [r14 + 16]   ; rax = i * m->cols
-    add rax, rsi   ; rax = i * m->cols + j
-    mov edi, [r13 + rax * 4] ; edi = m->data[i * m->cols + j]
+            ; src: m->data[i * m->cols + j]
+            mov rax, rcx   ; rax = i
+            imul rax, [r14 + 16]   ; rax = i * m->cols
+            add rax, rsi   ; rax = i * m->cols + j
+            mov edi, [r13 + rax * 4] ; edi = m->data[i * m->cols + j]
 
-    ; dst: matrix_data[idx].data[i * order + j]
-    mov rax, rcx   ; rax = i
-    imul rax, rbx  ; rax = i * order
-    add rax, rsi   ; rax = i * order + j
+            ; dst: matrix_data[idx].data[i * order + j]
+            mov rax, rcx   ; rax = i
+            imul rax, rbx  ; rax = i * order
+            add rax, rsi   ; rax = i * order + j
 
-    mov rdx, [r11] ; rdx = matrix_data[idx].data
-    mov [rdx + rax * 4], edi
+            mov rdx, [r11] ; rdx = matrix_data[idx].data
+            mov [rdx + rax * 4], edi
 
-    inc rsi ; j++
-    jmp copy_loop_j
+            inc rsi ; j++
+            jmp copy_loop_j
 
-copy_inc_i:
-    inc rcx ; i++
-    jmp copy_loop_i
+    copy_inc_i:
+        inc rcx ; i++
+        jmp copy_loop_i
 
 copy_done:
     inc rbx ; order++
