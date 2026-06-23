@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-22 12:45:34
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-22 12:50:19
+; @LastEditTime: 2026-06-23 16:14:50
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\lu_matrix_int.asm
 ; @Description: lu decomposition nasm code on windows 
 ;-------------------------------------------------------------
@@ -91,7 +91,7 @@ check_lm_loop:
     test rax, rax
     jz check_lm_fail
 
-    mov rax, [rsp + 24] ; rax = rank
+    movsxd rax, dword [rsp + 24] ; rax = rank
     lea rdx, [r12 + 1]  ; rdx = i + 1 (r12 preserved across call)
     cmp rax, rdx        ; rank == i + 1?
     jne check_lm_fail
@@ -269,19 +269,19 @@ init_U_lower_i:
 
     xor rsi, rsi ; j = 0
 
-init_U_lower_j:
-    cmp rsi, rdi ; j < i?
-    jge init_U_lower_i_inc
+    init_U_lower_j:
+        cmp rsi, rdi ; j < i?
+        jge init_U_lower_i_inc
 
-    ; U->data[i * n + j] = 0.0
-    mov rax, rdi
-    imul rax, r8
-    add rax, rsi
-    movsd xmm0, [rel zero]
-    movsd [r11 + rax * 8], xmm0
+        ; U->data[i * n + j] = 0.0
+        mov rax, rdi
+        imul rax, r8
+        add rax, rsi
+        movsd xmm0, [rel zero]
+        movsd [r11 + rax * 8], xmm0
 
-    inc rsi
-    jmp init_U_lower_j
+        inc rsi
+        jmp init_U_lower_j
 
 init_U_lower_i_inc:
     inc rdi
@@ -331,50 +331,50 @@ doolittle_loop_i:
     ; === sub-loop 1: U[i][j] for j = i..n-1 ===
     mov rsi, rdi ; j = i
 
-doolittle_u_j:
-    cmp rsi, r8 ; j < n?
-    jge doolittle_l_start
+    doolittle_u_j:
+        cmp rsi, r8 ; j < n?
+        jge doolittle_l_start
 
-    ; sum = Σ L[i][k] * U[k][j] for k = 0..j-1
-    xorpd xmm4, xmm4 ; sum = 0.0
-    xor rcx, rcx ; k = 0
+        ; sum = Σ L[i][k] * U[k][j] for k = 0..j-1
+        xorpd xmm4, xmm4 ; sum = 0.0
+        xor rcx, rcx ; k = 0
 
-doolittle_u_sum:
-    cmp rcx, rsi ; k < j?
-    jge doolittle_u_store
+        doolittle_u_sum:
+            cmp rcx, rdi ; k < i?
+            jge doolittle_u_store
 
-    ; L[i][k]
-    mov rax, rdi
-    imul rax, r8
-    add rax, rcx
-    movsd xmm0, [r10 + rax * 8]
+            ; L[i][k]
+            mov rax, rdi
+            imul rax, r8
+            add rax, rcx
+            movsd xmm0, [r10 + rax * 8]
 
-    ; U[k][j]
-    mov rax, rcx
-    imul rax, r8
-    add rax, rsi
-    mulsd xmm0, [r11 + rax * 8]
+            ; U[k][j]
+            mov rax, rcx
+            imul rax, r8
+            add rax, rsi
+            mulsd xmm0, [r11 + rax * 8]
 
-    addsd xmm4, xmm0
-    inc rcx
-    jmp doolittle_u_sum
+            addsd xmm4, xmm0
+            inc rcx
+            jmp doolittle_u_sum
 
-doolittle_u_store:
-    ; U[i][j] = (double)m[i][j] - sum
-    mov rax, rdi
-    imul rax, r8
-    add rax, rsi
-    movsxd rax, [r9 + rax * 4]
-    cvtsi2sd xmm0, rax
-    subsd xmm0, xmm4
+    doolittle_u_store:
+        ; U[i][j] = (double)m[i][j] - sum
+        mov rax, rdi
+        imul rax, r8
+        add rax, rsi
+        movsxd rax, [r9 + rax * 4]
+        cvtsi2sd xmm0, rax
+        subsd xmm0, xmm4
 
-    mov rax, rdi
-    imul rax, r8
-    add rax, rsi
-    movsd [r11 + rax * 8], xmm0
+        mov rax, rdi
+        imul rax, r8
+        add rax, rsi
+        movsd [r11 + rax * 8], xmm0
 
-    inc rsi ; j++
-    jmp doolittle_u_j
+        inc rsi ; j++
+        jmp doolittle_u_j
 
     ; === sub-loop 2: L[j][i] for j = i+1..n-1 ===
 doolittle_l_start:
@@ -441,7 +441,6 @@ doolittle_done:
     ; ========== store L and U in res ==========
     mov [rbx], r12     ; res->L = L
     mov [rbx + 8], r13 ; res->U = U
-
     ; ========== free leading_minors ==========
     xor rcx, rcx ; i = 0
 
