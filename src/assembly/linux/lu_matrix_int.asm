@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-22 12:43:59
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-22 12:45:49
+; @LastEditTime: 2026-06-23 16:53:04
 ; @FilePath: \asm_matrix_benchmark\src\assembly\linux\lu_matrix_int.asm
 ; @Description:lu decomposition nasm code on linux 
 ;-------------------------------------------------------------
@@ -251,19 +251,19 @@ init_U_lower_i:
 
     xor rsi, rsi ; j = 0
 
-init_U_lower_j:
-    cmp rsi, rdi ; j < i?
-    jge init_U_lower_i_inc
+    init_U_lower_j:
+        cmp rsi, rdi ; j < i?
+        jge init_U_lower_i_inc
 
-    ; U->data[i * n + j] = 0.0
-    mov rax, rdi
-    imul rax, r8
-    add rax, rsi
-    movsd xmm0, [rel zero]
-    movsd [r11 + rax * 8], xmm0
+        ; U->data[i * n + j] = 0.0
+        mov rax, rdi
+        imul rax, r8
+        add rax, rsi
+        movsd xmm0, [rel zero]
+        movsd [r11 + rax * 8], xmm0
 
-    inc rsi
-    jmp init_U_lower_j
+        inc rsi
+        jmp init_U_lower_j
 
 init_U_lower_i_inc:
     inc rdi
@@ -316,106 +316,106 @@ doolittle_loop_i:
     ; === sub-loop 1: U[i][j] for j = i..n-1 ===
     mov rsi, rdi ; j = i
 
-doolittle_u_j:
-    cmp rsi, r8 ; j < n?
-    jge doolittle_l_start
+    doolittle_u_j:
+        cmp rsi, r8 ; j < n?
+        jge doolittle_l_start
 
-    ; sum = Σ L[i][k] * U[k][j] for k = 0..j-1
-    xorpd xmm4, xmm4 ; sum = 0.0
-    xor rcx, rcx ; k = 0
+        ; sum = Σ L[i][k] * U[k][j] for k = 0..j-1
+        xorpd xmm4, xmm4 ; sum = 0.0
+        xor rcx, rcx ; k = 0
 
-doolittle_u_sum:
-    cmp rcx, rdi ; k < i?
-    jge doolittle_u_store
+    doolittle_u_sum:
+        cmp rcx, rdi ; k < i?
+        jge doolittle_u_store
 
-    ; L[i][k]
-    mov rax, rdi
-    imul rax, r8
-    add rax, rcx
-    movsd xmm0, [r10 + rax * 8]
+        ; L[i][k]
+        mov rax, rdi
+        imul rax, r8
+        add rax, rcx
+        movsd xmm0, [r10 + rax * 8]
 
-    ; U[k][j]
-    mov rax, rcx
-    imul rax, r8
-    add rax, rsi
-    mulsd xmm0, [r11 + rax * 8]
+        ; U[k][j]
+        mov rax, rcx
+        imul rax, r8
+        add rax, rsi
+        mulsd xmm0, [r11 + rax * 8]
 
-    addsd xmm4, xmm0
-    inc rcx
-    jmp doolittle_u_sum
+        addsd xmm4, xmm0
+        inc rcx
+        jmp doolittle_u_sum
 
-doolittle_u_store:
-    ; U[i][j] = (double)m[i][j] - sum
-    mov rax, rdi
-    imul rax, r8
-    add rax, rsi
-    movsxd rax, [r9 + rax * 4]
-    cvtsi2sd xmm0, rax
-    subsd xmm0, xmm4
+    doolittle_u_store:
+        ; U[i][j] = (double)m[i][j] - sum
+        mov rax, rdi
+        imul rax, r8
+        add rax, rsi
+        movsxd rax, [r9 + rax * 4]
+        cvtsi2sd xmm0, rax
+        subsd xmm0, xmm4
 
-    mov rax, rdi
-    imul rax, r8
-    add rax, rsi
-    movsd [r11 + rax * 8], xmm0
+        mov rax, rdi
+        imul rax, r8
+        add rax, rsi
+        movsd [r11 + rax * 8], xmm0
 
-    inc rsi ; j++
-    jmp doolittle_u_j
+        inc rsi ; j++
+        jmp doolittle_u_j
 
     ; === sub-loop 2: L[j][i] for j = i+1..n-1 ===
-doolittle_l_start:
-    lea rsi, [rdi + 1] ; j = i + 1
+    doolittle_l_start:
+        lea rsi, [rdi + 1] ; j = i + 1
 
-doolittle_l_j:
-    cmp rsi, r8 ; j < n?
-    jge doolittle_i_inc
+    doolittle_l_j:
+        cmp rsi, r8 ; j < n?
+        jge doolittle_i_inc
 
-    ; sum = Σ L[j][k] * U[k][i] for k = 0..j-1
-    xorpd xmm4, xmm4 ; sum = 0.0
-    xor rcx, rcx ; k = 0
+        ; sum = Σ L[j][k] * U[k][i] for k = 0..j-1
+        xorpd xmm4, xmm4 ; sum = 0.0
+        xor rcx, rcx ; k = 0
 
-doolittle_l_sum:
-    cmp rcx, rsi ; k < j?
-    jge doolittle_l_store
+    doolittle_l_sum:
+        cmp rcx, rsi ; k < j?
+        jge doolittle_l_store
 
-    ; L[j][k]
-    mov rax, rsi
-    imul rax, r8
-    add rax, rcx
-    movsd xmm0, [r10 + rax * 8]
+        ; L[j][k]
+        mov rax, rsi
+        imul rax, r8
+        add rax, rcx
+        movsd xmm0, [r10 + rax * 8]
 
-    ; U[k][i]
-    mov rax, rcx
-    imul rax, r8
-    add rax, rdi
-    mulsd xmm0, [r11 + rax * 8]
+        ; U[k][i]
+        mov rax, rcx
+        imul rax, r8
+        add rax, rdi
+        mulsd xmm0, [r11 + rax * 8]
 
-    addsd xmm4, xmm0
-    inc rcx
-    jmp doolittle_l_sum
+        addsd xmm4, xmm0
+        inc rcx
+        jmp doolittle_l_sum
 
-doolittle_l_store:
-    ; L[j][i] = ((double)m[j][i] - sum) / U[i][i]
-    mov rax, rsi
-    imul rax, r8
-    add rax, rdi
-    movsxd rax, [r9 + rax * 4]
-    cvtsi2sd xmm0, rax
-    subsd xmm0, xmm4
+    doolittle_l_store:
+        ; L[j][i] = ((double)m[j][i] - sum) / U[i][i]
+        mov rax, rsi
+        imul rax, r8
+        add rax, rdi
+        movsxd rax, [r9 + rax * 4]
+        cvtsi2sd xmm0, rax
+        subsd xmm0, xmm4
 
-    ; divide by U[i][i]
-    mov rax, rdi
-    imul rax, r8
-    add rax, rdi
-    divsd xmm0, [r11 + rax * 8]
+        ; divide by U[i][i]
+        mov rax, rdi
+        imul rax, r8
+        add rax, rdi
+        divsd xmm0, [r11 + rax * 8]
 
-    ; store L[j][i]
-    mov rax, rsi
-    imul rax, r8
-    add rax, rdi
-    movsd [r10 + rax * 8], xmm0
+        ; store L[j][i]
+        mov rax, rsi
+        imul rax, r8
+        add rax, rdi
+        movsd [r10 + rax * 8], xmm0
 
-    inc rsi ; j++
-    jmp doolittle_l_j
+        inc rsi ; j++
+        jmp doolittle_l_j
 
 doolittle_i_inc:
     inc rdi ; i++
