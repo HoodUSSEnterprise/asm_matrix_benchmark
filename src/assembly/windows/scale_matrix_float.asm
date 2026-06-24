@@ -1,11 +1,12 @@
 ;-------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
-; @Date: 2026-06-24
+; @Date: 2026-06-24 18:52:55
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24
+; @LastEditTime: 2026-06-24 19:32:31
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\scale_matrix_float.asm
-; @Description: scale matrix float nasm code on windows
+; @Description: scale matrix float nasm code on windows 
 ;-------------------------------------------------------------
+
 global scale_matrix_float
 extern printf
 extern malloc
