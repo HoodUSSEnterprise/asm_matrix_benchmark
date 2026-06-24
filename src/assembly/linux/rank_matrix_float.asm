@@ -54,23 +54,23 @@ rank_matrix_float:
 
     mov rdi, [r14 + 16]
     imul rdi, [r14 + 8]
-    mov rcx, rdi
-    shl rcx, 2
-    mov rdi, rcx
+    mov r12, rdi        ; preserve element count
+    shl rdi, 2          ; rdi = byte size
     call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_data
 
     mov rbx, rax
-    mov r12, [r14]
+    mov r13, [r14]
 
     xor rdx, rdx
+    mov rdi, r12        ; restore element count
 
 loop_copy:
     cmp rdx, rdi
     jge next
 
-    movss xmm0, [r12 + rdx * 4]
+    movss xmm0, [r13 + rdx * 4]
     movss [rbx + rdx * 4], xmm0
 
     inc rdx
@@ -83,7 +83,6 @@ next:
     xor rcx, rcx
     xor rdx, rdx
     movss xmm2, [rel epsilon]
-    movd xmm3, [rel abs_mask]
 
 loop1:
     cmp rcx, r8
@@ -92,6 +91,7 @@ loop1:
     cmp rdx, r9
     jge calc_rank
 
+    movd xmm3, [rel abs_mask]   ; reload abs_mask for each outer iteration
     mov r11, rcx
     find_pivot:
         cmp r11, r8
