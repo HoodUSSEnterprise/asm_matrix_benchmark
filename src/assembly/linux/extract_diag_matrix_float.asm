@@ -54,8 +54,8 @@ r8_bigger:
     jmp next
 
 next:
-    mov rcx, rdi
-    shl rcx, 2
+    mov r12, rdi        ; r12 = diag_len (callee-saved)
+    shl rdi, 2          ; rdi = byte size
     call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_pint
@@ -67,7 +67,7 @@ next:
     mov r10, [r14]
 
 loop1:
-    cmp rcx, rdi
+    cmp rcx, r12
     jge end
 
     mov r8, rcx
