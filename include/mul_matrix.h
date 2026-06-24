@@ -19,4 +19,12 @@
  ************************************************************/
 MatrixInt *mul_matrix_int(MatrixInt *m1, MatrixInt *m2);
 
+/***********************************************************
+@description: mul matrix double function
+@param {MatrixDouble} *m1
+@param {MatrixDouble} *m2
+@return {*}
+************************************************************/
+MatrixDouble *mul_matrix_double(MatrixDouble *m1, MatrixDouble *m2);
+
 #endif // MUL_MATRIX_H
