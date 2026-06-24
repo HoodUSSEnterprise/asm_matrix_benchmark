@@ -2,9 +2,9 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-24 13:38:39
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24 14:13:27
+; @LastEditTime: 2026-06-24 14:17:55
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\extract_diag_matrix_int.asm
-; @Description: 
+; @Description: get diagonal element for matrix, this method is like eye matrix.It means we get the element which row index equal to col index.
 ;-------------------------------------------------------------
 global extract_diag_int
 
