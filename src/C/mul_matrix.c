@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-16 19:08:13
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-24 16:18:40
+@LastEditTime: 2026-06-24 16:20:25
 @FilePath: \asm_matrix_benchmark\src\C\mul_matrix.c
 @Description: mul matrix c code
 *************************************************************/
@@ -75,7 +75,7 @@ MatrixInt *mul_matrix_int(MatrixInt *m1, MatrixInt *m2)
 @param {MatrixFloat} *m2
 @return {*}
 ************************************************************/
-MatrixFloat *mul_matrix_double(MatrixFloat *m1, MatrixFloat *m2)
+MatrixFloat *mul_matrix_float(MatrixFloat *m1, MatrixFloat *m2)
 {
     // check m1 and m2
     if (m1 == NULL || m2 == NULL)
