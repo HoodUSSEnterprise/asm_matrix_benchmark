@@ -35,4 +35,27 @@ MatrixInt *extract_col_int(MatrixInt *m, size_t index);
 *************************************************************/
 int *extract_diag_int(MatrixInt *m);
 
+/***********************************************************
+@description: extract matrix's row float
+@param {MatrixFloat} *m
+@param {size_t} index
+@return {*}
+*************************************************************/
+MatrixFloat *extract_row_float(MatrixFloat *m, size_t index);
+
+/***********************************************************
+@description: extract matrix's col float
+@param {MatrixFloat} *m
+@param {size_t} index
+@return {*}
+*************************************************************/
+MatrixFloat *extract_col_float(MatrixFloat *m, size_t index);
+
+/***********************************************************
+@description: extract matrix's diag float
+@param {MatrixFloat} *m
+@return {*}
+*************************************************************/
+float *extract_diag_float(MatrixFloat *m);
+
 #endif /* ifndef EXTRACT_MATRIX_H */
