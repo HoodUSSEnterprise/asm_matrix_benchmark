@@ -31,7 +31,7 @@ scale_matrix_double:
     sub rsp, 32 ; allocate shadow space for printf
 
     mov r14, rcx ; r14 = m
-    mov xmm15, xmm1 ; r15d = scale
+    movsd xmm15, xmm1 ; xmm15 = scale
 
     ; check param m
     test r14, r14
@@ -88,7 +88,7 @@ on_loop:
     movsd xmm0, [r9 + rcx * 8]
     mulsd xmm0, xmm15
 
-    mov [r13 + rcx * 8], xmm0
+    movsd [r13 + rcx * 8], xmm0
     inc rcx ; i++
     jmp on_loop
 
