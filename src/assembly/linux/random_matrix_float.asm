@@ -109,8 +109,8 @@ boundary_done:
 
     mov rdi, r14
     imul rdi, r15
-
-    lea rcx, [rdi * 4]
+    mov r12, rdi        ; preserve element count
+    shl rdi, 2          ; rdi = byte size
     call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_data
@@ -128,7 +128,7 @@ boundary_done:
     xor r14, r14
 
 fill_loop:
-    cmp r14, rdi
+    cmp r14, r12
     jge end
 
     call rand wrt ..plt
