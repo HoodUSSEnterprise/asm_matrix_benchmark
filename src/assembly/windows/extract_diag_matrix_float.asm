@@ -1,11 +1,12 @@
 ;-------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
-; @Date: 2026-06-24
+; @Date: 2026-06-24 18:52:55
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24
+; @LastEditTime: 2026-06-24 19:27:44
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\extract_diag_matrix_float.asm
-; @Description: get diagonal element for matrix float nasm code on windows
+; @Description:  get diagonal element for matrix float nasm code on windows
 ;-------------------------------------------------------------
+
 global extract_diag_float
 
 extern malloc
