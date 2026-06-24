@@ -1,12 +1,13 @@
 ;-------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
-; @Date: 2026-06-24
+; @Date: 2026-06-24 18:52:55
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24
+; @LastEditTime: 2026-06-24 19:32:48
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\special_matrix_double.asm
-; @Description: some special matrix like identity matrix, diag matrix,
+; @Description:  some special matrix like identity matrix, diag matrix,
 ; eye_matrix and zero matrix double nasm code on windows
 ;-------------------------------------------------------------
+
 global identity_matrix_double, diag_matrix_double, eye_matrix_double, zero_matrix_double
 extern malloc
 extern free
