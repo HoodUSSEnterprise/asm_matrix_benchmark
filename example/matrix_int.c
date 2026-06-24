@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-15 21:56:03
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-23 13:56:30
+@LastEditTime: 2026-06-24 13:34:02
 @FilePath: \asm_matrix_benchmark\example\matrix_int.c
 @Description:example of matrix int
 *************************************************************/
@@ -215,5 +215,32 @@ int main(void)
         print_matrix_double(lu_res.L);
         print_matrix_double(lu_res.U);
     }
+    puts("----------------------------------------------------------------------------------------");
+    puts("-------------------------------------extract matrix--------------------------------------");
+    int extract_data[6] = {1, 2, 3, 4, 5, 6};
+    MatrixInt extract_matrix = {extract_data, 2, 3};
+    print_matrix_int(&extract_matrix);
+    MatrixInt *extract_row = extract_row_int(&extract_matrix, 0);
+    print_matrix_int(extract_row);
+    MatrixInt *extract_col = extract_col_int(&extract_matrix, 1);
+    print_matrix_int(extract_col);
+    puts("extract diag: ");
+    int *extract_diag = extract_diag_int(&extract_matrix);
+    for (size_t i = 0; i < 2; i++)
+    {
+        printf("%d ", extract_diag[i]);
+    }
+    puts("");
+    puts("----------------------------------------------------------------------------------------");
+    puts("-------------------------------------random matrix---------------------------------------");
+    MatrixInt *rand_matrix1 = random_matrix_int(3, 4, NULL, 0);
+    print_matrix_int(rand_matrix1);
+    int rand_range[2] = {5, 15};
+    MatrixInt *rand_matrix2 = random_matrix_int(2, 5, rand_range, 2);
+    print_matrix_int(rand_matrix2);
+    int rand_range2[2] = {20, 10};
+    MatrixInt *rand_matrix3 = random_matrix_int(4, 3, rand_range2, 2);
+    print_matrix_int(rand_matrix3);
+    puts("----------------------------------------------------------------------------------------");
     return 0;
 }
