@@ -1,10 +1,10 @@
 ;-------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
-; @Date: 2026-06-24
+; @Date: 2026-06-24 18:52:55
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24
+; @LastEditTime: 2026-06-24 19:28:24
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\leading_minors_float.asm
-; @Description: get leading principal minor float nasm code on windows
+; @Description:  get leading principal minor float nasm code on windows
 ;-------------------------------------------------------------
 
 global get_leading_minors_float
