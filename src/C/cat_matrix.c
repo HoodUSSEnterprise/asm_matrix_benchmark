@@ -121,3 +121,117 @@ MatrixInt *cat_matrix_int(MatrixInt *m1, MatrixInt *m2, int axis)
         return NULL;
     }
 }
+
+/***********************************************************
+@description: cat matrix double, axis : 1 means horizon, 0 means vertical
+@param {MatrixDouble} *m1
+@param {MatrixDouble} *m2
+@param {int} axis : 1 means horizon, 0 means vertical
+@return {*}
+************************************************************/
+MatrixDouble *cat_matrix_double(MatrixDouble *m1, MatrixDouble *m2, int axis)
+{
+    // check m1 and m2
+    if (m1 == NULL || m2 == NULL)
+    {
+        fprintf(stderr, "Invalid param!\n");
+        return NULL;
+    }
+    // check m1->data and m2->data
+    if (m1->data == NULL || m2->data == NULL)
+    {
+        fprintf(stderr, "Invalid param!\n");
+        return NULL;
+    }
+    // vertical, m1->cols must equal to m2->cols
+    if (axis == 0)
+    {
+        // check dimension
+        if (m1->cols != m2->cols)
+        {
+            printf("Dimension mismatch! m1(%zu, %zu) vs m2(%zu, %zu)\n", m1->rows, m1->cols, m2->rows, m2->cols);
+            return NULL;
+        }
+        // malloc for new res
+        MatrixDouble *res = NULL;
+        res = (MatrixDouble *)malloc(sizeof(MatrixDouble));
+        if (res == NULL)
+        {
+            fprintf(stderr, "Memory allocation failed\n");
+            return NULL;
+        }
+        res->cols = m1->cols;
+        res->rows = m1->rows + m2->rows;
+        // malloc for res->data
+        res->data = (double *)malloc(sizeof(double) * res->cols * res->rows);
+        if (res->data == NULL)
+        {
+            free(res);
+            fprintf(stderr, "Memory allocation failed\n");
+            return NULL;
+        }
+        for (size_t i = 0; i < res->rows; i++)
+        {
+            for (size_t j = 0; j < res->cols; j++)
+            {
+                if (i < m1->rows)
+                {
+                    res->data[i * res->cols + j] = m1->data[i * res->cols + j];
+                }
+                else
+                {
+                    res->data[i * res->cols + j] = m2->data[(i - m1->rows) * res->cols + j];
+                }
+            }
+        }
+        return res;
+    }
+    // horizon, m1->rows must equal to m2->rows
+    else if (axis == 1)
+    {
+        // check dimension
+        if (m1->rows != m2->rows)
+        {
+            printf("Dimension mismatch! m1(%zu, %zu) vs m2(%zu, %zu)\n", m1->rows, m1->cols, m2->rows, m2->cols);
+            return NULL;
+        }
+        // malloc for new res
+        MatrixDouble *res = NULL;
+        res = (MatrixDouble *)malloc(sizeof(MatrixDouble));
+        if (res == NULL)
+        {
+            fprintf(stderr, "Memory allocation failed\n");
+            return NULL;
+        }
+        res->rows = m1->rows;
+        res->cols = m1->cols + m2->cols;
+        // malloc for res->data
+        res->data = (double *)malloc(sizeof(double) * res->cols * res->rows);
+        if (res->data == NULL)
+        {
+            free(res);
+            fprintf(stderr, "Memory allocation failed\n");
+            return NULL;
+        }
+        for (size_t i = 0; i < res->rows; i++)
+        {
+            for (size_t j = 0; j < res->cols; j++)
+            {
+                if (j < m1->cols)
+                {
+                    res->data[i * res->cols + j] = m1->data[i * m1->cols + j];
+                }
+                else
+                {
+                    res->data[i * res->cols + j] = m2->data[i * m2->cols + j - m1->cols];
+                }
+            }
+        }
+        return res;
+    }
+    else
+    {
+        puts("Wrong value, axis must be 0 or 1");
+        return NULL;
+    }
+}
