@@ -206,6 +206,16 @@ int main(void)
         }
     }
     puts("----------------------------------------------------------------------------------------");
+    puts("-------------------------------------lu decomposition-------------------------------------");
+    float lu_data[9] = {1, 2, 3, 0, 4, 5, 1, 0, 6};
+    MatrixFloat lu_matrix = {lu_data, 3, 3};
+    LU_Result lu_res;
+    if (LU_Decomposition_float(&lu_matrix, &lu_res))
+    {
+        print_matrix_double(lu_res.L);
+        print_matrix_double(lu_res.U);
+    }
+    puts("----------------------------------------------------------------------------------------");
     puts("-------------------------------------extract matrix--------------------------------------");
     float extract_data[6] = {1, 2, 3, 4, 5, 6};
     MatrixFloat extract_matrix = {extract_data, 2, 3};
