@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-17 17:22:56
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-24 16:14:49
+@LastEditTime: 2026-06-24 18:54:30
 @FilePath: \asm_matrix_benchmark\src\C\special_matrix.c
 @Description: some special matrix like identity matrix, diag matrix, eye_matrix and zero matrix
 *************************************************************/
@@ -42,7 +42,7 @@ MatrixInt *identity_matrix_int(int order)
     // init res->data with 0
     memset(res->data, 0, sizeof(int) * order * order);
     // diag must be 1
-    for (size_t i = 0; i < order; i++)
+    for (int i = 0; i < order; i++)
     {
         res->data[i * order + i] = 1;
     }
@@ -58,7 +58,7 @@ MatrixInt *identity_matrix_int(int order)
 MatrixInt *diag_matrix_int(int *data, size_t len)
 {
     // check data and len
-    if (data == NULL || len < 0)
+    if (data == NULL)
     {
         fprintf(stderr, "Invalid param!\n");
         return NULL;
@@ -148,8 +148,6 @@ MatrixInt *zero_matrix_int(int rows, int cols)
         fprintf(stderr, "Invalid param!\n");
         return NULL;
     }
-    // calc eye matrix diag len
-    int col = (rows >= cols ? cols : rows);
     // malloc res
     MatrixInt *res = NULL;
     res = (MatrixInt *)malloc(sizeof(MatrixInt));
@@ -207,7 +205,7 @@ MatrixFloat *identity_matrix_float(int order)
     // init res->data with 0
     memset(res->data, 0, sizeof(float) * order * order);
     // diag must be 1
-    for (size_t i = 0; i < order; i++)
+    for (int i = 0; i < order; i++)
     {
         res->data[i * order + i] = 1.0f;
     }
@@ -223,7 +221,7 @@ MatrixFloat *identity_matrix_float(int order)
 MatrixFloat *diag_matrix_float(float *data, size_t len)
 {
     // check data and len
-    if (data == NULL || len < 0)
+    if (data == NULL)
     {
         fprintf(stderr, "Invalid param!\n");
         return NULL;
@@ -370,7 +368,7 @@ MatrixDouble *identity_matrix_double(int order)
     // init res->data with 0
     memset(res->data, 0, sizeof(double) * order * order);
     // diag must be 1
-    for (size_t i = 0; i < order; i++)
+    for (int i = 0; i < order; i++)
     {
         res->data[i * order + i] = 1.0;
     }
@@ -386,7 +384,7 @@ MatrixDouble *identity_matrix_double(int order)
 MatrixDouble *diag_matrix_double(double *data, size_t len)
 {
     // check data and len
-    if (data == NULL || len < 0)
+    if (data == NULL)
     {
         fprintf(stderr, "Invalid param!\n");
         return NULL;
