@@ -20,4 +20,13 @@
  ************************************************************/
 MatrixInt *cat_matrix_int(MatrixInt *m1, MatrixInt *m2, int axis);
 
+/***********************************************************
+@description: cat matrix double, axis : 1 means horizon, 0 means vertical
+@param {MatrixDouble} *m1
+@param {MatrixDouble} *m2
+@param {int} axis : 1 means horizon, 0 means vertical
+@return {*}
+************************************************************/
+MatrixDouble *cat_matrix_double(MatrixDouble *m1, MatrixDouble *m2, int axis);
+
 #endif // CAT_MATRIX_H
