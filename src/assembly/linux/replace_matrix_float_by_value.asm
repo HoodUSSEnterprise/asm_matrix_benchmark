@@ -31,7 +31,7 @@ replace_matrix_float_by_value:
 
     mov r14, rdi
     movss xmm15, xmm0
-    movss [rsp + 48], xmm1
+    movss [rsp + 24], xmm1     ; new_data at safe stack offset
 
     test r14, r14
     jz null_ptr
@@ -55,7 +55,7 @@ replace_matrix_float_by_value:
     imul r10, [rsp + 32]
     add r10, [rsp + 40]
 
-    movss xmm0, [rsp + 48]
+    movss xmm0, [rsp + 24]
     movss [rsi + r10 * 4], xmm0
 
 loop_replace:
@@ -72,7 +72,8 @@ replace_data:
     imul r10, [rsp + 32]
     add r10, [rsp + 40]
 
-    movss xmm0, [rsp + 48]
+    movss xmm0, [rsp + 24]
+    mov rsi, [r14]              ; rsi = m->data (reload after call)
     movss [rsi + r10 * 4], xmm0
     jmp loop_replace
 
