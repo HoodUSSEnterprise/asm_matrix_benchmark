@@ -48,7 +48,7 @@ extract_col_double:
     mov r14, rdi
 
     ; check dimension and index
-    mov r8, [r14 + 8]   ; m->rows
+    mov r8, [r14 + 16]  ; m->cols
 
     cmp r15, r8
     jge null_ptr
