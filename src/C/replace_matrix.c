@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-17 13:24:03
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-24 16:15:45
+@LastEditTime: 2026-06-24 16:19:47
 @FilePath: \asm_matrix_benchmark\src\C\replace_matrix.c
 @Description: replace matrix c code by coord and value
 *************************************************************/
@@ -32,7 +32,7 @@ bool replace_matrix_int_by_coord(MatrixInt *m, Point *pos, int new_data)
     size_t x = pos->x;
     size_t y = pos->y;
     // check x and y range
-    if (x < 0 || x >= m->cols || y < 0 || y >= m->rows)
+    if (x >= m->cols || y >= m->rows)
     {
         puts("index out of range");
         return 0;
@@ -103,7 +103,7 @@ bool replace_matrix_float_by_coord(MatrixFloat *m, Point *pos, float new_data)
     size_t x = pos->x;
     size_t y = pos->y;
     // check x and y range
-    if (x < 0 || x >= m->cols || y < 0 || y >= m->rows)
+    if (x >= m->cols || y >= m->rows)
     {
         puts("index out of range");
         return 0;
@@ -174,7 +174,7 @@ bool replace_matrix_double_by_coord(MatrixDouble *m, Point *pos, double new_data
     size_t x = pos->x;
     size_t y = pos->y;
     // check x and y range
-    if (x < 0 || x >= m->cols || y < 0 || y >= m->rows)
+    if (x >= m->cols || y >= m->rows)
     {
         puts("index out of range");
         return 0;
