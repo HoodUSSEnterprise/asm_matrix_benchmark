@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-20 15:41:14
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-24 09:09:14
+@LastEditTime: 2026-06-24 13:32:38
 @FilePath: \asm_matrix_benchmark\src\C\extract_matrix.c
 @Description: extract matrix c code
 *************************************************************/
@@ -24,7 +24,7 @@ MatrixInt *extract_row_int(MatrixInt *m, size_t index)
         return NULL;
     }
     // check index, index must in range 0 and m->rows - 1
-    if (index < 0 || index > m->rows - 1)
+    if (index > m->rows - 1)
     {
         fprintf(stderr, "Invalid param!\n");
         return NULL;
@@ -69,7 +69,7 @@ MatrixInt *extract_col_int(MatrixInt *m, size_t index)
         return NULL;
     }
     // check index, index must in range 0 and m->cols - 1
-    if (index < 0 || index > m->cols - 1)
+    if (index > m->cols - 1)
     {
         fprintf(stderr, "Invalid param!\n");
         return NULL;
@@ -112,7 +112,7 @@ int *extract_diag_int(MatrixInt *m)
         fprintf(stderr, "Invalid param!\n");
         return NULL;
     }
-    int data_len = (m->rows >= m->cols ? m->cols : m->rows);
+    size_t data_len = (m->rows >= m->cols ? m->cols : m->rows);
     int *data = (int *)malloc(sizeof(int) * data_len);
     if (data == NULL)
     {
