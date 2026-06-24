@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-16 20:51:54
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-16 22:41:29
+@LastEditTime: 2026-06-24 15:58:05
 @FilePath: \asm_matrix_benchmark\include\cat_matrix.h
 @Description:
 *************************************************************/
@@ -19,6 +19,15 @@
 @return {*}
  ************************************************************/
 MatrixInt *cat_matrix_int(MatrixInt *m1, MatrixInt *m2, int axis);
+
+/***********************************************************
+@description: cat matrix float, axis : 1 means horizon, 0 means vertical
+@param {MatrixFloat} *m1
+@param {MatrixFloat} *m2
+@param {int} axis : 1 means horizon, 0 means vertical
+@return {*}
+************************************************************/
+MatrixFloat *cat_matrix_float(MatrixFloat *m1, MatrixFloat *m2, int axis);
 
 /***********************************************************
 @description: cat matrix double, axis : 1 means horizon, 0 means vertical

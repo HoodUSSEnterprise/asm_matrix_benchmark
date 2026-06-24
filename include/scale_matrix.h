@@ -27,4 +27,12 @@ MatrixInt *scale_matrix_int(MatrixInt *m, int scale);
 *************************************************************/
 MatrixDouble *scale_matrix_double(MatrixDouble *m, double scale);
 
+/***********************************************************
+@description: scale matrix float function
+@param {MatrixFloat} *m
+@param {float} scale
+@return {*}
+************************************************************/
+MatrixFloat *scale_matrix_float(MatrixFloat *m, float scale);
+
 #endif // SCALE_MATRIX_H

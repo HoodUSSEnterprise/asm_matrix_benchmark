@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-16 16:45:15
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-16 16:45:59
+@LastEditTime: 2026-06-24 16:05:14
 @FilePath: \asm_matrix_benchmark\include\mul_matrix.h
 @Description:mul matrix head file
 *************************************************************/
@@ -18,6 +18,14 @@
 @return {*}
  ************************************************************/
 MatrixInt *mul_matrix_int(MatrixInt *m1, MatrixInt *m2);
+
+/***********************************************************
+@description: mul matrix float function
+@param {MatrixFloat} *m1
+@param {MatrixFloat} *m2
+@return {*}
+************************************************************/
+MatrixFloat *mul_matrix_float(MatrixFloat *m1, MatrixFloat *m2);
 
 /***********************************************************
 @description: mul matrix double function

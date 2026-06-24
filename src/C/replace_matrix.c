@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-17 13:24:03
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-17 14:05:06
+@LastEditTime: 2026-06-24 16:19:47
 @FilePath: \asm_matrix_benchmark\src\C\replace_matrix.c
 @Description: replace matrix c code by coord and value
 *************************************************************/
@@ -32,7 +32,7 @@ bool replace_matrix_int_by_coord(MatrixInt *m, Point *pos, int new_data)
     size_t x = pos->x;
     size_t y = pos->y;
     // check x and y range
-    if (x < 0 || x >= m->cols || y < 0 || y >= m->rows)
+    if (x >= m->cols || y >= m->rows)
     {
         puts("index out of range");
         return 0;
@@ -80,6 +80,77 @@ bool replace_matrix_int_by_value(MatrixInt *m, int old_data, int new_data)
 }
 
 /***********************************************************
+@description: replace matrix float some data by coordinate
+@param {MatrixFloat} *m
+@param {Point} *pos
+@param {float} new_data
+@return {*}
+************************************************************/
+bool replace_matrix_float_by_coord(MatrixFloat *m, Point *pos, float new_data)
+{
+    // check m and pos
+    if (m == NULL || pos == NULL)
+    {
+        fprintf(stderr, "Invalid param!\n");
+        return false;
+    }
+    // check m->data
+    if (m->data == NULL)
+    {
+        fprintf(stderr, "Invalid param!\n");
+        return false;
+    }
+    size_t x = pos->x;
+    size_t y = pos->y;
+    // check x and y range
+    if (x >= m->cols || y >= m->rows)
+    {
+        puts("index out of range");
+        return 0;
+    }
+    // replace with new data
+    m->data[x * m->cols + y] = new_data;
+    return true;
+}
+
+/***********************************************************
+@description: replace matrix float some data by value
+@param {MatrixFloat} *m
+@param {float} old_data
+@param {float} new_data
+@return {*}
+************************************************************/
+bool replace_matrix_float_by_value(MatrixFloat *m, float old_data, float new_data)
+{
+    // check m
+    if (m == NULL)
+    {
+        fprintf(stderr, "Invalid param!\n");
+        return false;
+    }
+    // check m->data
+    if (m->data == NULL)
+    {
+        fprintf(stderr, "Invalid param!\n");
+        return false;
+    }
+    // replace value with while loop
+    Point pos = {0, 0};
+    if (find_elem_float(m, old_data, &pos) == false)
+    {
+        return false;
+    }
+    while (find_elem_float(m, old_data, &pos))
+    {
+        size_t x = pos.x;
+        size_t y = pos.y;
+        // replace with new data
+        m->data[x * m->cols + y] = new_data;
+    }
+    return true;
+}
+
+/***********************************************************
 @description: replace matrix double some data by coordinate
 @param {MatrixDouble} *m
 @param {Point} *pos
@@ -103,7 +174,7 @@ bool replace_matrix_double_by_coord(MatrixDouble *m, Point *pos, double new_data
     size_t x = pos->x;
     size_t y = pos->y;
     // check x and y range
-    if (x < 0 || x >= m->cols || y < 0 || y >= m->rows)
+    if (x >= m->cols || y >= m->rows)
     {
         puts("index out of range");
         return 0;
