@@ -1,11 +1,12 @@
 ;-------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
-; @Date: 2026-06-24
+; @Date: 2026-06-24 18:52:55
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24
+; @LastEditTime: 2026-06-24 20:11:38
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\lu_matrix_double.asm
 ; @Description: lu decomposition double nasm code on windows
 ;-------------------------------------------------------------
+
 
 global LU_Decomposition_double
 extern printf
@@ -23,6 +24,7 @@ section .rodata
     not_square       db "It's not a square", 0
     wrong_lm         db "function get_leading_minors_double has a wrong value", 0
     cant_lu          db "This matrix can't lu decomposition", 0
+    fmt db "%zu ", 10, 0
 
 section .text
 
@@ -93,7 +95,7 @@ check_lm_loop:
     jz check_lm_fail
 
     movsxd rax, dword [rsp + 24] ; rax = rank
-    lea rdx, [r12 + 1]  ; rdx = i + 1 (r12 preserved across call)
+    lea rdx, [r12 + 1]  ; rdx = i + 1
     cmp rax, rdx        ; rank == i + 1?
     jne check_lm_fail
 
@@ -124,7 +126,7 @@ check_lm_done:
     mov rax, r8         ; rax = m->rows
     imul rax, r9        ; rax = m->rows * m->cols
     mov r13, rax        ; r13 = element count
-    shl rax, 3          ; rax *= 8
+    shl rax, 3          ; rax *= 8 (sizeof double)
     mov rcx, rax
     call malloc
     test rax, rax
@@ -154,7 +156,7 @@ check_lm_done:
     ; ========== allocate U->data ==========
     mov rax, r8         ; rax = m->rows
     imul rax, r9        ; rax = m->rows * m->cols
-    shl rax, 3          ; rax *= 8
+    shl rax, 3          ; rax *= 8 (sizeof double)
     mov rcx, rax
     call malloc
     test rax, rax
@@ -190,6 +192,7 @@ alloc_done:
     mov r9, [r14]   ; r9 = m->data (double*)
     mov r10, [r12]  ; r10 = L->data (double*)
     mov r11, [r13]  ; r11 = U->data (double*)
+    ; r8 = n (= m->rows = m->cols)
 
     ; ========== init L: upper triangle = 0, diagonal = 1 ==========
     xor rdi, rdi ; i = 0
@@ -234,6 +237,7 @@ init_U_first_row:
     cmp rsi, r8 ; j < n?
     jge init_U_lower
 
+    ; U->data[0 * n + j] = m->data[0 * n + j]
     movsd xmm0, [r9 + rsi * 8] ; m->data[0 * n + j]
     movsd [r11 + rsi * 8], xmm0 ; U->data[0 * n + j]
 
@@ -279,10 +283,10 @@ compute_l_i0:
     cmp rdi, r8 ; i < n?
     jge compute_l_done
 
-    ; load m->data[i * n + 0] as double
+    ; load m->data[i * n + 0]
     mov rax, rdi
     imul rax, r8   ; rax = i * n
-    movsd xmm0, [r9 + rax * 8] ; m->data[i * n]
+    movsd xmm0, [r9 + rax * 8] ; m->data[i * n + 0]
     divsd xmm0, xmm1 ; xmm0 = m[i][0] / u_00
 
     ; store L->data[i * n + 0]
@@ -303,8 +307,9 @@ compute_l_done:
     ;         L[j][i] = (m[j][i] - Σ L[j][k] * U[k][i]) / U[i][i], k=0..j-1
 
     mov rdi, 1 ; i = 1
-
+    
 doolittle_loop_i:
+
     cmp rdi, r8 ; i < n?
     jge doolittle_done
 
@@ -420,13 +425,13 @@ doolittle_done:
     mov [rbx], r12     ; res->L = L
     mov [rbx + 8], r13 ; res->U = U
     ; ========== free leading_minors ==========
-    xor rcx, rcx ; i = 0
+    xor r12, r12 ; i = 0
 
 free_lm_data:
-    cmp rcx, [r15 + 8] ; i < leading_minors->len?
+    cmp r12, [r15 + 8] ; i < leading_minors->len?
     jae free_lm_array
 
-    mov rax, rcx
+    mov rax, r12
     imul rax, 24 ; rax = i * sizeof(MatrixDouble)
     mov rdi, [r15]       ; rdi = leading_minors->matrix_data
     mov rdi, [rdi + rax] ; rdi = matrix_data[i].data
@@ -436,7 +441,7 @@ free_lm_data:
     call free
 
 free_lm_next:
-    inc rcx
+    inc r12
     jmp free_lm_data
 
 free_lm_array:
