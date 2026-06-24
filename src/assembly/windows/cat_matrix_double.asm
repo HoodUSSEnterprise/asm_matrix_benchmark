@@ -222,7 +222,7 @@ loop11:
         mov r9, r12 ; r9 = res->cols
         imul r9, rcx ; r9 *= i
         add r9, rdx ; r9 += j
-        mov [rsi + r9 * 8], xmm0
+        movsd [rsi + r9 * 8], xmm0
         inc rdx ; j++
         jmp loop21
 
