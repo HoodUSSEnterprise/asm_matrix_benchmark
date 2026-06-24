@@ -1,6 +1,6 @@
 # asm_matrix_benchmark
 
-A cross-language matrix operations benchmark comparing performance across **Assembly (NASM)**, **C**, **C++**, and **Python**.
+A cross-language matrix operations benchmark comparing performance across **Assembly (NASM)**, **C**, **C++**, and **Python**, supporting **int**, **float**, and **double** data types.
 
 ## Overview
 
@@ -12,12 +12,12 @@ This project implements a comprehensive set of matrix operations in multiple lan
 ├── CMakeLists.txt              # Build configuration (C + NASM)
 ├── include/                    # C/C++ header files (.h)
 ├── src/
-│   ├── C/                      # C implementations
+│   ├── C/                      # C implementations (int/float/double)
 │   ├── C++/                    # C++ implementations
 │   ├── Python/                 # Python matrix module
 │   ├── assembly/
 │   │   ├── linux/              # NASM assembly (Linux x86-64)
-│   │   └── windows/            # NASM assembly (Windows x64)
+│   │   └── windows/            # NASM assembly (Windows x64) — int & double
 │   └── benchmark/              # Benchmark scripts
 ├── example/                    # Usage examples (C, C++, Python)
 ├── scripts/                    # Utility scripts
@@ -66,9 +66,20 @@ print(trace(m))   # 16
 
 ```bash
 mkdir build && cd build
-cmake ..
+cmake .. -DCMAKE_BUILD_TYPE=Release
 cmake --build .
 ```
+
+### Executable Targets
+
+| Target | Language | Data Type | Description |
+|---|---|---|---|
+| `matrix_int` | Assembly (NASM) | `int` | Assembly-accelerated int matrix ops |
+| `matrix_intc` | C | `int` | Pure C int matrix ops |
+| `matrix_intcpp` | C++ | `int` | C++ int matrix ops |
+| `matrix_floatc` | C | `float` | C float matrix ops |
+| `matrix_double` | Assembly (NASM) | `double` | Assembly-accelerated double matrix ops |
+| `matrix_doublec` | C | `double` | C double matrix ops |
 
 ## Benchmarks
 
@@ -79,6 +90,21 @@ Benchmark scripts are in `src/benchmark/`:
 - `build.bat` / `build.sh` — Build helpers
 
 Results are exported to `results.json` and visualized as `results.png`.
+
+## Assembly Implementations
+
+NASM assembly implementations are available for **int** and **double** matrix types on Windows x64, and **int** on Linux x86-64. The double-precision assembly covers all operations listed above, using SSE2 instructions (`movsd`, `addsd`, `subsd`, `mulsd`, `divsd`, `comisd`) for IEEE 754 double arithmetic.
+
+### Supported Assembly Operations (double)
+
+| Category | Operations |
+|---|---|
+| Arithmetic | `add`, `sub`, `mul`, `scale`, `cat` (concat) |
+| Queries | `find`, `compare`, `rank`, `trace` |
+| Transforms | `transpose`, `inv`, `LU_decomposition`, `leading_minors` |
+| Utilities | `print`, `random`, `special` (identity/diag/eye/zero) |
+| Extraction | `extract_row`, `extract_col`, `extract_diag` |
+| Replacement | `replace_by_coord`, `replace_by_value` |
 
 ## License
 
