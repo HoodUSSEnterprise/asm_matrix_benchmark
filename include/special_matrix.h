@@ -42,4 +42,35 @@ MatrixInt *eye_matrix_int(int rows, int cols);
  ************************************************************/
 MatrixInt *zero_matrix_int(int rows, int cols);
 
+/***********************************************************
+@description: generator identity matrix double
+@param {int} order
+@return {*}
+************************************************************/
+MatrixDouble *identity_matrix_double(int order);
+
+/***********************************************************
+@description: generator diag matrix double
+@param {double} *data
+@param {size_t} len
+@return {*}
+************************************************************/
+MatrixDouble *diag_matrix_double(double *data, size_t len);
+
+/***********************************************************
+@description: generator eye matrix double
+@param {int} rows
+@param {int} cols
+@return {*}
+************************************************************/
+MatrixDouble *eye_matrix_double(int rows, int cols);
+
+/***********************************************************
+@description: generator zero matrix double
+@param {int} rows
+@param {int} cols
+@return {*}
+************************************************************/
+MatrixDouble *zero_matrix_double(int rows, int cols);
+
 #endif // SPECIAL_MATRIX_H
