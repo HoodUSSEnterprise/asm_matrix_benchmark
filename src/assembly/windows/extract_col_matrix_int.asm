@@ -2,12 +2,14 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-24 09:02:36
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24 09:22:56
+; @LastEditTime: 2026-06-24 13:33:44
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\extract_col_matrix_int.asm
 ; @Description: extract col matrix int nasm code on windows
 ;-------------------------------------------------------------
 global extract_col_int
 
+extern malloc
+extern free
 extern printf
 extern puts
 
@@ -76,6 +78,7 @@ extract_col_int:
     mov rdi, [r14 + 8] ; m->rows
     mov r12, [rbx]     ; r12 = res->data
     mov r10, [r14 + 16]; m->cols
+    mov r13, [r14]     ; r13 = m->data
 
 loop1:
     cmp rsi, rdi ; i < m->rows
@@ -85,7 +88,7 @@ loop1:
     imul r8, r10 ; r8 *= m->cols
     add r8, r15  ; r8 += index
 
-    mov r9, [r14 + r8 * 4]  ; r9 = m->data[i * m->cols + index]
+    mov r9, [r13 + r8 * 4]  ; r9 = m->data[i * m->cols + index]
     mov [r12 + rsi * 4], r9 ; res->data[i] = m->data[i * m->cols + index]
 
     inc rsi ; i++
