@@ -137,26 +137,36 @@ target_link_libraries(matrix_int_cpplib ${EXTRA_LIBS})
 add_executable(matrix_intcpp example/matrix_int.cpp)
 target_link_libraries(matrix_intcpp matrix_int_cpplib)
 
-# set(LIB_SOURCES_MATRIX_DOUBLE
-#     src/assembly/${PLATFORM_DIR}/add_matrix_double.asm
-#     src/assembly/${PLATFORM_DIR}/find_matrix_double.asm
-#     src/assembly/${PLATFORM_DIR}/insert_matrix_double.asm
-#     src/assembly/${PLATFORM_DIR}/mul_matrix_double.asm
-#     src/assembly/${PLATFORM_DIR}/pop_matrix_double.asm
-#     src/assembly/${PLATFORM_DIR}/push_back_matrix_double.asm
-#     src/assembly/${PLATFORM_DIR}/remove_matrix_double.asm
-#     src/assembly/${PLATFORM_DIR}/replace_matrix_double.asm
-#     src/assembly/${PLATFORM_DIR}/reverse_matrix_double.asm
-#     src/assembly/${PLATFORM_DIR}/scale_matrix_double.asm
-#     src/assembly/${PLATFORM_DIR}/sub_matrix_double.asm
-# )
+set(LIB_SOURCES_MATRIX_DOUBLE
+    src/assembly/${PLATFORM_DIR}/add_matrix_double.asm
+    src/assembly/${PLATFORM_DIR}/cat_matrix_double.asm
+    src/assembly/${PLATFORM_DIR}/compare_matrix_double.asm
+    src/assembly/${PLATFORM_DIR}/extract_col_matrix_double.asm
+    src/assembly/${PLATFORM_DIR}/extract_diag_matrix_double.asm
+    src/assembly/${PLATFORM_DIR}/extract_row_matrix_double.asm
+    src/assembly/${PLATFORM_DIR}/find_matrix_double.asm
+    src/assembly/${PLATFORM_DIR}/inv_matrix_double.asm
+    src/assembly/${PLATFORM_DIR}/leading_minors_double.asm
+    src/assembly/${PLATFORM_DIR}/lu_matrix_double.asm
+    src/assembly/${PLATFORM_DIR}/mul_matrix_double.asm
+    src/assembly/${PLATFORM_DIR}/print_matrix_double.asm
+    src/assembly/${PLATFORM_DIR}/random_matrix_double.asm
+    src/assembly/${PLATFORM_DIR}/rank_matrix_double.asm
+    src/assembly/${PLATFORM_DIR}/replace_matrix_double_by_coord.asm
+    src/assembly/${PLATFORM_DIR}/replace_matrix_double_by_value.asm
+    src/assembly/${PLATFORM_DIR}/scale_matrix_double.asm
+    src/assembly/${PLATFORM_DIR}/special_matrix_double.asm
+    src/assembly/${PLATFORM_DIR}/sub_matrix_double.asm
+    src/assembly/${PLATFORM_DIR}/trace_matrix_double.asm
+    src/assembly/${PLATFORM_DIR}/transpose_matrix_double.asm
+)
 
-# add_library(matrix_lib_double ${LIB_SOURCES_MATRIX_DOUBLE})
-# target_include_directories(matrix_lib_double PUBLIC include)
-# target_link_libraries(matrix_lib_double ${EXTRA_LIBS})
+add_library(matrix_double_lib ${LIB_SOURCES_MATRIX_DOUBLE})
+target_include_directories(matrix_double_lib PUBLIC include)
+target_link_libraries(matrix_double_lib ${EXTRA_LIBS})
 
-# add_executable(matrix_double example/matrix_double.c)
-# target_link_libraries(matrix_double matrix_lib_double)
+add_executable(matrix_double example/matrix_double.c)
+target_link_libraries(matrix_double matrix_double_lib)
 
 # # Float 版本
 # set(LIB_SOURCES_MATRIX_FLOAT
