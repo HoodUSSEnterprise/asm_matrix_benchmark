@@ -21,4 +21,13 @@
  ************************************************************/
 MatrixInt *random_matrix_int(size_t rows, size_t cols, int *range, size_t size);
 
+/***********************************************************
+@description: random matrix float
+@param {size_t} rows
+@param {size_t} cols
+@param {float} range must contains two number
+@return {*}
+************************************************************/
+MatrixFloat *random_matrix_float(size_t rows, size_t cols, float *range, size_t size);
+
 #endif // RANDOM_MATRIX_H
