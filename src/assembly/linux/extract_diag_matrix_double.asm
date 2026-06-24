@@ -60,8 +60,8 @@ r8_bigger:
 
 next:
     ; malloc for res data, double type, len = rdi
-    mov rcx, rdi ; rcx = rdi
-    shl rcx, 3   ; rcx *= 8
+    mov r12, rdi    ; r12 = diag_len (callee-saved)
+    shl rdi, 3      ; rdi = byte size
     call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_pint
@@ -74,7 +74,7 @@ next:
     mov r10, [r14]     ; r10 = m->data
 
 loop1:
-    cmp rcx, rdi  ; i < data->len?
+    cmp rcx, r12  ; i < data->len?
     jge end
 
     ; data[i] = m->data[i * m->cols + i]
