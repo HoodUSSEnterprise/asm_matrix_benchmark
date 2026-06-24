@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-16 16:37:19
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-16 16:40:50
+@LastEditTime: 2026-06-23 21:00:24
 @FilePath: \asm_matrix_benchmark\include\sub_matrix.h
 @Description:sub matrix head file
 *************************************************************/
@@ -18,5 +18,13 @@
 @return {*}
  ************************************************************/
 MatrixInt *sub_matrix_int(MatrixInt *m1, MatrixInt *m2);
+
+/***********************************************************
+@description: sub matrix double value
+@param {MatrixDouble} *m1
+@param {MatrixDouble} *m2
+@return {*}
+ ************************************************************/
+MatrixDouble *sub_matrix_double(MatrixDouble *m1, MatrixDouble *m2);
 
 #endif // SUB_MATRIX_H
