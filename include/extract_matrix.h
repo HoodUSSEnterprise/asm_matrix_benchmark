@@ -35,4 +35,27 @@ MatrixInt *extract_col_int(MatrixInt *m, size_t index);
 *************************************************************/
 int *extract_diag_int(MatrixInt *m);
 
+/***********************************************************
+@description: extract matrix's row double
+@param {MatrixDouble} *m
+@param {size_t} index
+@return {*}
+*************************************************************/
+MatrixDouble *extract_row_double(MatrixDouble *m, size_t index);
+
+/***********************************************************
+@description: extract matrix's col double
+@param {MatrixDouble} *m
+@param {size_t} index
+@return {*}
+*************************************************************/
+MatrixDouble *extract_col_double(MatrixDouble *m, size_t index);
+
+/***********************************************************
+@description: extract matrix's diag double
+@param {MatrixDouble} *m
+@return {*}
+*************************************************************/
+double *extract_diag_double(MatrixDouble *m);
+
 #endif /* ifndef EXTRACT_MATRIX_H */
