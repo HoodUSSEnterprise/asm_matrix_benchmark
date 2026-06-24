@@ -21,4 +21,13 @@
  ************************************************************/
 MatrixInt *random_matrix_int(size_t rows, size_t cols, int *range, size_t size);
 
+/***********************************************************
+@description: random matrix double
+@param {size_t} rows
+@param {size_t} cols
+@param {double} range must contains two number
+@return {*}
+************************************************************/
+MatrixDouble *random_matrix_double(size_t rows, size_t cols, double *range, size_t size);
+
 #endif // RANDOM_MATRIX_H
