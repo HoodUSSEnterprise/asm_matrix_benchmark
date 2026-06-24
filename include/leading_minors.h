@@ -17,11 +17,24 @@ typedef struct Leading_Minors_Int
     size_t len;
 } Leading_Minors_Int;
 
+typedef struct Leading_Minors_Float
+{
+    MatrixFloat *matrix_data;
+    size_t len;
+} Leading_Minors_Float;
+
 /***********************************************************
 @description: get leading principal minor
 @param {MatrixInt} *m
 @return {*}
  ************************************************************/
 Leading_Minors_Int *get_leading_minors_int(MatrixInt *m);
+
+/***********************************************************
+@description: get leading principal minor float
+@param {MatrixFloat} *m
+@return {*}
+*************************************************************/
+Leading_Minors_Float *get_leading_minors_float(MatrixFloat *m);
 
 #endif // LEADING_MINORS_H
