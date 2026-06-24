@@ -1,10 +1,10 @@
 ;-------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
-; @Date: 2026-06-24
+; @Date: 2026-06-24 18:52:55
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24
+; @LastEditTime: 2026-06-24 19:29:03
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\random_matrix_double.asm
-; @Description: random matrix double nasm code on windows
+; @Description:  random matrix double nasm code on windows
 ;-------------------------------------------------------------
 
 global random_matrix_double
