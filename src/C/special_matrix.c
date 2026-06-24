@@ -172,3 +172,166 @@ MatrixInt *zero_matrix_int(int rows, int cols)
     memset(res->data, 0, sizeof(int) * rows * cols);
     return res;
 }
+
+/***********************************************************
+@description: generator identity matrix double
+@param {int} order
+@return {*}
+************************************************************/
+MatrixDouble *identity_matrix_double(int order)
+{
+    // check order, order must be great than 0
+    if (order <= 0)
+    {
+        fprintf(stderr, "Invalid param!\n");
+        return NULL;
+    }
+    // malloc res
+    MatrixDouble *res = NULL;
+    res = (MatrixDouble *)malloc(sizeof(MatrixDouble));
+    if (res == NULL)
+    {
+        fprintf(stderr, "Memory allocation failed\n");
+        return NULL;
+    }
+    res->rows = (size_t)order;
+    res->cols = (size_t)order;
+    // malloc res data
+    res->data = (double *)malloc(sizeof(double) * order * order);
+    if (res->data == NULL)
+    {
+        free(res);
+        fprintf(stderr, "Memory allocation failed\n");
+        return NULL;
+    }
+    // init res->data with 0
+    memset(res->data, 0, sizeof(double) * order * order);
+    // diag must be 1
+    for (size_t i = 0; i < order; i++)
+    {
+        res->data[i * order + i] = 1.0;
+    }
+    return res;
+}
+
+/***********************************************************
+@description: generator diag matrix double
+@param {double} *data
+@param {size_t} len
+@return {*}
+************************************************************/
+MatrixDouble *diag_matrix_double(double *data, size_t len)
+{
+    // check data and len
+    if (data == NULL || len < 0)
+    {
+        fprintf(stderr, "Invalid param!\n");
+        return NULL;
+    }
+    // malloc res
+    MatrixDouble *res = NULL;
+    res = (MatrixDouble *)malloc(sizeof(MatrixDouble));
+    if (res == NULL)
+    {
+        fprintf(stderr, "Memory allocation failed\n");
+        return NULL;
+    }
+    res->rows = len;
+    res->cols = len;
+    // malloc res data
+    res->data = (double *)malloc(sizeof(double) * len * len);
+    if (res->data == NULL)
+    {
+        free(res);
+        fprintf(stderr, "Memory allocation failed\n");
+        return NULL;
+    }
+    // init res->data with 0
+    memset(res->data, 0, sizeof(double) * len * len);
+    // diag must be 1
+    for (size_t i = 0; i < len; i++)
+    {
+        res->data[i * len + i] = data[i];
+    }
+    return res;
+}
+
+/***********************************************************
+@description: generator eye matrix double
+@param {int} rows
+@param {int} cols
+@return {*}
+************************************************************/
+MatrixDouble *eye_matrix_double(int rows, int cols)
+{
+    // check rows and cols
+    if (rows <= 0 || cols <= 0)
+    {
+        fprintf(stderr, "Invalid param!\n");
+        return NULL;
+    }
+    // calc eye matrix diag len
+    int col = (rows >= cols ? cols : rows);
+    // malloc res
+    MatrixDouble *res = NULL;
+    res = (MatrixDouble *)malloc(sizeof(MatrixDouble));
+    if (res == NULL)
+    {
+        fprintf(stderr, "Memory allocation failed\n");
+        return NULL;
+    }
+    res->rows = rows;
+    res->cols = cols;
+    // malloc res data
+    res->data = (double *)malloc(sizeof(double) * rows * cols);
+    if (res->data == NULL)
+    {
+        free(res);
+        fprintf(stderr, "Memory allocation failed\n");
+        return NULL;
+    }
+    // init res->data with 0
+    memset(res->data, 0, sizeof(double) * rows * cols);
+    for (int i = 0; i < col; i++)
+    {
+        res->data[i * cols + i] = 1.0;
+    }
+    return res;
+}
+
+/***********************************************************
+@description: generator zero matrix double
+@param {int} rows
+@param {int} cols
+@return {*}
+************************************************************/
+MatrixDouble *zero_matrix_double(int rows, int cols)
+{
+    // check rows and cols
+    if (rows <= 0 || cols <= 0)
+    {
+        fprintf(stderr, "Invalid param!\n");
+        return NULL;
+    }
+    // malloc res
+    MatrixDouble *res = NULL;
+    res = (MatrixDouble *)malloc(sizeof(MatrixDouble));
+    if (res == NULL)
+    {
+        fprintf(stderr, "Memory allocation failed\n");
+        return NULL;
+    }
+    res->rows = rows;
+    res->cols = cols;
+    // malloc res data
+    res->data = (double *)malloc(sizeof(double) * rows * cols);
+    if (res->data == NULL)
+    {
+        free(res);
+        fprintf(stderr, "Memory allocation failed\n");
+        return NULL;
+    }
+    // init res->data with 0
+    memset(res->data, 0, sizeof(double) * rows * cols);
+    return res;
+}
