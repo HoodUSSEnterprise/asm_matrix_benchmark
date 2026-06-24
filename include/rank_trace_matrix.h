@@ -29,4 +29,20 @@ bool rank_matrix_int(MatrixInt *m, int *rank);
  ************************************************************/
 bool trace_matrix_int(MatrixInt *m, int *trace);
 
+/***********************************************************
+@description: rank of matrix float
+@param {MatrixFloat} *m
+@param {int} *rank
+@return {*}
+*************************************************************/
+bool rank_matrix_float(MatrixFloat *m, int *rank);
+
+/***********************************************************
+@description: trace of matrix float
+@param {MatrixFloat} *m
+@param {float} *trace
+@return {*}
+*************************************************************/
+bool trace_matrix_float(MatrixFloat *m, float *trace);
+
 #endif // RANK_TRACE_MATRIX_H
