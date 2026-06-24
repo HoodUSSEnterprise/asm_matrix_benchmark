@@ -57,3 +57,28 @@ void print_matrix_double(MatrixDouble *m)
         putchar('\n');
     }
 }
+
+/***********************************************************
+@description: print matrix float
+@param {MatrixFloat} *m
+@return {*}
+************************************************************/
+void print_matrix_float(MatrixFloat *m)
+{
+    if (m == NULL)
+    {
+        fprintf(stderr, "Invalid param!\n");
+        return;
+    }
+    puts("------------------matrix info------------------");
+    printf("matrix size: (%zu, %zu)\n", m->rows, m->cols);
+    puts("matrix data:");
+    for (size_t i = 0; i < m->rows; i++)
+    {
+        for (size_t j = 0; j < m->cols; j++)
+        {
+            printf("%f ", m->data[i * m->cols + j]);
+        }
+        putchar('\n');
+    }
+}
