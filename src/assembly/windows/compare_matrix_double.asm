@@ -85,7 +85,7 @@ loop1:
     ; compare fabs(value) < 1e-6
     movsd xmm2, [rel epsilon]     ; xmm2 = 1e-6
     comisd xmm0, xmm2
-    jae pivot_zero              ; if fabs(value) >= epsilon, try next row
+    jae false_end               ; if fabs(value) >= epsilon, not equal
 
     inc rdi ; i++
     jmp loop1
