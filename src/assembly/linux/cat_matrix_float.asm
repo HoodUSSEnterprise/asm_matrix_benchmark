@@ -68,12 +68,12 @@ cat_matrix_float:
 
     mov rbx, rax
 
-    mov rdi, [r14 + 16]
+    mov rcx, [r14 + 16]
     mov r12, [r14 + 8]
     add r12, [r15 + 8]
-    imul rdi, r12
-    mov rcx, rdi
-    shl rcx, 2
+    imul rcx, r12
+    mov rdi, rcx
+    shl rdi, 2
     call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_data
@@ -149,8 +149,7 @@ greater_than_zero:
     mov r12, [r14 + 16]
     add r12, [r15 + 16]
     imul rdi, r12
-    mov rcx, rdi
-    shl rcx, 2
+    shl rdi, 2
     call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_data
