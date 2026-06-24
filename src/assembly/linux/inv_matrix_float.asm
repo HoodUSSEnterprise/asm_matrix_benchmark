@@ -185,13 +185,14 @@ init_done:
     xor rcx, rcx
     xor rdx, rdx
     movss xmm2, [rel epsilon]
-    movd xmm3, [rel abs_mask]
 
 gauss_loop:
     cmp rcx, r8
     jge extract_res
     cmp rdx, r10
     jge extract_res
+
+    movd xmm3, [rel abs_mask]   ; reload abs_mask each iteration
 
     mov rdi, rcx
 
