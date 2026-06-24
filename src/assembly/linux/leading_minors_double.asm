@@ -93,7 +93,7 @@ get_leading_minors_double:
 
     ; ========== loop order = 1..m->rows ==========
 
-    mov rdi, 0 ; rdi = successful_count
+    mov qword [rsp + 24], 0 ; successful_count = 0
     mov rbx, 1 ; rbx = order (1-indexed)
 
 order_loop:
@@ -128,7 +128,7 @@ order_loop:
     mov [r11], rax ; matrix_data[idx].data = new malloc data
 
     ; update successful_count
-    mov rdi, rbx ; successful_count = order
+    mov qword [rsp + 24], rbx ; successful_count = order
 
     ; copy sub-matrix: for i=0..order-1, j=0..order-1
     ; matrix_data[idx].data[i * order + j] = m->data[i * m->cols + j]
@@ -193,12 +193,11 @@ malloc_fail_matrix_data:
 malloc_fail_subdata:
     lea rdi, [rel malloc_failed]
     call puts wrt ..plt
-    ; rdi = successful_count (number of sub-matrices with valid data)
     ; free matrix_data[0].data through matrix_data[successful_count-1].data
     xor rsi, rsi ; i = 0
 
     free_subdata_loop:
-        cmp rsi, rdi ; i < successful_count?
+        cmp rsi, [rsp + 24] ; i < successful_count?
         jae free_subdata_done
 
         mov rax, rsi
