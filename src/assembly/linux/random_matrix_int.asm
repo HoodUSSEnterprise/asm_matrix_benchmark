@@ -1,8 +1,12 @@
 ;-------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
-; @Date: 2026-06-24
-; @Description: random matrix nasm code on linux
+; @Date: 2026-06-24 09:34:52
+; @LastEditors: HoodUSSEnterprise
+; @LastEditTime: 2026-06-24 14:16:04
+; @FilePath: \asm_matrix_benchmark\src\assembly\linux\random_matrix_int.asm
+; @Description:random matrix nasm code on linux 
 ;-------------------------------------------------------------
+
 global random_matrix_int
 
 extern malloc
