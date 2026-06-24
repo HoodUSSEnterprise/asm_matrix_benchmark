@@ -1,11 +1,12 @@
 ;-------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
-; @Date: 2026-06-24
+; @Date: 2026-06-24 18:52:55
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24
+; @LastEditTime: 2026-06-24 19:27:16
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\compare_matrix_float.asm
-; @Description: compare two matrix float nasm code on windows
+; @Description:  compare two matrix float nasm code on windows
 ;-------------------------------------------------------------
+
 global is_equal_matrix_float
 
 extern printf
