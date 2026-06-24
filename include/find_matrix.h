@@ -36,4 +36,13 @@ bool find_elem_int(MatrixInt *m, int elem, Point *pos);
 *************************************************************/
 bool find_elem_double(MatrixDouble *m, double elem, Point *pos);
 
+/***********************************************************
+@description: find elem position in matrix m
+@param {MatrixFloat} *m
+@param {float} elem
+@param {Point} *pos
+@return {*}
+*************************************************************/
+bool find_elem_float(MatrixFloat *m, float elem, Point *pos);
+
 #endif // FIND_MATRIX_H
