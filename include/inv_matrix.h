@@ -18,4 +18,11 @@
  ************************************************************/
 MatrixDouble *inv_matrix_int(MatrixInt *m);
 
+/***********************************************************
+@description: invertible matrix float
+@param {MatrixFloat} *m
+@return {*}
+************************************************************/
+MatrixFloat *inv_matrix_float(MatrixFloat *m);
+
 #endif // INV_MATRIX_H
