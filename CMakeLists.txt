@@ -100,7 +100,6 @@ set(LIB_SOURCES_MATRIX_CPP
     src/C++/compare_matrix.cpp
     src/C++/constructor_matrix.cpp
     src/C++/destructor_matrix.cpp
-    src/C++/determinant_matrix.cpp
     src/C++/extract_matrix.cpp
     src/C++/find_matrix.cpp
     src/C++/leading_minors.cpp
