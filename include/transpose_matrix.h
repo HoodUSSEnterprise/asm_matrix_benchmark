@@ -18,4 +18,11 @@
  ************************************************************/
 MatrixInt *transpose_matrix_int(MatrixInt *m);
 
+/***********************************************************
+@description: transpose the matrix float
+@param {MatrixFloat} *m
+@return {*}
+*************************************************************/
+MatrixFloat *transpose_matrix_float(MatrixFloat *m);
+
 #endif // TRANSPOSE_MATRIX_H
