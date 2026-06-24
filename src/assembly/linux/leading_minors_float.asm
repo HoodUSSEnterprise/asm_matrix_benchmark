@@ -81,7 +81,7 @@ get_leading_minors_float:
 
     ; ========== loop order = 1..m->rows ==========
 
-    xor rdi, rdi
+    mov qword [rsp + 24], 0 ; successful_count = 0
     mov rbx, 1
 
 order_loop:
@@ -110,7 +110,7 @@ order_loop:
     mov r11, [rsp + 32]
     mov [r11], rax
 
-    mov rdi, rbx
+    mov qword [rsp + 24], rbx ; successful_count = order
 
     xor rcx, rcx
     mov rdx, [r11]
@@ -174,7 +174,7 @@ malloc_fail_subdata:
     xor rsi, rsi
 
     free_subdata_loop:
-        cmp rsi, rdi
+        cmp rsi, [rsp + 24] ; i < successful_count?
         jae free_subdata_done
 
         mov rax, rsi
@@ -182,7 +182,7 @@ malloc_fail_subdata:
         mov r8, [r12 + rax]
         test r8, r8
         jz free_subdata_next
-        mov rcx, r8
+        mov rdi, r8
         call free wrt ..plt
 
     free_subdata_next:
