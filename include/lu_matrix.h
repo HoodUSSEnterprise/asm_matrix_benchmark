@@ -27,4 +27,12 @@ typedef struct LU_Result
  ************************************************************/
 bool LU_Decomposition_int(MatrixInt *m, LU_Result *res);
 
+/***********************************************************
+@description: lu decomposition of float matrix (converts to double internally)
+@param {MatrixFloat} *m
+@param {LU_Result} *res
+@return {*}
+ ************************************************************/
+bool LU_Decomposition_float(MatrixFloat *m, LU_Result *res);
+
 #endif // LU_MATRIX_H
