@@ -77,6 +77,7 @@ replace_data:
     imul r10, [rsp + 32] ; pos.x * m->cols
     add r10, [rsp + 40] ; pos.x * m->cols + pos.y
 
+    mov rsi, [r14]           ; rsi = m->data (reload after call)
     movsd [rsi + r10 * 8], xmm14 ; m->data[pos.x * m->cols + pos.y] = new_data
     jmp loop_replace
 
