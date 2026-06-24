@@ -1,11 +1,12 @@
 ;-------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
-; @Date: 2026-06-24
+; @Date: 2026-06-24 18:52:55
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24
+; @LastEditTime: 2026-06-24 19:33:19
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\trace_matrix_double.asm
-; @Description: the trace of matrix double nasm code on windows
+; @Description:  the trace of matrix double nasm code on windows
 ;-------------------------------------------------------------
+
 global trace_matrix_double
 extern puts
 
