@@ -79,12 +79,12 @@ cat_matrix_double:
     ; malloc res->data
     ; res->cols = m1->cols
     ; res->rows = m1->rows + m2->rows
-    mov rdi, [r14 + 16]  ; m1->cols
+    mov rcx, [r14 + 16]  ; m1->cols
     mov r12, [r14 + 8] ; m1->rows
     add r12, [r15 + 8] ; m1->rows + m2->rows
-    imul rdi, r12 ; res->rows * res->cols
-    mov rcx, rdi ; number of sizeof(double)
-    shl rcx, 3 ; rcx *= 8
+    imul rcx, r12 ; res->rows * res->cols
+    mov rdi, rcx ; number of sizeof(double)
+    shl rdi, 3 ; rdi *= 8
     call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_data
@@ -168,9 +168,8 @@ greater_than_zero:
     mov rdi, [r14 + 8]  ; m1->rows
     mov r12, [r14 + 16] ; m1->cols
     add r12, [r15 + 16] ; m1->cols + m2->cols
-    imul rdi, r12 ; res->rows * res->cols
-    mov rcx, rdi ; number of sizeof(double)
-    shl rcx, 3 ; rcx *= 8
+    imul rdi, r12 ; res->rows * res->cols, number of sizeof(double)
+    shl rdi, 3 ; rdi *= 8
     call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_data
