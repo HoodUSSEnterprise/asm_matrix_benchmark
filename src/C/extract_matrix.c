@@ -2,8 +2,8 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-20 15:41:14
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-20 15:52:58
-@FilePath: src/C/extract_matrix.c
+@LastEditTime: 2026-06-24 09:09:14
+@FilePath: \asm_matrix_benchmark\src\C\extract_matrix.c
 @Description: extract matrix c code
 *************************************************************/
 
@@ -12,10 +12,10 @@
 /***********************************************************
 @description: extract matrix's row
 @param {MatrixInt} *m
-@param {int} index
+@param {size_t} index
 @return {*}
  ************************************************************/
-MatrixInt *extract_row_int(MatrixInt *m, int index)
+MatrixInt *extract_row_int(MatrixInt *m, size_t index)
 {
     // check m and m->data
     if (m == NULL || m->data == NULL)
@@ -57,10 +57,10 @@ MatrixInt *extract_row_int(MatrixInt *m, int index)
 /***********************************************************
 @description: extract matrix's col
 @param {MatrixInt} *m
-@param {int} index
+@param {size_t} index
 @return {*}
  ************************************************************/
-MatrixInt *extract_col_int(MatrixInt *m, int index)
+MatrixInt *extract_col_int(MatrixInt *m, size_t index)
 {
     // check m and m->data
     if (m == NULL || m->data == NULL)
