@@ -19,4 +19,12 @@
  ************************************************************/
 MatrixInt *mul_matrix_int(MatrixInt *m1, MatrixInt *m2);
 
+/***********************************************************
+@description: mul matrix float function
+@param {MatrixFloat} *m1
+@param {MatrixFloat} *m2
+@return {*}
+************************************************************/
+MatrixFloat *mul_matrix_float(MatrixFloat *m1, MatrixFloat *m2);
+
 #endif // MUL_MATRIX_H
