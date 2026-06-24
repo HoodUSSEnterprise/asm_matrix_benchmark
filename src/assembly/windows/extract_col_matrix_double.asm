@@ -1,26 +1,28 @@
 ;-------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
-; @Date: 2026-06-23 20:56:08
+; @Date: 2026-06-24
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24 08:47:39
-; @FilePath: \asm_matrix_benchmark\src\assembly\windows\scale_matrix_double.asm
-; @Description: scale matrix double nasm code on windows
+; @LastEditTime: 2026-06-24
+; @FilePath: \asm_matrix_benchmark\src\assembly\windows\extract_col_matrix_double.asm
+; @Description: extract col matrix double nasm code on windows
 ;-------------------------------------------------------------
-global scale_matrix_double
-extern printf
+global extract_col_double
+
 extern malloc
 extern free
+extern printf
+extern puts
 
 section .rodata
-    malloc_failed db "Memory allocation failed", 10, 0                         ; malloc failed msg
     invalid_param db "Invalid param!", 10, 0                                   ; invalid param msg
+    malloc_failed db "Memory allocation failed", 10, 0                         ; malloc failed msg
 
 section .text
 
-; MatrixDouble *scale_matrix_double(MatrixDouble *m, double scale);
-; rcx = m, xmm1 = scale
+; MatrixDouble *extract_col_double(MatrixDouble *m, size_t index);
+; rcx = m, rdx = index
+extract_col_double:
 
-scale_matrix_double:
     ; save callee_register
     push rbx
     push rdi
@@ -31,31 +33,28 @@ scale_matrix_double:
     sub rsp, 32 ; allocate shadow space for printf
 
     mov r14, rcx ; r14 = m
-    movsd xmm15, xmm1 ; xmm15 = scale
+    mov r15, rdx ; r15 = index
 
-    ; check param m
+    ; check m
     test r14, r14
     jz null_ptr
 
-    mov r14, [rcx] ; r14 = m->data
-
     ; check m->data
+    mov r14, [rcx]
     test r14, r14
     jz null_ptr
 
     ; restore r14
     mov r14, rcx
 
-    ; get dimension
+    ; check dimension and index
     mov r8, [r14 + 8]   ; m->rows
-    mov r9, [r14 + 16]  ; m->cols
 
-    ; save the data len in rdi
-    mov rdi, r8     ; rdi = m1->rows
-    imul rdi, r9    ; rdi = m1->rows * m1->cols
+    cmp r15, r8
+    jge null_ptr
 
     ; malloc res 24 bytes
-    mov rcx, 24 
+    mov rcx, 24
     call malloc
     test rax, rax
     jz malloc_fail_struct
@@ -63,35 +62,41 @@ scale_matrix_double:
     mov rbx, rax
 
     ; malloc res->data
-    mov rcx, rdi
+    mov rcx, [r14 + 8]
     shl rcx, 3 ; rcx *= 8
     call malloc
     test rax, rax
     jz malloc_fail_data
 
     mov [rbx], rax      ; res->data = new malloc data
-    mov r9, [r14 + 8]   ; r9 = m1->rows
-    mov r10, [r14 + 16] ; r10 = m2->cols
-    mov [rbx + 8], r9   ; res->rows = m1->rows
-    mov [rbx + 16], r10 ; res->cols = m1->cols
+    mov r10, [r14 + 8] ; r10 = m->rows
+    mov [rbx + 8], r10 ; res->rows = m->rows
+    mov qword [rbx + 16], 1   ; res->cols = 1
 
-    ; scale m
-    xor rcx, rcx ; i = 0
-    mov r13, [rbx]
-    mov r9, [r14] ; r9 = m->data
+    ; init loop
+    xor rsi, rsi ; i = 0
+    mov rdi, [r14 + 8] ; m->rows
+    mov r12, [rbx]     ; r12 = res->data
+    mov r10, [r14 + 16]; m->cols
+    mov r13, [r14]     ; r13 = m->data
 
-on_loop:
-    cmp rcx, rdi ; i < rdi
+loop1:
+    cmp rsi, rdi ; i < m->rows
     jge end
 
-    ; res->data[rcx] = m->data[rcx] * scale
-    movsd xmm0, [r9 + rcx * 8]
-    mulsd xmm0, xmm15
+    mov r8, rsi ; r8 = i
+    imul r8, r10 ; r8 *= m->cols
+    add r8, r15  ; r8 += index
 
-    movsd [r13 + rcx * 8], xmm0
-    inc rcx ; i++
-    jmp on_loop
+    movsd xmm0, [r13 + r8 * 8]  ; xmm0 = m->data[i * m->cols + index]
+    movsd [r12 + rsi * 8], xmm0 ; res->data[i] = m->data[i * m->cols + index]
 
+    inc rsi ; i++
+    jmp loop1
+
+end:
+    mov rax, rbx
+    jmp cleanup
 
 malloc_fail_struct:
     lea rcx, [rel malloc_failed] ; rcx = malloc_failed
@@ -112,10 +117,6 @@ null_ptr:
     call printf
     mov rax, 0 ; return NULL
     jmp cleanup
-
-end:
-
-    mov rax, rbx
 
 cleanup:
     add rsp, 32 ; restore stack pointer

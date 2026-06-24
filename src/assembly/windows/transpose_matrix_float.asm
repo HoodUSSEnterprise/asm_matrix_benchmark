@@ -1,15 +1,16 @@
 ;-------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
-; @Date: 2026-06-23 20:56:08
+; @Date: 2026-06-24
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24 08:47:39
-; @FilePath: \asm_matrix_benchmark\src\assembly\windows\scale_matrix_double.asm
-; @Description: scale matrix double nasm code on windows
+; @LastEditTime: 2026-06-24
+; @FilePath: \asm_matrix_benchmark\src\assembly\windows\transpose_matrix_float.asm
+; @Description: get transpose matrix float nasm code on windows
 ;-------------------------------------------------------------
-global scale_matrix_double
-extern printf
+
+global transpose_matrix_float
 extern malloc
 extern free
+extern printf
 
 section .rodata
     malloc_failed db "Memory allocation failed", 10, 0                         ; malloc failed msg
@@ -17,10 +18,11 @@ section .rodata
 
 section .text
 
-; MatrixDouble *scale_matrix_double(MatrixDouble *m, double scale);
-; rcx = m, xmm1 = scale
+; MatrixFloat *transpose_matrix_float(MatrixFloat *m);
+; rcx = m
 
-scale_matrix_double:
+transpose_matrix_float:
+
     ; save callee_register
     push rbx
     push rdi
@@ -31,7 +33,6 @@ scale_matrix_double:
     sub rsp, 32 ; allocate shadow space for printf
 
     mov r14, rcx ; r14 = m
-    movsd xmm15, xmm1 ; xmm15 = scale
 
     ; check param m
     test r14, r14
@@ -46,16 +47,12 @@ scale_matrix_double:
     ; restore r14
     mov r14, rcx
 
-    ; get dimension
-    mov r8, [r14 + 8]   ; m->rows
-    mov r9, [r14 + 16]  ; m->cols
-
     ; save the data len in rdi
-    mov rdi, r8     ; rdi = m1->rows
-    imul rdi, r9    ; rdi = m1->rows * m1->cols
+    mov rdi, [r14 + 8]     ; rdi = m1->rows
+    imul rdi, [r14 + 16]    ; rdi = m1->rows * m1->cols
 
     ; malloc res 24 bytes
-    mov rcx, 24 
+    mov rcx, 24
     call malloc
     test rax, rax
     jz malloc_fail_struct
@@ -64,33 +61,51 @@ scale_matrix_double:
 
     ; malloc res->data
     mov rcx, rdi
-    shl rcx, 3 ; rcx *= 8
+    shl rcx, 2 ; rcx *= 4 (sizeof float)
     call malloc
     test rax, rax
     jz malloc_fail_data
 
     mov [rbx], rax      ; res->data = new malloc data
-    mov r9, [r14 + 8]   ; r9 = m1->rows
-    mov r10, [r14 + 16] ; r10 = m2->cols
-    mov [rbx + 8], r9   ; res->rows = m1->rows
-    mov [rbx + 16], r10 ; res->cols = m1->cols
+    mov r9, [r14 + 8]   ; r9 = m->rows
+    mov r10, [r14 + 16] ; r10 = m->cols
+    mov [rbx + 8], r10  ; res->rows = m->cols
+    mov [rbx + 16], r9  ; res->cols = m->rows
 
-    ; scale m
-    xor rcx, rcx ; i = 0
-    mov r13, [rbx]
-    mov r9, [r14] ; r9 = m->data
+    ; init loop conditino
+    xor rdi, rdi ; i = 0
+    mov r11, [r14] ; r11 = m->data
+    mov r12, [rbx] ; r13 = res->data
 
-on_loop:
-    cmp rcx, rdi ; i < rdi
+loop1:
+    cmp rdi, r10 ; i < res->rows
     jge end
+    xor rsi ,rsi
+    loop2:
+        cmp rsi, r9 ; j < res->cols
+        jge inc_rdi
 
-    ; res->data[rcx] = m->data[rcx] * scale
-    movsd xmm0, [r9 + rcx * 8]
-    mulsd xmm0, xmm15
+        ; calc index of m
+        mov r8, r10      ; r8 = m->cols
+        imul r8, rsi    ; r8 *= j
+        add r8, rdi     ; r8 += i
 
-    movsd [r13 + rcx * 8], xmm0
-    inc rcx ; i++
-    jmp on_loop
+        ; xmm0 = m->data[j * m->cols + i]
+        movss xmm0, [r11 + r8 * 4]
+
+        ; calc index of res
+        mov r8, r9     ; r8 = res->cols
+        imul r8, rdi    ; r8 *= i
+        add r8, rsi     ; r8 += j
+
+        ; m->data[i * res->cols + j] = xmm0
+        movss [r12 + r8 * 4], xmm0
+        inc rsi ; j++
+        jmp loop2
+
+inc_rdi:
+    inc rdi; i++
+    jmp loop1
 
 
 malloc_fail_struct:
@@ -114,7 +129,6 @@ null_ptr:
     jmp cleanup
 
 end:
-
     mov rax, rbx
 
 cleanup:

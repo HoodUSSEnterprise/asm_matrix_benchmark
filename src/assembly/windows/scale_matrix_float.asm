@@ -1,12 +1,12 @@
 ;-------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
-; @Date: 2026-06-23 20:56:08
+; @Date: 2026-06-24
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24 08:47:39
-; @FilePath: \asm_matrix_benchmark\src\assembly\windows\scale_matrix_double.asm
-; @Description: scale matrix double nasm code on windows
+; @LastEditTime: 2026-06-24
+; @FilePath: \asm_matrix_benchmark\src\assembly\windows\scale_matrix_float.asm
+; @Description: scale matrix float nasm code on windows
 ;-------------------------------------------------------------
-global scale_matrix_double
+global scale_matrix_float
 extern printf
 extern malloc
 extern free
@@ -17,10 +17,10 @@ section .rodata
 
 section .text
 
-; MatrixDouble *scale_matrix_double(MatrixDouble *m, double scale);
+; MatrixFloat *scale_matrix_float(MatrixFloat *m, float scale);
 ; rcx = m, xmm1 = scale
 
-scale_matrix_double:
+scale_matrix_float:
     ; save callee_register
     push rbx
     push rdi
@@ -31,7 +31,7 @@ scale_matrix_double:
     sub rsp, 32 ; allocate shadow space for printf
 
     mov r14, rcx ; r14 = m
-    movsd xmm15, xmm1 ; xmm15 = scale
+    movss xmm15, xmm1 ; xmm15 = scale
 
     ; check param m
     test r14, r14
@@ -55,7 +55,7 @@ scale_matrix_double:
     imul rdi, r9    ; rdi = m1->rows * m1->cols
 
     ; malloc res 24 bytes
-    mov rcx, 24 
+    mov rcx, 24
     call malloc
     test rax, rax
     jz malloc_fail_struct
@@ -64,7 +64,7 @@ scale_matrix_double:
 
     ; malloc res->data
     mov rcx, rdi
-    shl rcx, 3 ; rcx *= 8
+    shl rcx, 2 ; rcx *= 4 (sizeof float)
     call malloc
     test rax, rax
     jz malloc_fail_data
@@ -85,10 +85,9 @@ on_loop:
     jge end
 
     ; res->data[rcx] = m->data[rcx] * scale
-    movsd xmm0, [r9 + rcx * 8]
-    mulsd xmm0, xmm15
-
-    movsd [r13 + rcx * 8], xmm0
+    movss xmm0, [r9 + rcx * 4]
+    mulss xmm0, xmm15
+    movss [r13 + rcx * 4], xmm0
     inc rcx ; i++
     jmp on_loop
 

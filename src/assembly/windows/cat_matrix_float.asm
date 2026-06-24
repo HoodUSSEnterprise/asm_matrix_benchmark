@@ -1,12 +1,12 @@
 ;-------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
-; @Date: 2026-06-23 23:29:14
+; @Date: 2026-06-24
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24 08:47:07
-; @FilePath: \asm_matrix_benchmark\src\assembly\windows\cat_matrix_double.asm
-; @Description: cat matrix double nasm code on windows
+; @LastEditTime: 2026-06-24
+; @FilePath: \asm_matrix_benchmark\src\assembly\windows\cat_matrix_float.asm
+; @Description: cat matrix float nasm code on windows
 ;-------------------------------------------------------------
-global cat_matrix_double
+global cat_matrix_float
 extern malloc
 extern free
 extern printf
@@ -20,11 +20,11 @@ section .rodata
 
 section .text
 
-; MatrixDouble *cat_matrix_double(MatrixDouble *m1, MatrixDouble *m2, int axis);
+; MatrixFloat *cat_matrix_float(MatrixFloat *m1, MatrixFloat *m2, int axis);
 ; rcx = m1, rdx = m2, r8d = axis
 ; axis : 1 means horizon, 0 means vertical
-cat_matrix_double:
-    
+cat_matrix_float:
+
     ; save callee_register
     push rbx
     push rdi
@@ -69,7 +69,7 @@ cat_matrix_double:
     jne dimension_mismatch
 
     ; malloc new res
-    mov rcx, 24 ; sizeof(MatrixInt) = 24
+    mov rcx, 24 ; sizeof(MatrixFloat) = 24
     call malloc
     test rax, rax
     jz malloc_fail_struct
@@ -83,8 +83,8 @@ cat_matrix_double:
     mov r12, [r14 + 8] ; m1->rows
     add r12, [r15 + 8] ; m1->rows + m2->rows
     imul rdi, r12 ; res->rows * res->cols
-    mov rcx, rdi ; number of sizeof(int)
-    shl rcx, 3 ; rcx *= 8
+    mov rcx, rdi ; number of sizeof(float)
+    shl rcx, 2 ; rcx *= 4
     call malloc
     test rax, rax
     jz malloc_fail_data
@@ -119,8 +119,8 @@ loop1:
         mov r9, rdi ; r9 = m1->cols
         imul r9, rcx ; r9 *= i
         add r9, rdx ; r9 += j
-        movsd xmm0, [r14 + r9 * 8] ; xmm0 = m1->data[i * res->cols + j]
-        movsd [rsi + r9 * 8], xmm0
+        movss xmm0, [r14 + r9 * 4] ; xmm0 = m1->data[i * res->cols + j]
+        movss [rsi + r9 * 4], xmm0
         inc rdx ; j++
         jmp loop2
 
@@ -129,12 +129,12 @@ loop1:
         imul r13, rcx ; r13 *= i
         add r13, rdx ; r13 += j
         mov r9, rdi ; r9 = res->cols
-        mov r11, rcx ; r11 = i 
+        mov r11, rcx ; r11 = i
         sub r11, r8 ; r11 = i - m1->rows
         imul r9, r11 ; r9 = (i - m1->rows) * res->cols
         add r9, rdx ; r9 += j
-        movsd xmm0, [r15 + r9 * 8] ; xmm0 = m1->data[(i - m1->rows) * res->cols + j]
-        movsd [rsi + r13 * 8], xmm0
+        movss xmm0, [r15 + r9 * 4] ; xmm0 = m1->data[(i - m1->rows) * res->cols + j]
+        movss [rsi + r13 * 4], xmm0
         inc rdx ; j++
         jmp loop2
 
@@ -155,7 +155,7 @@ greater_than_zero:
     jne dimension_mismatch
 
     ; malloc new res
-    mov rcx, 24 ; sizeof(MatrixInt) = 24
+    mov rcx, 24 ; sizeof(MatrixFloat) = 24
     call malloc
     test rax, rax
     jz malloc_fail_struct
@@ -169,8 +169,8 @@ greater_than_zero:
     mov r12, [r14 + 16] ; m1->cols
     add r12, [r15 + 16] ; m1->cols + m2->cols
     imul rdi, r12 ; res->rows * res->cols
-    mov rcx, rdi ; number of sizeof(int)
-    shl rcx, 3 ; rcx *= 8
+    mov rcx, rdi ; number of sizeof(float)
+    shl rcx, 2 ; rcx *= 4
     call malloc
     test rax, rax
     jz malloc_fail_data
@@ -205,24 +205,24 @@ loop11:
         mov r9, rdi ; r9 = m1->cols
         imul r9, rcx ; r9 *= i
         add r9, rdx ; r9 += j
-        movsd xmm0, [r14 + r9 * 8] ; xmm0 = m1->data[i * m1->cols + j]
+        movss xmm0, [r14 + r9 * 4] ; xmm0 = m1->data[i * m1->cols + j]
         mov r9, r12 ; r9 = res->cols
         imul r9, rcx ; r9 *= i
         add r9, rdx ; r9 += j
-        movsd [rsi + r9 * 8], xmm0 ; res->data[i * res->cols + j] = xmm0
+        movss [rsi + r9 * 4], xmm0 ; res->data[i * res->cols + j] = xmm0
         inc rdx ; j++
         jmp loop21
 
-    matrix_after11: 
+    matrix_after11:
         mov r9, r13 ; r9 = m2->cols
         imul r9, rcx ; r9 *= i
         add r9, rdx ; r9 += j
         sub r9, rdi ; r9 = i * m2->cols + j - m1->cols
-        movsd xmm0, [r15 + r9 * 8] ; xmm0 = m2->data[i * m2->cols + j - m1->cols]
+        movss xmm0, [r15 + r9 * 4] ; xmm0 = m2->data[i * m2->cols + j - m1->cols]
         mov r9, r12 ; r9 = res->cols
         imul r9, rcx ; r9 *= i
         add r9, rdx ; r9 += j
-        movsd [rsi + r9 * 8], xmm0
+        movss [rsi + r9 * 4], xmm0
         inc rdx ; j++
         jmp loop21
 
@@ -260,7 +260,7 @@ end:
     jmp cleanup
 
 dimension_mismatch:
-    lea rcx, [rel dim_mismatch] 
+    lea rcx, [rel dim_mismatch]
     mov rdx, [r14 + 8]          ; m1.rows
     mov r8, [r14 + 16]          ; m1.cols
     mov r9, [r15 + 8]           ; m2.rows
