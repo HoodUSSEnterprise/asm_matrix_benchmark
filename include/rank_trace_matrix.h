@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-17 19:37:37
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-18 23:18:30
+@LastEditTime: 2026-06-24 14:46:00
 @FilePath: \asm_matrix_benchmark\include\rank_trace_matrix.h
 @Description:  rank and trace of matrix
 *************************************************************/
@@ -28,5 +28,21 @@ bool rank_matrix_int(MatrixInt *m, int *rank);
 @return {*}
  ************************************************************/
 bool trace_matrix_int(MatrixInt *m, int *trace);
+
+/***********************************************************
+@description: rank of matrix
+@param {MatrixDouble} *m
+@param {int} *rank
+@return {*}
+*************************************************************/
+bool rank_matrix_double(MatrixDouble *m, int *rank);
+
+/***********************************************************
+@description: trace of matrix
+@param {MatrixDouble} *m
+@param {double} *trace
+@return {*}
+*************************************************************/
+bool trace_matrix_double(MatrixDouble *m, double *trace);
 
 #endif // RANK_TRACE_MATRIX_H
