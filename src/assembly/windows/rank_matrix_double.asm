@@ -1,11 +1,12 @@
 ;-------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
-; @Date: 2026-06-24
+; @Date: 2026-06-24 18:52:55
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24
+; @LastEditTime: 2026-06-24 19:29:14
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\rank_matrix_double.asm
-; @Description: rank matrix double nasm code on windows
+; @Description:  rank matrix double nasm code on windows
 ;-------------------------------------------------------------
+
 global rank_matrix_double
 extern puts
 extern malloc
