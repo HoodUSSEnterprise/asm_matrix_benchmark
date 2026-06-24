@@ -30,4 +30,12 @@ bool is_equal_matrix_int(MatrixInt *m1, MatrixInt *m2);
 *************************************************************/
 bool is_equal_matrix_double(MatrixDouble *m1, MatrixDouble *m2);
 
+/***********************************************************
+@description: compare two matrix both float type
+@param {MatrixFloat} *m1
+@param {MatrixFloat} *m2
+@return {*}
+************************************************************/
+bool is_equal_matrix_float(MatrixFloat *m1, MatrixFloat *m2);
+
 #endif // COMPARE_MATRIX_H

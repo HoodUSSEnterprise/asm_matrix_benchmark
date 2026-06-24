@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-21 15:42:01
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-24 14:54:39
+@LastEditTime: 2026-06-24 15:59:48
 @FilePath: \asm_matrix_benchmark\include\leading_minors.h
 @Description: get leading principal minor
 *************************************************************/
@@ -17,6 +17,12 @@ typedef struct Leading_Minors_Int
     size_t len;
 } Leading_Minors_Int;
 
+typedef struct Leading_Minors_Float
+{
+    MatrixFloat *matrix_data;
+    size_t len;
+} Leading_Minors_Float;
+
 typedef struct Leading_Minors_Double
 {
     MatrixDouble *matrix_data;
@@ -29,6 +35,13 @@ typedef struct Leading_Minors_Double
 @return {*}
  ************************************************************/
 Leading_Minors_Int *get_leading_minors_int(MatrixInt *m);
+
+/***********************************************************
+@description: get leading principal minor float
+@param {MatrixFloat} *m
+@return {*}
+*************************************************************/
+Leading_Minors_Float *get_leading_minors_float(MatrixFloat *m);
 
 /***********************************************************
 @description: get leading principal minor

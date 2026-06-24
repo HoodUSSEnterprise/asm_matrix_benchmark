@@ -31,6 +31,24 @@ bool replace_matrix_int_by_coord(MatrixInt *m, Point *pos, int new_data);
 bool replace_matrix_int_by_value(MatrixInt *m, int old_data, int new_data);
 
 /***********************************************************
+@description: replace matrix float some data by coordinate
+@param {MatrixFloat} *m
+@param {Point} *pos
+@param {float} new_data
+@return {*}
+************************************************************/
+bool replace_matrix_float_by_coord(MatrixFloat *m, Point *pos, float new_data);
+
+/***********************************************************
+@description: replace matrix float some data by value
+@param {MatrixFloat} *m
+@param {float} old_data
+@param {float} new_data
+@return {*}
+************************************************************/
+bool replace_matrix_float_by_value(MatrixFloat *m, float old_data, float new_data);
+
+/***********************************************************
 @description: replace matrix double some data by coordinate
 @param {MatrixDouble} *m
 @param {Point} *pos

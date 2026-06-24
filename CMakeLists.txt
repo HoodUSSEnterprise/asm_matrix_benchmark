@@ -99,6 +99,10 @@ target_link_libraries(matrix_int_clib ${EXTRA_LIBS})
 add_executable(matrix_intc example/matrix_int.c)
 target_link_libraries(matrix_intc matrix_int_clib)
 
+# C Float 版本 (与 int 在同一组 C 源文件中)
+add_executable(matrix_floatc example/matrix_float.c)
+target_link_libraries(matrix_floatc matrix_int_clib)
+
 # C Double 版本 (与 int 在同一组 C 源文件中)
 add_executable(matrix_doublec example/matrix_double.c)
 target_link_libraries(matrix_doublec matrix_int_clib)

@@ -27,4 +27,12 @@ MatrixInt *add_matrix_int(MatrixInt *m1, MatrixInt *m2);
 *************************************************************/
 MatrixDouble *add_matrix_double(MatrixDouble *m1, MatrixDouble *m2);
 
+/***********************************************************
+@description: add matrix float
+@param {MatrixFloat} *m1
+@param {MatrixFloat} *m2
+@return {*}
+************************************************************/
+MatrixFloat *add_matrix_float(MatrixFloat *m1, MatrixFloat *m2);
+
 #endif // ADD_MATRIX_H

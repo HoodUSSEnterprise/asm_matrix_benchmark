@@ -27,4 +27,12 @@ MatrixInt *sub_matrix_int(MatrixInt *m1, MatrixInt *m2);
  ************************************************************/
 MatrixDouble *sub_matrix_double(MatrixDouble *m1, MatrixDouble *m2);
 
+/***********************************************************
+@description: sub matrix float value
+@param {MatrixFloat} *m1
+@param {MatrixFloat} *m2
+@return {*}
+************************************************************/
+MatrixFloat *sub_matrix_float(MatrixFloat *m1, MatrixFloat *m2);
+
 #endif // SUB_MATRIX_H

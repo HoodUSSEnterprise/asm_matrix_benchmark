@@ -25,4 +25,11 @@ void print_matrix_int(MatrixInt *m);
  ************************************************************/
 void print_matrix_double(MatrixDouble *m);
 
+/***********************************************************
+@description: print matrix float
+@param {MatrixFloat} *m
+@return {*}
+************************************************************/
+void print_matrix_float(MatrixFloat *m);
+
 #endif // PRINT_MATRIX_H
