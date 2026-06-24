@@ -71,14 +71,10 @@ set(LIB_SOURCES_MATRIX_C
     src/C/leading_minors.c
     src/C/lu_matrix.c
     src/C/mul_matrix.c
-    # src/C/pop_matrix.c
-    # src/C/push_back_matrix.c
     src/C/print_matrix.c
     src/C/random_matrix.c
-    # src/C/remove_matrix.c
     src/C/rank_trace_matrix.c
     src/C/replace_matrix.c
-    # src/C/reverse_matrix.c
     src/C/scale_matrix.c
     src/C/special_matrix.c
     src/C/sub_matrix.c
@@ -177,6 +173,7 @@ set(LIB_SOURCES_MATRIX_FLOAT
     src/assembly/${PLATFORM_DIR}/leading_minors_float.asm
     src/assembly/${PLATFORM_DIR}/lu_matrix_float.asm
     src/assembly/${PLATFORM_DIR}/mul_matrix_float.asm
+    src/assembly/${PLATFORM_DIR}/print_matrix_double.asm
     src/assembly/${PLATFORM_DIR}/print_matrix_float.asm
     src/assembly/${PLATFORM_DIR}/random_matrix_float.asm
     src/assembly/${PLATFORM_DIR}/rank_matrix_float.asm
