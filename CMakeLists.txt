@@ -29,6 +29,9 @@ set(LIB_SOURCES_MATRIX_INT
     src/assembly/${PLATFORM_DIR}/add_matrix_int.asm
     src/assembly/${PLATFORM_DIR}/cat_matrix_int.asm
     src/assembly/${PLATFORM_DIR}/compare_matrix_int.asm
+    src/assembly/${PLATFORM_DIR}/extract_col_matrix_int.asm
+    src/assembly/${PLATFORM_DIR}/extract_diag_matrix_int.asm
+    src/assembly/${PLATFORM_DIR}/extract_row_matrix_int.asm
     src/assembly/${PLATFORM_DIR}/find_matrix_int.asm
     src/assembly/${PLATFORM_DIR}/inv_matrix_int.asm
     src/assembly/${PLATFORM_DIR}/leading_minors_int.asm
@@ -38,6 +41,7 @@ set(LIB_SOURCES_MATRIX_INT
     # src/assembly/${PLATFORM_DIR}/push_back_matrix_int.asm
     src/assembly/${PLATFORM_DIR}/print_matrix_double.asm
     src/assembly/${PLATFORM_DIR}/print_matrix_int.asm
+    src/assembly/${PLATFORM_DIR}/random_matrix_int.asm
     # src/assembly/${PLATFORM_DIR}/remove_matrix_int.asm
     src/assembly/${PLATFORM_DIR}/rank_matrix_int.asm
     src/assembly/${PLATFORM_DIR}/replace_matrix_int_by_coord.asm
@@ -65,6 +69,7 @@ set(LIB_SOURCES_MATRIX_C
     src/C/add_matrix.c
     src/C/cat_matrix.c
     src/C/compare_matrix.c
+    src/C/extract_matrix.c
     src/C/find_matrix.c
     src/C/inv_matrix.c
     src/C/leading_minors.c
@@ -73,6 +78,7 @@ set(LIB_SOURCES_MATRIX_C
     # src/C/pop_matrix.c
     # src/C/push_back_matrix.c
     src/C/print_matrix.c
+    src/C/random_matrix.c
     # src/C/remove_matrix.c
     src/C/rank_trace_matrix.c
     src/C/replace_matrix.c
