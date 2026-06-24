@@ -168,24 +168,34 @@ target_link_libraries(matrix_double_lib ${EXTRA_LIBS})
 add_executable(matrix_double example/matrix_double.c)
 target_link_libraries(matrix_double matrix_double_lib)
 
-# # Float 版本
-# set(LIB_SOURCES_MATRIX_FLOAT
-#     src/assembly/${PLATFORM_DIR}/add_matrix_float.asm
-#     src/assembly/${PLATFORM_DIR}/find_matrix_float.asm
-#     src/assembly/${PLATFORM_DIR}/insert_matrix_float.asm
-#     src/assembly/${PLATFORM_DIR}/mul_matrix_float.asm
-#     src/assembly/${PLATFORM_DIR}/pop_matrix_float.asm
-#     src/assembly/${PLATFORM_DIR}/push_back_matrix_float.asm
-#     src/assembly/${PLATFORM_DIR}/remove_matrix_float.asm
-#     src/assembly/${PLATFORM_DIR}/replace_matrix_float.asm
-#     src/assembly/${PLATFORM_DIR}/reverse_matrix_float.asm
-#     src/assembly/${PLATFORM_DIR}/scale_matrix_float.asm
-#     src/assembly/${PLATFORM_DIR}/sub_matrix_float.asm
-# )
+# Float 版本
+set(LIB_SOURCES_MATRIX_FLOAT
+    src/assembly/${PLATFORM_DIR}/add_matrix_float.asm
+    src/assembly/${PLATFORM_DIR}/cat_matrix_float.asm
+    src/assembly/${PLATFORM_DIR}/compare_matrix_float.asm
+    src/assembly/${PLATFORM_DIR}/extract_col_matrix_float.asm
+    src/assembly/${PLATFORM_DIR}/extract_diag_matrix_float.asm
+    src/assembly/${PLATFORM_DIR}/extract_row_matrix_float.asm
+    src/assembly/${PLATFORM_DIR}/find_matrix_float.asm
+    src/assembly/${PLATFORM_DIR}/inv_matrix_float.asm
+    src/assembly/${PLATFORM_DIR}/leading_minors_float.asm
+    src/assembly/${PLATFORM_DIR}/lu_matrix_float.asm
+    src/assembly/${PLATFORM_DIR}/mul_matrix_float.asm
+    src/assembly/${PLATFORM_DIR}/print_matrix_float.asm
+    src/assembly/${PLATFORM_DIR}/random_matrix_float.asm
+    src/assembly/${PLATFORM_DIR}/rank_matrix_float.asm
+    src/assembly/${PLATFORM_DIR}/replace_matrix_float_by_coord.asm
+    src/assembly/${PLATFORM_DIR}/replace_matrix_float_by_value.asm
+    src/assembly/${PLATFORM_DIR}/scale_matrix_float.asm
+    src/assembly/${PLATFORM_DIR}/special_matrix_float.asm
+    src/assembly/${PLATFORM_DIR}/sub_matrix_float.asm
+    src/assembly/${PLATFORM_DIR}/trace_matrix_float.asm
+    src/assembly/${PLATFORM_DIR}/transpose_matrix_float.asm
+)
 
-# add_library(matrix_float_lib ${LIB_SOURCES_MATRIX_FLOAT})
-# target_include_directories(matrix_float_lib PUBLIC include)
-# target_link_libraries(matrix_float_lib ${EXTRA_LIBS})
+add_library(matrix_float_lib ${LIB_SOURCES_MATRIX_FLOAT})
+target_include_directories(matrix_float_lib PUBLIC include)
+target_link_libraries(matrix_float_lib ${EXTRA_LIBS})
 
-# add_executable(matrix_float example/matrix_float.c)
-# target_link_libraries(matrix_float matrix_float_lib)
+add_executable(matrix_float example/matrix_float.c)
+target_link_libraries(matrix_float matrix_float_lib)

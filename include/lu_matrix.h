@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-21 14:10:23
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-21 15:58:18
+@LastEditTime: 2026-06-24 18:49:23
 @FilePath: \asm_matrix_benchmark\include\lu_matrix.h
 @Description: lu decomposition of matrix
 *************************************************************/
@@ -26,6 +26,14 @@ typedef struct LU_Result
 @return {*}
  ************************************************************/
 bool LU_Decomposition_int(MatrixInt *m, LU_Result *res);
+
+/***********************************************************
+@description: lu decomposition of float matrix (converts to double internally)
+@param {MatrixFloat} *m
+@param {LU_Result} *res
+@return {*}
+ ************************************************************/
+bool LU_Decomposition_float(MatrixFloat *m, LU_Result *res);
 
 /***********************************************************
 @description: lu decomposition of matrix double
