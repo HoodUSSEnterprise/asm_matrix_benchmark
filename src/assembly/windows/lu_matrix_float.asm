@@ -1,10 +1,10 @@
 ;-------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
-; @Date: 2026-06-24
+; @Date: 2026-06-24 18:52:55
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24
+; @LastEditTime: 2026-06-24 20:12:04
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\lu_matrix_float.asm
-; @Description: lu decomposition float nasm code on windows
+; @Description:  lu decomposition float nasm code on windows
 ;-------------------------------------------------------------
 
 global LU_Decomposition_float
@@ -422,13 +422,13 @@ doolittle_done:
     mov [rbx], r12     ; res->L = L
     mov [rbx + 8], r13 ; res->U = U
     ; ========== free leading_minors ==========
-    xor rcx, rcx ; i = 0
+    xor r12, r12 ; i = 0
 
 free_lm_data:
-    cmp rcx, [r15 + 8] ; i < leading_minors->len?
+    cmp r12, [r15 + 8] ; i < leading_minors->len?
     jae free_lm_array
 
-    mov rax, rcx
+    mov rax, r12
     imul rax, 24 ; rax = i * sizeof(MatrixFloat)
     mov rdi, [r15]       ; rdi = leading_minors->matrix_data
     mov rdi, [rdi + rax] ; rdi = matrix_data[i].data
@@ -438,7 +438,7 @@ free_lm_data:
     call free
 
 free_lm_next:
-    inc rcx
+    inc r12
     jmp free_lm_data
 
 free_lm_array:
