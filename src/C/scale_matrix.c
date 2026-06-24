@@ -52,3 +52,48 @@ MatrixInt *scale_matrix_int(MatrixInt *m, int scale)
     }
     return res;
 }
+
+/***********************************************************
+@description: scale matrix double
+@param {MatrixDouble} *m
+@param {double} scale
+@return {*}
+************************************************************/
+MatrixDouble *scale_matrix_double(MatrixDouble *m, double scale)
+{
+    // check m
+    if (m == NULL)
+    {
+        fprintf(stderr, "Invalid param!\n");
+        return NULL;
+    }
+    // check m->data
+    if (m->data == NULL)
+    {
+        fprintf(stderr, "Invalid param!\n");
+        return NULL;
+    }
+    // malloc for new res
+    MatrixDouble *res = NULL;
+    res = (MatrixDouble *)malloc(sizeof(MatrixDouble));
+    if (res == NULL)
+    {
+        fprintf(stderr, "Memory allocation failed\n");
+        return NULL;
+    }
+    res->cols = m->cols;
+    res->rows = m->rows;
+    // malloc for res->data
+    res->data = (double *)malloc(sizeof(double) * res->cols * res->rows);
+    if (res->data == NULL)
+    {
+        free(res);
+        fprintf(stderr, "Memory allocation failed\n");
+        return NULL;
+    }
+    for (size_t i = 0; i < res->cols * res->rows; i++)
+    {
+        res->data[i] = m->data[i] * scale;
+    }
+    return res;
+}
