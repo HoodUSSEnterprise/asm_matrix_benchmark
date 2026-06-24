@@ -42,7 +42,7 @@ extract_col_float:
 
     mov r14, rdi
 
-    mov r8, [r14 + 8]
+    mov r8, [r14 + 16]
 
     cmp r15, r8
     jge null_ptr
