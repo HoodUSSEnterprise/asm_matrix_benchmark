@@ -52,3 +52,48 @@ MatrixInt *scale_matrix_int(MatrixInt *m, int scale)
     }
     return res;
 }
+
+/***********************************************************
+@description: scale matrix float
+@param {MatrixFloat} *m
+@param {float} scale
+@return {*}
+************************************************************/
+MatrixFloat *scale_matrix_float(MatrixFloat *m, float scale)
+{
+    // check m
+    if (m == NULL)
+    {
+        fprintf(stderr, "Invalid param!\n");
+        return NULL;
+    }
+    // check m->data
+    if (m->data == NULL)
+    {
+        fprintf(stderr, "Invalid param!\n");
+        return NULL;
+    }
+    // malloc for new res
+    MatrixFloat *res = NULL;
+    res = (MatrixFloat *)malloc(sizeof(MatrixFloat));
+    if (res == NULL)
+    {
+        fprintf(stderr, "Memory allocation failed\n");
+        return NULL;
+    }
+    res->cols = m->cols;
+    res->rows = m->rows;
+    // malloc for res->data
+    res->data = (float *)malloc(sizeof(float) * res->cols * res->rows);
+    if (res->data == NULL)
+    {
+        free(res);
+        fprintf(stderr, "Memory allocation failed\n");
+        return NULL;
+    }
+    for (size_t i = 0; i < res->cols * res->rows; i++)
+    {
+        res->data[i] = m->data[i] * scale;
+    }
+    return res;
+}
