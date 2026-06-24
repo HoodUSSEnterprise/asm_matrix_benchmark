@@ -78,3 +78,74 @@ Leading_Minors_Int *get_leading_minors_int(MatrixInt *m)
     }
     return res;
 }
+
+/***********************************************************
+@description: get leading principal minor float
+@param {MatrixFloat} *m
+@return {*}
+*************************************************************/
+Leading_Minors_Float *get_leading_minors_float(MatrixFloat *m)
+{
+    // check m and m->data
+    if (m == NULL || m->data == NULL)
+    {
+        fprintf(stderr, "Invalid param!\n");
+        return NULL;
+    }
+    // check dimension
+    if (m->rows == 0 || m->cols == 0)
+    {
+        fprintf(stderr, "Invalid param!\n");
+        return NULL;
+    }
+    if (m->cols != m->rows)
+    {
+        puts("It's not a square");
+        return NULL;
+    }
+    // malloc new res
+    Leading_Minors_Float *res = NULL;
+    res = (Leading_Minors_Float *)malloc(sizeof(Leading_Minors_Float));
+    if (res == NULL)
+    {
+        fprintf(stderr, "Memory allocation failed\n");
+        return NULL;
+    }
+    // get leading principal minor size
+    res->len = m->rows;
+    // malloc new res data
+    res->matrix_data = (MatrixFloat *)malloc(sizeof(MatrixFloat) * m->rows);
+    if (res->matrix_data == NULL)
+    {
+        free(res);
+        fprintf(stderr, "Memory allocation failed\n");
+        return NULL;
+    }
+    // malloc for every matrix and get data
+    for (size_t order = 1; order <= m->rows; order++)
+    {
+        res->matrix_data[order - 1].rows = order;
+        res->matrix_data[order - 1].cols = order;
+        res->matrix_data[order - 1].data = (float *)malloc(sizeof(float) * order * order);
+        if (res->matrix_data[order - 1].data == NULL)
+        {
+            // free malloc memory before
+            for (size_t i = 0; i < order; i++)
+            {
+                free(res->matrix_data[i].data);
+            }
+            free(res->matrix_data);
+            free(res);
+            fprintf(stderr, "Memory allocation failed\n");
+            return NULL;
+        }
+        for (size_t i = 0; i < order; i++)
+        {
+            for (size_t j = 0; j < order; j++)
+            {
+                res->matrix_data[order - 1].data[i * order + j] = m->data[i * m->cols + j];
+            }
+        }
+    }
+    return res;
+}
