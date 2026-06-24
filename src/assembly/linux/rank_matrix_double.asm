@@ -57,13 +57,13 @@ rank_matrix_double:
     je null_ptr
 
     ; malloc new data, because elimination modifies data
-    mov rdi, [r14 + 16] ; rdi = m->cols
-    imul rdi, [r14 + 8] ; rdi *= m->rows
-    mov r12, rdi        ; preserve count
-    ; now rdi is len of new data array
+    mov rcx, [r14 + 16] ; rcx = m->cols
+    imul rcx, [r14 + 8] ; rcx *= m->rows
+    mov r12, rcx        ; preserve count
+    ; now rcx is len of new data array
     ; new data array type is double
-    mov rcx, rdi  ; rcx = len of array
-    shl rcx, 3    ; rcx *= 8
+    mov rdi, rcx  ; rcx = len of array
+    shl rdi, 3    ; rdi *= 8
     call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_data
