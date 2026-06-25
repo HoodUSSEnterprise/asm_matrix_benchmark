@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-24 18:52:55
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24 19:28:05
+; @LastEditTime: 2026-06-25 15:16:58
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\find_matrix_float.asm
 ; @Description:  find elem position in matrix float nasm code on windows
 ;-------------------------------------------------------------
@@ -30,7 +30,11 @@ find_elem_float:
     push r13
     push r14
     push r15
-    sub rsp, 32 ; allocate shadow space for puts
+    sub rsp, 48 ; allocate shadow space for puts
+
+    movss [rsp + 36], xmm13
+    movss [rsp + 40], xmm14
+    movss [rsp + 44], xmm15
 
     mov r14, rcx    ; r14 = m
     movss xmm15, xmm1 ; xmm15 = elem
@@ -125,7 +129,11 @@ end:
     jmp cleanup
 
 cleanup:
-    add rsp, 32 ; restore stack pointer
+        
+    movss xmm15, [rsp + 44]
+    movss xmm14, [rsp + 40]
+    movss xmm13, [rsp + 36]
+    add rsp, 48 ; restore stack pointer
     ; restore callee_register
     pop r15
     pop r14
