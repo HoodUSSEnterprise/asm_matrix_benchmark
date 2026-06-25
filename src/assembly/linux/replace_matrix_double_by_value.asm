@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-24 20:31:53
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24 20:32:16
+; @LastEditTime: 2026-06-25 15:37:01
 ; @FilePath: \asm_matrix_benchmark\src\assembly\linux\replace_matrix_double_by_value.asm
 ; @Description: replace matrix double by value nasm code on linux
 ;-------------------------------------------------------------
@@ -28,7 +28,10 @@ replace_matrix_double_by_value:
     push r13
     push r14
     push r15
-    sub rsp, 48 ; allocate shadow space for puts
+    sub rsp, 64 ; allocate shadow space for puts
+
+    movsd [rsp + 48], xmm15
+    movsd [rsp + 56], xmm14
 
     mov r14, rdi ; r14 = m
     movsd xmm15, xmm0 ; xmm15 = old_data
@@ -95,7 +98,10 @@ end:
     mov rax, 1
 
 cleanup:
-    add rsp, 48 ; restore stack pointer
+
+    movsd xmm15 [rsp + 48]
+    movsd xmm14 [rsp + 56]
+    add rsp, 64 ; restore stack pointer
     ; restore callee_register
     pop r15
     pop r14
