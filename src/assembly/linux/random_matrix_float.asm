@@ -19,7 +19,7 @@ extern time
 section .rodata
     malloc_failed db "Memory allocation failed", 0
     invalid_param db "Invalid param!", 0
-    rand_max dd 32767.0
+    rand_max dd 0x4f000000
 
 section .text
 
