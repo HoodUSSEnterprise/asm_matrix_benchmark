@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-24 20:41:55
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24 20:42:38
+; @LastEditTime: 2026-06-25 14:21:41
 ; @FilePath: \asm_matrix_benchmark\src\assembly\linux\mul_matrix_float.asm
 ; @Description: mul matrix float nasm code on linux
 ;-------------------------------------------------------------
@@ -68,8 +68,8 @@ mul_matrix_float:
 
     mov rbx, rax
 
-    mov rdi, r8
-    imul rdi, r11
+    mov rdi, [r14 + 8]
+    imul rdi, [r15 + 16]
     shl rdi, 2
     call malloc wrt ..plt
     test rax, rax
