@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-15 21:56:03
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-24 13:34:02
+@LastEditTime: 2026-06-25 09:25:33
 @FilePath: \asm_matrix_benchmark\example\matrix_int.c
 @Description:example of matrix int
 *************************************************************/
@@ -233,6 +233,8 @@ int main(void)
     puts("");
     puts("----------------------------------------------------------------------------------------");
     puts("-------------------------------------random matrix---------------------------------------");
+    // set the random number seed
+    srand((unsigned)time(NULL));
     MatrixInt *rand_matrix1 = random_matrix_int(3, 4, NULL, 0);
     print_matrix_int(rand_matrix1);
     int rand_range[2] = {5, 15};
