@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-24 18:52:55
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24 19:32:11
+; @LastEditTime: 2026-06-25 15:40:38
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\replace_matrix_float_by_coord.asm
 ; @Description: replace matrix float by coord nasm code on windows
 ;-------------------------------------------------------------
@@ -27,7 +27,9 @@ replace_matrix_float_by_coord:
     push r13
     push r14
     push r15
-    sub rsp, 32 ; allocate shadow space for puts
+    sub rsp, 40 ; allocate shadow space for puts
+
+    movss [rsp + 36], xmm14
 
     mov r14, rcx ; r14 = m
     mov r15, rdx ; r15 = pos
@@ -90,7 +92,9 @@ index_out_of_range:
     jmp cleanup
 
 cleanup:
-    add rsp, 32 ; restore stack pointer
+
+    movss xmm14, [rsp + 36]
+    add rsp, 40 ; restore stack pointer
     ; restore callee_register
     pop r15
     pop r14
