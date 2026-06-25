@@ -233,8 +233,6 @@ int main(void)
     puts("");
     puts("----------------------------------------------------------------------------------------");
     puts("-------------------------------------random matrix---------------------------------------");
-    // set the random number seed
-    srand((unsigned)time(NULL));
     MatrixInt *rand_matrix1 = random_matrix_int(3, 4, NULL, 0);
     print_matrix_int(rand_matrix1);
     int rand_range[2] = {5, 15};
