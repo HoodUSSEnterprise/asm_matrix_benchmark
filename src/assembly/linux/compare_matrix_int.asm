@@ -74,8 +74,8 @@ loop1:
     cmp rdi, rsi ; i < rsi
     jge true_end
 
-    mov r12, [r10 + rdi * 4] ; r12 = m1->data[i]
-    cmp r12, [r11 + rdi * 4] ; m1->data[i] == m2->data[i]
+    mov r12d, [r10 + rdi * 4] ; r12d = m1->data[i]
+    cmp r12d, [r11 + rdi * 4] ; m1->data[i] == m2->data[i]
     jne false_end 
 
     inc rdi ; i++
