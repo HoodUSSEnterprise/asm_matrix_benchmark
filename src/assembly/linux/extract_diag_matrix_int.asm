@@ -52,16 +52,16 @@ extract_diag_int:
     ; choose smaller one
     cmp r8, r9      ; m->rows < m->cols ?
     jae r8_bigger
-    mov rdi, r8
+    mov r12, r8
     jmp next
 r8_bigger:
-    mov rdi, r9
+    mov r12, r9
     jmp next
 
 next:
-    ; malloc for res data, int type, len = rdi
-    mov rcx, rdi
-    shl rcx, 2   ; rcx *= 4 (sizeof int)
+    ; malloc for res data, int type, len = r12
+    mov rdi, r12
+    shl rdi, 2   ; rdi *= 4 (sizeof int)
     call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_pint
@@ -75,7 +75,7 @@ next:
     mov r10, [r14]     ; r10 = m->data
 
 loop1:
-    cmp rcx, rdi  ; i < data->len?
+    cmp rcx, r12  ; i < data->len?
     jge end
 
     ; data[i] = m->data[i * m->cols + i]
