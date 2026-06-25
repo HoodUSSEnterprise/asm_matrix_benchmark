@@ -250,9 +250,9 @@ malloc_fail_data:
     jmp cleanup
 
 end:
+    mov dword [r15], esi
     mov rdi, r12
     call free wrt ..plt
-    mov dword [r15], esi
     mov rax, 1
     jmp cleanup
 
