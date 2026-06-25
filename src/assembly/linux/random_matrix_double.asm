@@ -148,7 +148,7 @@ boundary_done:
     xor r14, r14        ; i = 0
 
 fill_loop:
-    cmp r14, rdi        ; i < total elements
+    cmp r14, r12        ; i < total elements
     jge end
 
     call rand wrt ..plt
