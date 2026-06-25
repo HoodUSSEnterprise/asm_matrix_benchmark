@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-24 20:31:53
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24 20:32:06
+; @LastEditTime: 2026-06-25 15:36:21
 ; @FilePath: \asm_matrix_benchmark\src\assembly\linux\replace_matrix_double_by_coord.asm
 ; @Description: replace matrix double by coord nasm code on linux
 ;-------------------------------------------------------------
@@ -26,7 +26,9 @@ replace_matrix_double_by_coord:
     push r13
     push r14
     push r15
-    sub rsp, 32 ; allocate shadow space for puts
+    sub rsp, 40 ; allocate shadow space for puts
+
+    movsd [rsp + 32], xmm15
 
     mov r14, rdi ; r14 = m
     mov r15, rsi ; r15 = pos
@@ -88,7 +90,9 @@ index_out_of_range:
     jmp cleanup
 
 cleanup:
-    add rsp, 32 ; restore stack pointer
+
+    movsd xmm15 [rsp + 32]
+    add rsp, 40 ; restore stack pointer
     ; restore callee_register
     pop r15
     pop r14
