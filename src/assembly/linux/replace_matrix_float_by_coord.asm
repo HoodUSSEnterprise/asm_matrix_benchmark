@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-24 20:41:23
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24 20:42:19
+; @LastEditTime: 2026-06-25 15:37:22
 ; @FilePath: \asm_matrix_benchmark\src\assembly\linux\replace_matrix_float_by_coord.asm
 ; @Description: replace matrix float by coord nasm code on linux
 ;-------------------------------------------------------------
@@ -25,7 +25,9 @@ replace_matrix_float_by_coord:
     push r13
     push r14
     push r15
-    sub rsp, 32
+    sub rsp, 40
+
+    movss [rsp + 36], xmm14
 
     mov r14, rdi
     mov r15, rsi
@@ -78,7 +80,9 @@ index_out_of_range:
     jmp cleanup
 
 cleanup:
-    add rsp, 32
+
+    movss xmm14, [rsp + 36]
+    add rsp, 40
     pop r15
     pop r14
     pop r13
