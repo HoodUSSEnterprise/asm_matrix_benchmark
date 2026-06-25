@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-24 20:38:22
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24 20:43:25
+; @LastEditTime: 2026-06-25 15:13:50
 ; @FilePath: \asm_matrix_benchmark\src\assembly\linux\find_matrix_float.asm
 ; @Description: find elem position in matrix float nasm code on linux
 ;-------------------------------------------------------------
@@ -28,7 +28,11 @@ find_elem_float:
     push r13
     push r14
     push r15
-    sub rsp, 32
+    sub rsp, 48
+
+    movss [rsp + 36], xmm13
+    movss [rsp + 40], xmm14
+    movss [rsp + 44], xmm15
 
     mov r14, rdi
     movss xmm15, xmm0
@@ -110,7 +114,11 @@ end:
     jmp cleanup
 
 cleanup:
-    add rsp, 32
+    
+    movss xmm15, [rsp + 44]
+    movss xmm14, [rsp + 40]
+    movss xmm13, [rsp + 36]
+    add rsp, 48
     pop r15
     pop r14
     pop r13
