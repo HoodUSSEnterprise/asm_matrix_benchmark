@@ -36,7 +36,11 @@ random_matrix_float:
     push r13
     push r14
     push r15
-    sub rsp, 48
+    sub rsp, 56
+
+    movss [rsp + 40], xmm12
+    movss [rsp + 44], xmm13
+    movss [rsp + 48], xmm14
 
     mov r14, rcx ; r14 = rows
     mov r15, rdx ; r15 = cols
@@ -181,7 +185,11 @@ end:
     mov rax, rbx
 
 cleanup:
-    add rsp, 48 ; restore stack pointer
+
+    movss xmm14, [rsp + 48]
+    movss xmm13, [rsp + 44]
+    movss xmm12, [rsp + 40]
+    add rsp, 56 ; restore stack pointer
     ; restore callee_register
     pop r15
     pop r14
