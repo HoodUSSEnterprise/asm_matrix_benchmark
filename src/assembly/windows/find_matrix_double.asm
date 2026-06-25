@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-24
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24
+; @LastEditTime: 2026-06-25 15:38:30
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\find_matrix_double.asm
 ; @Description: find elem position in matrix double nasm code on windows
 ;-------------------------------------------------------------
@@ -28,7 +28,11 @@ find_elem_double:
     push r13
     push r14
     push r15
-    sub rsp, 32 ; allocate shadow space for puts
+    sub rsp, 56 ; allocate shadow space for puts
+
+    movsd [rsp + 32], xmm13
+    movsd [rsp + 40], xmm14
+    movsd [rsp + 48], xmm15
 
     mov r14, rcx    ; r14 = m
     movsd xmm15, xmm1 ; xmm15 = elem
@@ -124,7 +128,11 @@ end:
     jmp cleanup
 
 cleanup:
-    add rsp, 32 ; restore stack pointer
+
+    movsd xmm15, [rsp + 48]
+    movsd xmm14, [rsp + 40]
+    movsd xmm13, [rsp + 32]
+    add rsp, 56 ; restore stack pointer
     ; restore callee_register
     pop r15
     pop r14
