@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-24 20:41:55
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24 20:43:40
+; @LastEditTime: 2026-06-25 15:37:32
 ; @FilePath: \asm_matrix_benchmark\src\assembly\linux\replace_matrix_float_by_value.asm
 ; @Description: replace matrix float by value nasm code on linux
 ;-------------------------------------------------------------
@@ -27,7 +27,9 @@ replace_matrix_float_by_value:
     push r13
     push r14
     push r15
-    sub rsp, 48
+    sub rsp, 56
+
+    movss [rsp + 48], xmm15
 
     mov r14, rdi
     movss xmm15, xmm0
@@ -91,7 +93,8 @@ end:
     mov rax, 1
 
 cleanup:
-    add rsp, 48
+    movss xmm15, [rsp + 48]
+    add rsp, 56
     pop r15
     pop r14
     pop r13
