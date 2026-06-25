@@ -38,12 +38,12 @@ identity_matrix_int:
 
     mov rbx, rax
 
-    ; save the data len in r11
-    mov r11, r14     ; r11 = order
-    imul r11, r14    ; r11 = order * order
+    ; save the data len in r13
+    mov r13, r14     ; r13 = order
+    imul r13, r14    ; r13 = order * order
 
     ; malloc res->data
-    mov rdi, r11
+    mov rdi, r13
     shl rdi, 2 ; rdi *= 4
     call malloc wrt ..plt
     test rax, rax
@@ -53,8 +53,8 @@ identity_matrix_int:
     mov r12, rax ; r12 = malloc res data
     mov rdi, r12 ; rdi = malloc res data
     mov esi, 0   ; memset value = 0
-    mov r8, rdi  ; number sizeof int
-    shl r8, 2    ; sizeof res data
+    mov rdx, r13  ; number sizeof int
+    shl rdx, 2    ; sizeof res data
     call memset wrt ..plt
 
     ; init res param
@@ -112,12 +112,12 @@ diag_matrix_int:
 
     mov rbx, rax
 
-    ; save the data len in r11
-    mov r11, r15     ; r11 = order
-    imul r11, r15    ; r11 = order * order
+    ; save the data len in r13
+    mov r13, r15     ; r13 = order
+    imul r13, r15    ; r13 = order * order
 
     ; malloc res->data
-    mov rdi, r11
+    mov rdi, r13
     shl rdi, 2 ; rdi *= 4
     call malloc wrt ..plt
     test rax, rax
@@ -127,8 +127,8 @@ diag_matrix_int:
     mov r12, rax ; r12 = malloc res data
     mov rdi, r12 ; rdi = malloc res data
     mov esi, 0   ; memset value = 0
-    mov r8, rdi  ; number sizeof int
-    shl r8, 2    ; sizeof res data
+    mov rdx, r13  ; number sizeof int
+    shl rdx, 2    ; sizeof res data
     call memset wrt ..plt
 
     ; init res param
@@ -187,12 +187,12 @@ eye_matrix_int:
 
     mov rbx, rax
 
-    ; save the data len in r11d
-    mov r11d, r14d     ; r11d = rows
-    imul r11d, r15d    ; r11d = rows * cols
+    ; save the data len in r13d
+    mov r13d, r14d     ; r13d = rows
+    imul r13d, r15d    ; r13d = rows * cols
 
     ; malloc res->data
-    mov edi, r11d
+    mov edi, r13d
     shl edi, 2 ; edi *= 4
     call malloc wrt ..plt
     test rax, rax
@@ -202,8 +202,8 @@ eye_matrix_int:
     mov r12, rax ; r12 = malloc res data
     mov rdi, r12 ; rdi = malloc res data
     mov esi, 0   ; memset value = 0
-    mov r8, rdi  ; number sizeof int
-    shl r8, 2    ; sizeof res data
+    mov rdx, r13  ; number sizeof int
+    shl rdx, 2    ; sizeof res data
     call memset wrt ..plt
 
     ; init res param
@@ -268,12 +268,12 @@ zero_matrix_int:
 
     mov rbx, rax
 
-    ; save the data len in r11d
-    mov r11d, r14d     ; r11d = rows
-    imul r11d, r15d    ; r11d = rows * cols
+    ; save the data len in r13d
+    mov r13d, r14d     ; r13d = rows
+    imul r13d, r15d    ; r13d = rows * cols
 
     ; malloc res->data
-    mov edi, r11d
+    mov edi, r13d
     shl edi, 2 ; edi *= 4
     call malloc wrt ..plt
     test rax, rax
@@ -283,8 +283,8 @@ zero_matrix_int:
     mov r12, rax ; r12 = malloc res data
     mov rdi, r12 ; rdi = malloc res data
     mov esi, 0   ; memset value = 0
-    mov r8, rdi  ; number sizeof int
-    shl r8, 2    ; sizeof res data
+    mov rdx, r13  ; number sizeof int
+    shl rdx, 2    ; sizeof res data
     call memset wrt ..plt
 
     ; init res param
