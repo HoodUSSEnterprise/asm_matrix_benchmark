@@ -115,7 +115,8 @@ boundary_done:
     ; total elements = rows * cols
     mov r11, r14
     imul r11, r15 ; r11 = rows * cols
-
+    
+    mov [rsp +40], r11
     ; malloc res->data
     lea rdi, [r11 * 4]
     call malloc wrt ..plt
@@ -137,6 +138,7 @@ boundary_done:
     xor r14, r14        ; i = 0
 
 fill_loop:
+    mov r11, [rsp + 40]
     cmp r14, r11        ; i < total elements
     jge end
 
