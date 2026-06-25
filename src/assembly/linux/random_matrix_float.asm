@@ -29,6 +29,7 @@ section .text
 ; ---------------------------------------------------------------------------------------------
 random_matrix_float:
 
+    ; save callee_register
     push rbx
     push r12
     push r13
@@ -40,16 +41,20 @@ random_matrix_float:
     movss [rsp + 44], xmm13
     movss [rsp + 48], xmm14
 
-    mov r14, rdi
-    mov r15, rsi
-    mov r12, rdx
-    mov r13, rcx
+    mov r14, rdi ; r14 = rows
+    mov r15, rsi ; r15 = cols
+    mov r12, rdx ; r12 = range
+    mov r13, rcx ; r13 = size
 
+    ; check param rows
     test r14, r14
     jz null_ptr
+    ; check param cols
     test r15, r15
     jz null_ptr
 
+    ; determine max_boundary and min_boundary
+    ; store on stack: [rsp + 32] = max, [rsp + 36] = min
     cmp r13, 0
     je case_size_zero
     cmp r13, 1
@@ -67,6 +72,7 @@ case_size_one:
     comiss xmm0, xmm1
     jbe range_le_zero
 
+    ; range[0] > 0
     movss [rsp + 32], xmm0
     mov dword [rsp + 36], 0
     jmp boundary_done
@@ -75,11 +81,13 @@ range_le_zero:
     comiss xmm0, xmm1
     jb range_neg
 
-    mov dword [rsp + 32], 0x41200000
-    mov dword [rsp + 36], 0
+    ; range[0] == 0
+    mov dword [rsp + 32], 0x41200000 ; max = 10.0f
+    mov dword [rsp + 36], 0           ; min = 0.0f
     jmp boundary_done
 
 range_neg:
+    ; range[0] < 0
     mov dword [rsp + 32], 0
     movss [rsp + 36], xmm0
     jmp boundary_done
@@ -90,8 +98,9 @@ case_size_else:
     comiss xmm0, xmm1
     jae first_bigger
 
-    movss [rsp + 32], xmm1
-    movss [rsp + 36], xmm0
+    ; range[0] < range[1]
+    movss [rsp + 32], xmm1 ; max = range[1]
+    movss [rsp + 36], xmm0 ; min = range[0]
     jmp boundary_done
 
 first_bigger:
@@ -99,11 +108,13 @@ first_bigger:
     movss [rsp + 36], xmm1
 
 boundary_done:
+    ; srand((unsigned)time(NULL))
     xor rdi, rdi
     call time wrt ..plt
     mov edi, eax
     call srand wrt ..plt
 
+    ; malloc res struct (24 bytes)
     mov edi, 24
     call malloc wrt ..plt
     test rax, rax
@@ -111,35 +122,39 @@ boundary_done:
 
     mov rbx, rax
 
+    ; total elements = rows * cols
     mov rdi, r14
-    imul rdi, r15
-    mov r12, rdi        ; preserve element count
-    shl rdi, 2          ; rdi = byte size
+    imul rdi, r15 ; rdi = rows * cols
+    mov r12, rdi  ; preserve element count
+    shl rdi, 2    ; rdi = byte size (sizeof(float) = 4)
+    ; malloc res->data
     call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_data
 
-    mov [rbx], rax
-    mov [rbx + 8], r14
-    mov [rbx + 16], r15
+    ; init res fields
+    mov [rbx], rax      ; res->data = new malloc data
+    mov [rbx + 8], r14  ; res->rows = rows
+    mov [rbx + 16], r15 ; res->cols = cols
 
-    mov r15, [rbx]
+    ; fill data with random float values
+    mov r15, [rbx]      ; r15 = res->data
     movss xmm14, [rsp + 32]
     movss xmm13, [rsp + 36]
     subss xmm14, xmm13
     movss xmm12, [rel rand_max]
 
-    xor r14, r14
+    xor r14, r14        ; i = 0
 
 fill_loop:
-    cmp r14, r12
+    cmp r14, r12        ; i < total elements
     jge end
 
     call rand wrt ..plt
-    cvtsi2ss xmm0, eax
-    divss xmm0, xmm12
-    mulss xmm0, xmm14
-    addss xmm0, xmm13
+    cvtsi2ss xmm0, eax  ; xmm0 = (float)rand()
+    divss xmm0, xmm12   ; xmm0 = (float)rand() / RAND_MAX  [0, 1)
+    mulss xmm0, xmm14   ; xmm0 *= (max - min)
+    addss xmm0, xmm13   ; xmm0 += min
 
     movss [r15 + r14 * 4], xmm0
     inc r14
@@ -173,6 +188,7 @@ cleanup:
     movss xmm13, [rsp + 44]
     movss xmm12, [rsp + 40]
     add rsp, 56
+    ; restore callee_register
     pop r15
     pop r14
     pop r13
