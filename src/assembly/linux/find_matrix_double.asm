@@ -128,9 +128,9 @@ end:
 
 cleanup:
     
-    movsd xmm15 [rsp + 48]
-    movsd xmm14 [rsp + 40]
-    movsd xmm13 [rsp + 32]
+    movsd xmm15, [rsp + 48]
+    movsd xmm14, [rsp + 40]
+    movsd xmm13, [rsp + 32]
     add rsp, 56 ; restore stack pointer
     ; restore callee_register
     pop r15
