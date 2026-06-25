@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-24 20:30:24
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24 20:54:34
+; @LastEditTime: 2026-06-25 15:38:11
 ; @FilePath: \asm_matrix_benchmark\src\assembly\linux\scale_matrix_double.asm
 ; @Description: scale matrix double nasm code on linux
 ;-------------------------------------------------------------
@@ -28,7 +28,9 @@ scale_matrix_double:
     push r13
     push r14
     push r15
-    sub rsp, 32 ; allocate shadow space for printf
+    sub rsp, 40 ; allocate shadow space for printf
+
+    movsd [rsp + 32], xmm15
 
     mov r14, rdi ; r14 = m
     movsd xmm15, xmm0 ; xmm15 = scale
@@ -123,7 +125,9 @@ end:
     mov rax, rbx
 
 cleanup:
-    add rsp, 32 ; restore stack pointer
+
+    movsd xmm15 [rsp + 32]
+    add rsp, 40 ; restore stack pointer
     ; restore callee_register
     pop r15
     pop r14
