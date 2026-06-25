@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-24 20:38:22
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-25 14:20:50
+; @LastEditTime: 2026-06-25 15:38:20
 ; @FilePath: \asm_matrix_benchmark\src\assembly\linux\scale_matrix_float.asm
 ; @Description: scale matrix float nasm code on linux
 ;-------------------------------------------------------------
@@ -28,7 +28,9 @@ scale_matrix_float:
     push r13
     push r14
     push r15
-    sub rsp, 32 ; allocate shadow space for printf
+    sub rsp, 40 ; allocate shadow space for printf
+
+    movss [rsp + 36], xmm15
 
     mov r14, rdi ; r14 = m
     movss xmm15, xmm0 ; xmm15 = scale
@@ -122,7 +124,9 @@ end:
     mov rax, rbx
 
 cleanup:
-    add rsp, 32
+
+    movss xmm15, [rsp + 36]
+    add rsp, 40
     pop r15
     pop r14
     pop r13
