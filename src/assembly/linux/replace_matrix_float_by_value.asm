@@ -22,6 +22,7 @@ section .text
 ; bool replace_matrix_float_by_value(MatrixFloat *m, float old_data, float new_data);
 ; rdi = m, xmm0 = old_data, xmm1 = new_data (System V)
 replace_matrix_float_by_value:
+    ; save callee_register
     push rbx
     push r12
     push r13
@@ -35,14 +36,17 @@ replace_matrix_float_by_value:
     movss xmm15, xmm0
     movss [rsp + 24], xmm1     ; new_data at safe stack offset
 
+    ; check m
     test r14, r14
     jz null_ptr
 
     mov r14, [rdi]
 
+    ; check m->data
     test r14, r14
     jz null_ptr
 
+    ; restore r14
     mov r14, rdi
 
     mov rdi, r14
@@ -53,6 +57,7 @@ replace_matrix_float_by_value:
     je no_find
 
     mov rsi, [r14]
+    ; calc index of array
     mov r10, [r14 + 16]
     imul r10, [rsp + 32]
     add r10, [rsp + 40]
@@ -70,6 +75,7 @@ loop_replace:
     jne end
 
 replace_data:
+    ; calc index of array
     mov r10, [r14 + 16]
     imul r10, [rsp + 32]
     add r10, [rsp + 40]
@@ -95,6 +101,7 @@ end:
 cleanup:
     movss xmm15, [rsp + 48]
     add rsp, 56
+    ; restore callee_register
     pop r15
     pop r14
     pop r13
