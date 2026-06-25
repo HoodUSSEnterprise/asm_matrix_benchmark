@@ -222,8 +222,6 @@ MatrixDouble *random_matrix_double(size_t rows, size_t cols, double *range, size
             min_boundary = range[0];
         }
     }
-    // set the random number seed
-    srand((unsigned)time(NULL));
     // malloc new res
     MatrixDouble *res = NULL;
     res = (MatrixDouble *)malloc(sizeof(MatrixDouble));
