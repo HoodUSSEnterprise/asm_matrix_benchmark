@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-24 18:52:55
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24 19:29:03
+; @LastEditTime: 2026-06-25 15:34:58
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\random_matrix_double.asm
 ; @Description:  random matrix double nasm code on windows
 ;-------------------------------------------------------------
@@ -39,7 +39,10 @@ random_matrix_double:
     push r13
     push r14
     push r15
-    sub rsp, 48
+    sub rsp, 64
+
+    movsd [rsp + 48], xmm15
+    movsd [rsp + 56], xmm14
 
     mov r14, rcx ; r14 = rows
     mov r15, rdx ; r15 = cols
@@ -153,7 +156,7 @@ fill_loop:
     call rand
     ; convert to double: scale = (double)rand() / RAND_MAX
     cvtsi2sd xmm0, eax
-    mov rax, 2147483647 ; RAND_MAX = 0x7FFFFFF
+    mov rax, 32767 ; RAND_MAX = 0x7FFF
     cvtsi2sd xmm1, rax
     divsd xmm0, xmm1   ; xmm0 = (double)rand() / RAND_MAX
     mulsd xmm0, xmm14  ; xmm0 *= (max - min)
@@ -187,7 +190,10 @@ end:
     mov rax, rbx
 
 cleanup:
-    add rsp, 48 ; restore stack pointer
+
+    movsd xmm15, [rsp + 48]
+    movsd xmm14, [rsp + 56]
+    add rsp, 64 ; restore stack pointer
     ; restore callee_register
     pop r15
     pop r14
