@@ -23,6 +23,7 @@ section .text
 ; rdi = m, xmm0 = elem, rsi = pos (System V)
 find_elem_float:
 
+    ; save callee_register
     push rbx
     push r12
     push r13
@@ -38,20 +39,30 @@ find_elem_float:
     movss xmm15, xmm0
     mov r13, rsi
 
+    ; check m
     test r14, r14
     jz null_ptr
 
     mov r14, [rdi]
+    ; check m->data
     test r14, r14
     jz null_ptr
 
+    ; restore r14
     mov r14, rdi
 
+    ; check pos, if pos is null, malloc for pos
     test r13, r13
     jz malloc_pos
     jmp init_loop
 
 malloc_pos:
+    ; typedef struct Point
+    ; {
+    ;     size_t x;
+    ;     size_t y;
+    ; } Point;
+    ; sizeof(Point) = 16
     mov rdi, 16
     call malloc wrt ..plt
     test rax, rax
@@ -59,11 +70,12 @@ malloc_pos:
     mov r13, rax
 
 init_loop:
-    xor rdi, rdi
-    mov r8, [r14 + 8]
-    mov r9, [r14 + 16]
+    ; init loop condition
+    xor rdi, rdi ; i = 0
+    mov r8, [r14 + 8] ; m->rows
+    mov r9, [r14 + 16] ; m->cols
     mov r11, [r14]
-    movss xmm14, [rel epsilon]
+    movss xmm14, [rel epsilon] ; xmm14 = 1e-6f
     movd xmm13, [rel abs_mask]
 
 loop1:
@@ -79,10 +91,12 @@ loop1:
         imul r10, rdi
         add r10, rsi
 
-        movss xmm0, [r11 + r10 * 4]
-        subss xmm0, xmm15
-        andps xmm0, xmm13
-        comiss xmm0, xmm14
+        ; compare m->data[i * m->cols + j] with elem using epsilon
+        movss xmm0, [r11 + r10 * 4] ; xmm0 = m->data[i * m->cols + j]
+        subss xmm0, xmm15 ; xmm0 = value - elem
+        ; fabs: clear sign bit
+        andps xmm0, xmm13 ; xmm0 = fabs(value - elem)
+        comiss xmm0, xmm14 ; compare with epsilon
         jb end
         inc rsi
         jmp loop2
@@ -119,6 +133,7 @@ cleanup:
     movss xmm14, [rsp + 40]
     movss xmm13, [rsp + 36]
     add rsp, 48
+    ; restore callee_register
     pop r15
     pop r14
     pop r13
