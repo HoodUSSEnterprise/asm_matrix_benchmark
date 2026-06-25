@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-24 20:38:22
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24 20:41:31
+; @LastEditTime: 2026-06-25 14:20:50
 ; @FilePath: \asm_matrix_benchmark\src\assembly\linux\scale_matrix_float.asm
 ; @Description: scale matrix float nasm code on linux
 ;-------------------------------------------------------------
@@ -22,32 +22,40 @@ section .text
 ; rdi = m, xmm0 = scale (System V)
 
 scale_matrix_float:
+    ; save callee_register
     push rbx
     push r12
     push r13
     push r14
     push r15
-    sub rsp, 32
+    sub rsp, 32 ; allocate shadow space for printf
 
-    mov r14, rdi
-    movss xmm15, xmm0
+    mov r14, rdi ; r14 = m
+    movss xmm15, xmm0 ; xmm15 = scale
 
+    ; check param m
     test r14, r14
     jz null_ptr
 
-    mov r14, [rdi]
+    mov r14, [rdi] ; r14 = m->data
+
+    ; check m->data
     test r14, r14
     jz null_ptr
 
+    ; restore r14
     mov r14, rdi
 
-    mov r8, [r14 + 8]
-    mov r9, [r14 + 16]
+    ; get dimension
+    mov r8, [r14 + 8]  ; m->rows
+    mov r9, [r14 + 16] ; m->cols
 
-    mov rdi, r8
-    imul rdi, r9
-    mov r12, rdi
+    ; save the data len in rdi
+    mov rdi, r8         ; rdi = m1->rows
+    imul rdi, r9        ; rdi = m1->rows * m1->cols
+    mov r12, rdi        ; preserve count in r12
 
+    ; malloc res 24 bytes
     mov rdi, 24
     call malloc wrt ..plt
     test rax, rax
@@ -55,32 +63,37 @@ scale_matrix_float:
 
     mov rbx, rax
 
+    ; malloc res->data
     mov rdi, r12
     shl rdi, 2
     call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_data
 
-    mov [rbx], rax
-    mov r9, [r14 + 8]
-    mov r10, [r14 + 16]
-    mov [rbx + 8], r9
-    mov [rbx + 16], r10
+    mov [rbx], rax      ; res->data = new malloc data
+    mov r9, [r14 + 8]   ; r9 = m->rows
+    mov r10, [r14 + 16] ; r10 = m->cols
+    mov [rbx + 8], r9   ; res->rows = m->rows
+    mov [rbx + 16], r10 ; res->cols = m->cols
 
+    ; scale m
     mov rdi, r12
-    xor rcx, rcx
+    xor rcx, rcx ; i = 0
     mov r13, [rbx]
     mov r9, [r14]
 
 on_loop:
-    cmp rcx, rdi
+    cmp rcx, rdi ; i < rdi 
     jge end
 
+    ; res->data[rcx] = m->data[rcx] * scale
     movss xmm0, [r9 + rcx * 4]
     mulss xmm0, xmm15
+
     movss [r13 + rcx * 4], xmm0
-    inc rcx
+    inc rcx ; i++
     jmp on_loop
+
 
 malloc_fail_struct:
     lea rdi, [rel malloc_failed]
