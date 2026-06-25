@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-24 09:34:52
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24 14:16:04
+; @LastEditTime: 2026-06-25 09:23:29
 ; @FilePath: \asm_matrix_benchmark\src\assembly\linux\random_matrix_int.asm
 ; @Description:random matrix nasm code on linux 
 ;-------------------------------------------------------------
@@ -35,7 +35,7 @@ random_matrix_int:
     push r13
     push r14
     push r15
-    sub rsp, 40
+    sub rsp, 48
 
     mov r14, rdi ; r14 = rows
     mov r15, rsi ; r15 = cols
@@ -50,7 +50,7 @@ random_matrix_int:
     jz null_ptr
 
     ; determine max_boundary and min_boundary
-    ; store on stack: [rsp] = max, [rsp + 4] = min
+    ; store on stack: [rsp + 32] = max, [rsp + 36] = min
     cmp r13, 0
     je case_size_zero
     cmp r13, 1
@@ -58,48 +58,48 @@ random_matrix_int:
     jmp case_size_else
 
 case_size_zero:
-    mov dword [rsp], 10  ; max = 10
-    mov dword [rsp + 4], 0 ; min = 0
+    mov dword [rsp + 32], 10  ; max = 10
+    mov dword [rsp + 36], 0 ; min = 0
     jmp boundary_done
 
 case_size_one:
     mov eax, [r12]      ; eax = range[0]
     test eax, eax
-    jg .range_pos
-    je .range_zero
+    jg range_pos
+    je range_zero
     ; range[0] < 0
-    mov dword [rsp], 0  ; max = 0
-    mov [rsp + 4], eax  ; min = range[0]
+    mov dword [rsp + 32], 0  ; max = 0
+    mov [rsp + 36], eax  ; min = range[0]
     jmp boundary_done
 
-.range_pos:
-    mov [rsp], eax      ; max = range[0]
-    mov dword [rsp + 4], 0 ; min = 0
+range_pos:
+    mov [rsp + 32], eax      ; max = range[0]
+    mov dword [rsp + 36], 0 ; min = 0
     jmp boundary_done
 
-.range_zero:
-    mov dword [rsp], 10 ; max = 10
-    mov dword [rsp + 4], 0 ; min = 0
+range_zero:
+    mov dword [rsp + 32], 10 ; max = 10
+    mov dword [rsp + 36], 0 ; min = 0
     jmp boundary_done
 
 case_size_else:
     mov eax, [r12]      ; eax = range[0]
     mov edx, [r12 + 4]  ; edx = range[1]
     cmp eax, edx
-    jge .first_bigger
+    jge first_bigger
 
     ; range[0] < range[1]
-    mov [rsp], edx      ; max = range[1]
-    mov [rsp + 4], eax  ; min = range[0]
+    mov [rsp + 32], edx      ; max = range[1]
+    mov [rsp + 36], eax  ; min = range[0]
     jmp boundary_done
 
-.first_bigger:
-    mov [rsp], eax      ; max = range[0]
-    mov [rsp + 4], edx  ; min = range[1]
+first_bigger:
+    mov [rsp + 32], eax      ; max = range[0]
+    mov [rsp + 36], edx  ; min = range[1]
 
 boundary_done:
     ; srand((unsigned)time(NULL))
-    xor edi, edi
+    xor rdi, rdi
     call time wrt ..plt
     mov edi, eax
     call srand wrt ..plt
@@ -129,8 +129,8 @@ boundary_done:
 
     ; fill data with random values
     mov r15, [rbx]      ; r15 = res->data
-    mov r12d, [rsp]     ; r12d = max_boundary
-    mov r13d, [rsp + 4] ; r13d = min_boundary
+    mov r12d, [rsp + 32]     ; r12d = max_boundary
+    mov r13d, [rsp + 36] ; r13d = min_boundary
     sub r12d, r13d      ; r12d = max - min
     inc r12d            ; r12d = range_size = max - min + 1
 
@@ -173,7 +173,7 @@ end:
     mov rax, rbx
 
 cleanup:
-    add rsp, 40 ; restore stack pointer
+    add rsp, 48 ; restore stack pointer
     ; restore callee_register
     pop r15
     pop r14
