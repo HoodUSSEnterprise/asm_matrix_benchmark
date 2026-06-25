@@ -127,6 +127,7 @@ cleanup:
 
     movss xmm15, [rsp + 36]
     add rsp, 40
+    ; restore callee_register
     pop r15
     pop r14
     pop r13
