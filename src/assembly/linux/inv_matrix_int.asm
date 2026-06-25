@@ -22,8 +22,6 @@ section .rodata
     invalid_param    db "Invalid param!", 0
     not_square       db "It's not a square", 0
     not_invertible   db "It not invertible matrix", 0
-    fmt db "%lf ", 10, 0
-    fmt1 db "%p ", 10, 0
 
 section .text
 
@@ -396,12 +394,6 @@ extract_inc_i:
 
 free_aug:
     mov r14, rdi
-    lea rdi, [rel fmt1]
-    mov rsi, r14
-    call printf wrt ..plt
-    lea rdi, [rel fmt1]
-    mov rsi, [rbx]
-    call printf wrt ..plt
     ; free aug_matrix->data
     mov rdi, [r15]
     call free wrt ..plt
