@@ -33,6 +33,9 @@ set(LIB_SOURCES_MATRIX_INT
     src/assembly/${PLATFORM_DIR}/int/extract_diag_matrix_int.asm
     src/assembly/${PLATFORM_DIR}/int/extract_row_matrix_int.asm
     src/assembly/${PLATFORM_DIR}/int/find_matrix_int.asm
+    src/assembly/${PLATFORM_DIR}/int/free_leading_minors_int.asm
+    src/assembly/${PLATFORM_DIR}/double/free_matrix_double.asm
+    src/assembly/${PLATFORM_DIR}/int/free_matrix_int.asm
     src/assembly/${PLATFORM_DIR}/int/inv_matrix_int.asm
     src/assembly/${PLATFORM_DIR}/int/leading_minors_int.asm
     src/assembly/${PLATFORM_DIR}/int/lu_matrix_int.asm
@@ -67,6 +70,7 @@ set(LIB_SOURCES_MATRIX_C
     src/C/compare_matrix.c
     src/C/extract_matrix.c
     src/C/find_matrix.c
+    src/C/free_matrix.c
     src/C/inv_matrix.c
     src/C/leading_minors.c
     src/C/lu_matrix.c
