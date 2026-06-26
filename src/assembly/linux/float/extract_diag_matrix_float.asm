@@ -1,11 +1,11 @@
-;-------------------------------------------------------------
+; -------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-24 20:41:23
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24 20:43:02
-; @FilePath: \asm_matrix_benchmark\src\assembly\linux\extract_diag_matrix_float.asm
+; @LastEditTime: 2026-06-26 15:17:16
+; @FilePath: \asm_matrix_benchmark\src\assembly\linux\float\extract_diag_matrix_float.asm
 ; @Description:get diagonal element for matrix float nasm code on linux 
-;-------------------------------------------------------------
+; -------------------------------------------------------------
 
 global extract_diag_float
 
@@ -15,13 +15,14 @@ extern printf
 extern puts
 
 section .rodata
-    invalid_param db "Invalid param!", 10, 0
-    malloc_failed db "Memory allocation failed", 10, 0
+    invalid_param  db  "Invalid param!", 10, 0
+    malloc_failed  db  "Memory allocation failed", 10, 0
 
 section .text
 
 ; float *extract_diag_float(MatrixFloat *m)
 ; rdi = m (System V)
+
 extract_diag_float:
 
     push rbx
@@ -49,13 +50,14 @@ extract_diag_float:
     jae r8_bigger
     mov rdi, r8
     jmp next
+
 r8_bigger:
     mov rdi, r9
     jmp next
 
 next:
-    mov r12, rdi        ; r12 = diag_len (callee-saved)
-    shl rdi, 2          ; rdi = byte size
+    mov r12, rdi                        ; r12 = diag_len (callee-saved)
+    shl rdi, 2                          ; rdi = byte size
     call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_pint
