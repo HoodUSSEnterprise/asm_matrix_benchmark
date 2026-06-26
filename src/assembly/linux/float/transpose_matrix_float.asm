@@ -1,11 +1,11 @@
-;-------------------------------------------------------------
+; -------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-24 20:38:22
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24 20:41:58
-; @FilePath: \asm_matrix_benchmark\src\assembly\linux\transpose_matrix_float.asm
+; @LastEditTime: 2026-06-26 15:18:07
+; @FilePath: \asm_matrix_benchmark\src\assembly\linux\float\transpose_matrix_float.asm
 ; @Description: get transpose matrix float nasm code on linux
-;-------------------------------------------------------------
+; -------------------------------------------------------------
 
 global transpose_matrix_float
 extern malloc
@@ -13,8 +13,8 @@ extern free
 extern printf
 
 section .rodata
-    malloc_failed db "Memory allocation failed", 10, 0
-    invalid_param db "Invalid param!", 10, 0
+    malloc_failed  db  "Memory allocation failed", 10, 0
+    invalid_param  db  "Invalid param!", 10, 0
 
 section .text
 
@@ -72,6 +72,7 @@ loop1:
     cmp rdi, r10
     jge end
     xor rsi, rsi
+
     loop2:
         cmp rsi, r9
         jge inc_rdi
