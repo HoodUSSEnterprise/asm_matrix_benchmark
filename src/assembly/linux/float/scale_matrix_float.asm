@@ -1,11 +1,11 @@
-;-------------------------------------------------------------
+; -------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-24 20:38:22
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-25 15:38:20
-; @FilePath: \asm_matrix_benchmark\src\assembly\linux\scale_matrix_float.asm
+; @LastEditTime: 2026-06-26 15:17:56
+; @FilePath: \asm_matrix_benchmark\src\assembly\linux\float\scale_matrix_float.asm
 ; @Description: scale matrix float nasm code on linux
-;-------------------------------------------------------------
+; -------------------------------------------------------------
 
 global scale_matrix_float
 extern printf
@@ -13,8 +13,8 @@ extern malloc
 extern free
 
 section .rodata
-    malloc_failed db "Memory allocation failed", 10, 0
-    invalid_param db "Invalid param!", 10, 0
+    malloc_failed  db  "Memory allocation failed", 10, 0
+    invalid_param  db  "Invalid param!", 10, 0
 
 section .text
 
@@ -28,18 +28,18 @@ scale_matrix_float:
     push r13
     push r14
     push r15
-    sub rsp, 40 ; allocate shadow space for printf
+    sub rsp, 40                         ; allocate shadow space for printf
 
     movss [rsp + 36], xmm15
 
-    mov r14, rdi ; r14 = m
-    movss xmm15, xmm0 ; xmm15 = scale
+    mov r14, rdi                        ; r14 = m
+    movss xmm15, xmm0                   ; xmm15 = scale
 
     ; check param m
     test r14, r14
     jz null_ptr
 
-    mov r14, [rdi] ; r14 = m->data
+    mov r14, [rdi]                      ; r14 = m->data
 
     ; check m->data
     test r14, r14
@@ -49,13 +49,13 @@ scale_matrix_float:
     mov r14, rdi
 
     ; get dimension
-    mov r8, [r14 + 8]  ; m->rows
-    mov r9, [r14 + 16] ; m->cols
+    mov r8, [r14 + 8]                   ; m->rows
+    mov r9, [r14 + 16]                  ; m->cols
 
     ; save the data len in rdi
-    mov rdi, r8         ; rdi = m1->rows
-    imul rdi, r9        ; rdi = m1->rows * m1->cols
-    mov r12, rdi        ; preserve count in r12
+    mov rdi, r8                         ; rdi = m1->rows
+    imul rdi, r9                        ; rdi = m1->rows * m1->cols
+    mov r12, rdi                        ; preserve count in r12
 
     ; malloc res 24 bytes
     mov rdi, 24
@@ -72,20 +72,20 @@ scale_matrix_float:
     test rax, rax
     jz malloc_fail_data
 
-    mov [rbx], rax      ; res->data = new malloc data
-    mov r9, [r14 + 8]   ; r9 = m->rows
-    mov r10, [r14 + 16] ; r10 = m->cols
-    mov [rbx + 8], r9   ; res->rows = m->rows
-    mov [rbx + 16], r10 ; res->cols = m->cols
+    mov [rbx], rax                      ; res->data = new malloc data
+    mov r9, [r14 + 8]                   ; r9 = m->rows
+    mov r10, [r14 + 16]                 ; r10 = m->cols
+    mov [rbx + 8], r9                   ; res->rows = m->rows
+    mov [rbx + 16], r10                 ; res->cols = m->cols
 
     ; scale m
     mov rdi, r12
-    xor rcx, rcx ; i = 0
+    xor rcx, rcx                        ; i = 0
     mov r13, [rbx]
     mov r9, [r14]
 
 on_loop:
-    cmp rcx, rdi ; i < rdi 
+    cmp rcx, rdi                        ; i < rdi 
     jge end
 
     ; res->data[rcx] = m->data[rcx] * scale
@@ -93,9 +93,8 @@ on_loop:
     mulss xmm0, xmm15
 
     movss [r13 + rcx * 4], xmm0
-    inc rcx ; i++
+    inc rcx                             ; i++
     jmp on_loop
-
 
 malloc_fail_struct:
     lea rdi, [rel malloc_failed]
