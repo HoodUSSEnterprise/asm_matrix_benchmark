@@ -1,11 +1,11 @@
-;-------------------------------------------------------------
+; -------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-24 20:46:01
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24 20:46:19
-; @FilePath: \asm_matrix_benchmark\src\assembly\linux\inv_matrix_float.asm
+; @LastEditTime: 2026-06-26 15:17:30
+; @FilePath: \asm_matrix_benchmark\src\assembly\linux\float\inv_matrix_float.asm
 ; @Description: invertible matrix float nasm code on linux
-;-------------------------------------------------------------
+; -------------------------------------------------------------
 
 global inv_matrix_float
 extern printf
@@ -15,19 +15,20 @@ extern free
 extern rank_matrix_float
 
 section .rodata
-    epsilon          dd 1e-6
-    abs_mask         dd 0x7FFFFFFF
-    one_float        dd 1.0
-    zero_float       dd 0.0
-    malloc_failed    db "Memory allocation failed", 0
-    invalid_param    db "Invalid param!", 0
-    not_square       db "It's not a square", 0
-    not_invertible   db "It not invertible matrix", 0
+    epsilon         dd  1e-6
+    abs_mask        dd  0x7FFFFFFF
+    one_float       dd  1.0
+    zero_float      dd  0.0
+    malloc_failed   db  "Memory allocation failed", 0
+    invalid_param   db  "Invalid param!", 0
+    not_square      db  "It's not a square", 0
+    not_invertible  db  "It not invertible matrix", 0
 
 section .text
 
 ; MatrixFloat *inv_matrix_float(MatrixFloat *m);
 ; rdi = m (System V)
+
 inv_matrix_float:
 
     push rbx
@@ -168,6 +169,7 @@ init_loop_i:
         je set_one
         movss [r11 + rax * 4], xmm0
         jmp init_inc_j
+
     set_one:
         movss [r11 + rax * 4], xmm1
 
@@ -192,7 +194,7 @@ gauss_loop:
     cmp rdx, r10
     jge extract_res
 
-    movd xmm3, [rel abs_mask]   ; reload abs_mask each iteration
+    movd xmm3, [rel abs_mask]           ; reload abs_mask each iteration
 
     mov rdi, rcx
 
