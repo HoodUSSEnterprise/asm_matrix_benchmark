@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-16 19:02:24
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-25 16:57:43
+@LastEditTime: 2026-06-26 15:26:59
 @FilePath: \asm_matrix_benchmark\include\matrix_int_cpp.h
 @Description: matrix C++ head file
 *************************************************************/
@@ -12,8 +12,6 @@
 #include <iostream>
 #include <utility>
 #include <vector>
-
-class MatrixDouble;
 
 class MatrixInt
 {
