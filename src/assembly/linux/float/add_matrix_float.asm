@@ -1,11 +1,11 @@
-;-------------------------------------------------------------
+; -------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-24 20:38:22
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24 20:40:53
-; @FilePath: \asm_matrix_benchmark\src\assembly\linux\add_matrix_float.asm
+; @LastEditTime: 2026-06-26 15:17:03
+; @FilePath: \asm_matrix_benchmark\src\assembly\linux\float\add_matrix_float.asm
 ; @Description:  add matrix float nasm code on linux
-;-------------------------------------------------------------
+; -------------------------------------------------------------
 
 global add_matrix_float
 extern printf
@@ -13,14 +13,15 @@ extern malloc
 extern free
 
 section .rodata
-    malloc_failed db "Memory allocation failed", 10, 0                         ; malloc failed msg
-    invalid_param db "Invalid param!", 10, 0                                   ; invalid param msg
-    dim_mismatch  db "Dimension mismatch! m1(%zu, %zu) vs m2(%zu, %zu)", 10, 0       ; dim mismatch msg
+    malloc_failed  db  "Memory allocation failed", 10, 0                            ; malloc failed msg
+    invalid_param  db  "Invalid param!", 10, 0                                      ; invalid param msg
+    dim_mismatch   db  "Dimension mismatch! m1(%zu, %zu) vs m2(%zu, %zu)", 10, 0    ; dim mismatch msg
 
 section .text
 
 ; MatrixFloat *add_matrix_float(MatrixFloat *m1, MatrixFloat *m2);
 ; rdi = m1, rsi = m2 (System V)
+
 add_matrix_float:
 
     ; save callee_register
@@ -31,16 +32,16 @@ add_matrix_float:
     push r15
     sub rsp, 32
 
-    mov r14, rdi ; r14 = m1
-    mov r15, rsi ; r15 = m2
+    mov r14, rdi                        ; r14 = m1
+    mov r15, rsi                        ; r15 = m2
 
     test r14, r14
     jz null_ptr
     test r15, r15
     jz null_ptr
 
-    mov r14, [rdi] ; r14 = m1->data
-    mov r15, [rsi] ; r15 = m2->data
+    mov r14, [rdi]                      ; r14 = m1->data
+    mov r15, [rsi]                      ; r15 = m2->data
 
     test r14, r14
     jz null_ptr
@@ -50,10 +51,10 @@ add_matrix_float:
     mov r14, rdi
     mov r15, rsi
 
-    mov r8, [r14 + 8]   ; m1->rows
-    mov r9, [r14 + 16]  ; m1->cols
-    mov r10, [r15 + 8]  ; m2->rows
-    mov r11, [r15 + 16] ; m2->cols
+    mov r8, [r14 + 8]                   ; m1->rows
+    mov r9, [r14 + 16]                  ; m1->cols
+    mov r10, [r15 + 8]                  ; m2->rows
+    mov r11, [r15 + 16]                 ; m2->cols
 
     cmp r8, r10
     jne dimension_mismatch
@@ -72,22 +73,22 @@ add_matrix_float:
     mov rbx, rax
 
     mov rdi, r12
-    shl rdi, 2 ; rdi *= 4 (sizeof float)
+    shl rdi, 2                          ; rdi *= 4 (sizeof float)
     call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_data
 
-    mov [rbx], rax      ; res->data = new malloc data
-    mov r9, [r14 + 8]   ; r9 = m1->rows
-    mov r10, [r14 + 16] ; r10 = m1->cols
-    mov [rbx + 8], r9   ; res->rows = m1->rows
-    mov [rbx + 16], r10 ; res->cols = m1->cols
+    mov [rbx], rax                      ; res->data = new malloc data
+    mov r9, [r14 + 8]                   ; r9 = m1->rows
+    mov r10, [r14 + 16]                 ; r10 = m1->cols
+    mov [rbx + 8], r9                   ; res->rows = m1->rows
+    mov [rbx + 16], r10                 ; res->cols = m1->cols
 
     mov rdi, r12
-    xor rcx, rcx ; i = 0
+    xor rcx, rcx                        ; i = 0
     mov r13, [rbx]
-    mov r9, [r14] ; r9 = m1->data
-    mov r10, [r15] ; r10 = m2->data
+    mov r9, [r14]                       ; r9 = m1->data
+    mov r10, [r15]                      ; r10 = m2->data
 
 on_loop:
     cmp rcx, rdi
