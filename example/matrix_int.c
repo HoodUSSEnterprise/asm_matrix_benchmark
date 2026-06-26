@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-15 21:56:03
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-25 09:25:33
+@LastEditTime: 2026-06-26 19:15:01
 @FilePath: \asm_matrix_benchmark\example\matrix_int.c
 @Description:example of matrix int
 *************************************************************/
@@ -27,6 +27,7 @@ int main(void)
     m = sub_matrix_int(&v1, &v3);
     print_matrix_int(v);
     print_matrix_int(m);
+    free_matrix_int(&v);
     puts("----------------------------------------------------------------------------------------");
     puts("---------------------------------------mul matrix---------------------------------------");
     int mul_data[3] = {1, 2, 3};
@@ -53,6 +54,7 @@ int main(void)
     MatrixInt cat_matrix4 = {cat_data2, 3, 2};
     m = cat_matrix_int(&cat_matrix3, &cat_matrix4, 1);
     print_matrix_int(m);
+    free_matrix_int(&m);
     puts("----------------------------------------------------------------------------------------");
     puts("--------------------------------------find matrix---------------------------------------");
     int find_data[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
@@ -127,6 +129,7 @@ int main(void)
     print_matrix_int(&raw_matrix);
     MatrixInt *transpose_matrix = transpose_matrix_int(&raw_matrix);
     print_matrix_int(transpose_matrix);
+    free_matrix_int(&transpose_matrix);
     puts("----------------------------------------------------------------------------------------");
     puts("-------------------------------------special matrix-------------------------------------");
     MatrixInt *identity = identity_matrix_int(6);
@@ -134,10 +137,13 @@ int main(void)
     int diag_data[5] = {1, 2, 3, 4, 5};
     MatrixInt *diag = diag_matrix_int(diag_data, 5);
     print_matrix_int(diag);
+    free_matrix_int(&diag);
     MatrixInt *eye = eye_matrix_int(3, 4);
     print_matrix_int(eye);
+    free_matrix_int(&eye);
     MatrixInt *zero = zero_matrix_int(10, 10);
     print_matrix_int(zero);
+    free_matrix_int(&zero);
     puts("----------------------------------------------------------------------------------------");
     puts("-------------------------------------rank and trace-------------------------------------");
     int rank_data[9] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
@@ -193,6 +199,7 @@ int main(void)
     MatrixInt matrix_orgin = {inv_matrix, 3, 3};
     MatrixDouble *matrix_inv = inv_matrix_int(&matrix_orgin);
     print_matrix_double(matrix_inv);
+    free_matrix_double(&matrix_inv);
     puts("----------------------------------------------------------------------------------------");
     puts("-------------------------------------leading minors-------------------------------------");
     int leading_data[9] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
@@ -205,6 +212,7 @@ int main(void)
             print_matrix_int(&leading_minors->matrix_data[i]);
         }
     }
+    free_leading_minors_int(&leading_minors);
     puts("----------------------------------------------------------------------------------------");
     puts("-------------------------------------lu decomposition-------------------------------------");
     int lu_data[9] = {1, 2, 3, 0, 4, 5, 1, 0, 6};
@@ -215,6 +223,8 @@ int main(void)
         print_matrix_double(lu_res.L);
         print_matrix_double(lu_res.U);
     }
+    free_matrix_double(&lu_res.L);
+    free_matrix_double(&lu_res.U);
     puts("----------------------------------------------------------------------------------------");
     puts("-------------------------------------extract matrix--------------------------------------");
     int extract_data[6] = {1, 2, 3, 4, 5, 6};
@@ -222,25 +232,31 @@ int main(void)
     print_matrix_int(&extract_matrix);
     MatrixInt *extract_row = extract_row_int(&extract_matrix, 0);
     print_matrix_int(extract_row);
+    free_matrix_int(&extract_row);
     MatrixInt *extract_col = extract_col_int(&extract_matrix, 1);
     print_matrix_int(extract_col);
+    free_matrix_int(&extract_col);
     puts("extract diag: ");
     int *extract_diag = extract_diag_int(&extract_matrix);
     for (size_t i = 0; i < 2; i++)
     {
         printf("%d ", extract_diag[i]);
     }
+    free(extract_diag);
     puts("");
     puts("----------------------------------------------------------------------------------------");
     puts("-------------------------------------random matrix---------------------------------------");
     MatrixInt *rand_matrix1 = random_matrix_int(3, 4, NULL, 0);
     print_matrix_int(rand_matrix1);
+    free_matrix_int(&rand_matrix1);
     int rand_range[2] = {5, 15};
     MatrixInt *rand_matrix2 = random_matrix_int(2, 5, rand_range, 2);
     print_matrix_int(rand_matrix2);
+    free_matrix_int(&rand_matrix2);
     int rand_range2[2] = {20, 10};
     MatrixInt *rand_matrix3 = random_matrix_int(4, 3, rand_range2, 2);
     print_matrix_int(rand_matrix3);
+    free_matrix_int(&rand_matrix3);
     puts("----------------------------------------------------------------------------------------");
     return 0;
 }
