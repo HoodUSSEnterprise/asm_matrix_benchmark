@@ -1,11 +1,11 @@
-;-------------------------------------------------------------
+; -------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-24 21:02:06
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24 21:02:17
-; @FilePath: \asm_matrix_benchmark\src\assembly\linux\extract_col_matrix_int.asm
+; @LastEditTime: 2026-06-26 15:19:35
+; @FilePath: \asm_matrix_benchmark\src\assembly\linux\int\extract_col_matrix_int.asm
 ; @Description: extract col matrix int nasm code on linux
-;-------------------------------------------------------------
+; -------------------------------------------------------------
 
 global extract_col_int
 
@@ -14,13 +14,14 @@ extern free
 extern printf
 
 section .rodata
-    invalid_param db "Invalid param!", 10, 0
-    malloc_failed db "Memory allocation failed", 10, 0
+    invalid_param  db  "Invalid param!", 10, 0
+    malloc_failed  db  "Memory allocation failed", 10, 0
 
 section .text
 
 ; MatrixInt *extract_col_int(MatrixInt *m, size_t index);
 ; rdi = m, rsi = index (System V)
+
 extract_col_int:
 
     ; save callee_register
@@ -31,8 +32,8 @@ extract_col_int:
     push r15
     sub rsp, 32
 
-    mov r14, rdi ; r14 = m
-    mov r15, rsi ; r15 = index
+    mov r14, rdi                        ; r14 = m
+    mov r15, rsi                        ; r15 = index
 
     ; check m
     test r14, r14
@@ -62,35 +63,35 @@ extract_col_int:
 
     ; malloc res->data
     mov rdi, [r14 + 8]
-    shl rdi, 2 ; rdi *= 4 (sizeof int)
+    shl rdi, 2                          ; rdi *= 4 (sizeof int)
     call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_data
 
-    mov [rbx], rax      ; res->data = new malloc data
-    mov r10, [r14 + 8]  ; r10 = m->rows
-    mov [rbx + 8], r10  ; res->rows = m->rows
-    mov qword [rbx + 16], 1   ; res->cols = 1
+    mov [rbx], rax                      ; res->data = new malloc data
+    mov r10, [r14 + 8]                  ; r10 = m->rows
+    mov [rbx + 8], r10                  ; res->rows = m->rows
+    mov qword[rbx + 16], 1              ; res->cols = 1
 
     ; init loop
-    xor rsi, rsi ; i = 0
-    mov rdi, [r14 + 8] ; m->rows
-    mov r12, [rbx]     ; r12 = res->data
-    mov r10, [r14 + 16]; m->cols
-    mov r13, [r14]     ; r13 = m->data
+    xor rsi, rsi                        ; i = 0
+    mov rdi, [r14 + 8]                  ; m->rows
+    mov r12, [rbx]                      ; r12 = res->data
+    mov r10, [r14 + 16]                 ; m->cols
+    mov r13, [r14]                      ; r13 = m->data
 
 loop1:
-    cmp rsi, rdi ; i < m->rows
+    cmp rsi, rdi                        ; i < m->rows
     jge end
 
-    mov r8, rsi ; r8 = i
-    imul r8, r10 ; r8 *= m->cols
-    add r8, r15  ; r8 += index
+    mov r8, rsi                         ; r8 = i
+    imul r8, r10                        ; r8 *= m->cols
+    add r8, r15                         ; r8 += index
 
-    mov r9d, [r13 + r8 * 4]  ; r9d = m->data[i * m->cols + index]
-    mov [r12 + rsi * 4], r9d ; res->data[i] = m->data[i * m->cols + index]
+    mov r9d, [r13 + r8 * 4]             ; r9d = m->data[i * m->cols + index]
+    mov [r12 + rsi * 4], r9d            ; res->data[i] = m->data[i * m->cols + index]
 
-    inc rsi ; i++
+    inc rsi                             ; i++
     jmp loop1
 
 end:
