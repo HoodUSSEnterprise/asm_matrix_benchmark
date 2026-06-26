@@ -1,11 +1,11 @@
-;-------------------------------------------------------------
+; -------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-22 12:45:34
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-23 16:52:53
-; @FilePath: \asm_matrix_benchmark\src\assembly\windows\lu_matrix_int.asm
+; @LastEditTime: 2026-06-26 15:22:47
+; @FilePath: \asm_matrix_benchmark\src\assembly\windows\int\lu_matrix_int.asm
 ; @Description: lu decomposition nasm code on windows 
-;-------------------------------------------------------------
+; -------------------------------------------------------------
 
 global LU_Decomposition_int
 extern printf
@@ -16,18 +16,19 @@ extern get_leading_minors_int
 extern rank_matrix_int
 
 section .rodata
-    zero             dq 0.0
-    one              dq 1.0
-    malloc_failed    db "Memory allocation failed", 0
-    invalid_param    db "Invalid param!", 0
-    not_square       db "It's not a square", 0
-    wrong_lm         db "function get_leading_minors_int has a wrong value", 0
-    cant_lu          db "This matrix can't lu decomposition", 0
+    zero           dq  0.0
+    one            dq  1.0
+    malloc_failed  db  "Memory allocation failed", 0
+    invalid_param  db  "Invalid param!", 0
+    not_square     db  "It's not a square", 0
+    wrong_lm       db  "function get_leading_minors_int has a wrong value", 0
+    cant_lu        db  "This matrix can't lu decomposition", 0
 
 section .text
 
 ; bool LU_Decomposition_int(MatrixInt *m, LU_Result *res);
 ; rcx = m, rdx = res
+
 LU_Decomposition_int:
 
     ; save callee_register
@@ -38,16 +39,16 @@ LU_Decomposition_int:
     push r13
     push r14
     push r15
-    sub rsp, 32 ; allocate shadow space
+    sub rsp, 32                         ; allocate shadow space
 
-    mov r14, rcx ; r14 = m
-    mov rbx, rdx ; rbx = res
+    mov r14, rcx                        ; r14 = m
+    mov rbx, rdx                        ; rbx = res
 
     ; check param m
     test r14, r14
     jz null_ptr
 
-    mov r14, [rcx] ; r14 = m->data
+    mov r14, [rcx]                      ; r14 = m->data
 
     ; check m->data
     test r14, r14
@@ -57,10 +58,10 @@ LU_Decomposition_int:
     mov r14, rcx
 
     ; check dimension (square matrix)
-    mov r8, [r14 + 8]   ; r8 = m->rows
-    mov r9, [r14 + 16]  ; r9 = m->cols
+    mov r8, [r14 + 8]                   ; r8 = m->rows
+    mov r9, [r14 + 16]                  ; r9 = m->cols
 
-    cmp r8, r9 ; m->rows == m->cols?
+    cmp r8, r9                          ; m->rows == m->cols?
     jne not_a_square
 
     ; ========== get leading minors ==========
@@ -69,41 +70,41 @@ LU_Decomposition_int:
     test rax, rax
     jz wrong_leading_minors
 
-    mov r15, rax ; r15 = leading_minors
+    mov r15, rax                        ; r15 = leading_minors
 
     ; reload r8 after call
-    mov r8, [r14 + 8] ; r8 = m->rows
+    mov r8, [r14 + 8]                   ; r8 = m->rows
 
     ; check each leading minor rank == order
-    xor r12, r12 ; i = 0
+    xor r12, r12                        ; i = 0
 
 check_lm_loop:
-    cmp r12, [r15 + 8] ; i < leading_minors->len?
+    cmp r12, [r15 + 8]                  ; i < leading_minors->len?
     jae check_lm_done
 
     ; &leading_minors->matrix_data[i]
-    mov rax, [r15]  ; rax = matrix_data array pointer
-    mov rcx, r12    ; rcx = i (for Windows calling convention)
-    imul rcx, 24   ; rcx = i * sizeof(MatrixInt)
-    add rcx, rax   ; rcx = &matrix_data[i]
+    mov rax, [r15]                      ; rax = matrix_data array pointer
+    mov rcx, r12                        ; rcx = i (for Windows calling convention)
+    imul rcx, 24                        ; rcx = i * sizeof(MatrixInt)
+    add rcx, rax                        ; rcx = &matrix_data[i]
 
-    lea rdx, [rsp + 24] ; rdx = &rank (local var)
+    lea rdx, [rsp + 24]                 ; rdx = &rank (local var)
     call rank_matrix_int
     test rax, rax
     jz check_lm_fail
 
-    movsxd rax, dword [rsp + 24] ; rax = rank
-    lea rdx, [r12 + 1]  ; rdx = i + 1 (r12 preserved across call)
-    cmp rax, rdx        ; rank == i + 1?
+    movsxd rax, dword[rsp + 24]         ; rax = rank
+    lea rdx, [r12 + 1]                  ; rdx = i + 1 (r12 preserved across call)
+    cmp rax, rdx                        ; rank == i + 1?
     jne check_lm_fail
 
-    inc r12 ; i++
+    inc r12                             ; i++
     jmp check_lm_loop
 
 check_lm_done:
     ; reload r8, r9 after calls
-    mov r8, [r14 + 8]   ; r8 = m->rows
-    mov r9, [r14 + 16]  ; r9 = m->cols
+    mov r8, [r14 + 8]                   ; r8 = m->rows
+    mov r9, [r14 + 16]                  ; r9 = m->cols
 
     ; ========== allocate L (MatrixDouble) ==========
     mov rcx, 24
@@ -111,30 +112,30 @@ check_lm_done:
     test rax, rax
     jz malloc_fail_L
 
-    mov r12, rax ; r12 = L
+    mov r12, rax                        ; r12 = L
 
     ; reload r8, r9 after malloc call
-    mov r8, [r14 + 8]   ; r8 = m->rows
-    mov r9, [r14 + 16]  ; r9 = m->cols
+    mov r8, [r14 + 8]                   ; r8 = m->rows
+    mov r9, [r14 + 16]                  ; r9 = m->cols
 
-    mov [r12 + 8], r8   ; L->rows = m->rows
-    mov [r12 + 16], r9  ; L->cols = m->cols
+    mov [r12 + 8], r8                   ; L->rows = m->rows
+    mov [r12 + 16], r9                  ; L->cols = m->cols
 
     ; ========== allocate L->data ==========
-    mov rax, r8         ; rax = m->rows
-    imul rax, r9        ; rax = m->rows * m->cols
-    mov r13, rax        ; r13 = element count
-    shl rax, 3          ; rax *= 8
+    mov rax, r8                         ; rax = m->rows
+    imul rax, r9                        ; rax = m->rows * m->cols
+    mov r13, rax                        ; r13 = element count
+    shl rax, 3                          ; rax *= 8
     mov rcx, rax
     call malloc
     test rax, rax
     jz malloc_fail_Ldata
 
-    mov [r12], rax      ; L->data = new malloc data
+    mov [r12], rax                      ; L->data = new malloc data
 
     ; reload r8, r9 after malloc call
-    mov r8, [r14 + 8]   ; r8 = m->rows
-    mov r9, [r14 + 16]  ; r9 = m->cols
+    mov r8, [r14 + 8]                   ; r8 = m->rows
+    mov r9, [r14 + 16]                  ; r9 = m->cols
 
     ; ========== allocate U (MatrixDouble) ==========
     mov rcx, 24
@@ -142,54 +143,54 @@ check_lm_done:
     test rax, rax
     jz malloc_fail_U
 
-    mov r13, rax ; r13 = U
+    mov r13, rax                        ; r13 = U
 
     ; reload r8, r9 after malloc call
-    mov r8, [r14 + 8]   ; r8 = m->rows
-    mov r9, [r14 + 16]  ; r9 = m->cols
+    mov r8, [r14 + 8]                   ; r8 = m->rows
+    mov r9, [r14 + 16]                  ; r9 = m->cols
 
-    mov [r13 + 8], r8   ; U->rows = m->rows
-    mov [r13 + 16], r9  ; U->cols = m->cols
+    mov [r13 + 8], r8                   ; U->rows = m->rows
+    mov [r13 + 16], r9                  ; U->cols = m->cols
 
     ; ========== allocate U->data ==========
-    mov rax, r8         ; rax = m->rows
-    imul rax, r9        ; rax = m->rows * m->cols
-    shl rax, 3          ; rax *= 8
+    mov rax, r8                         ; rax = m->rows
+    imul rax, r9                        ; rax = m->rows * m->cols
+    shl rax, 3                          ; rax *= 8
     mov rcx, rax
     call malloc
     test rax, rax
     jz malloc_fail_Udata
 
-    mov [r13], rax      ; U->data = new malloc data
+    mov [r13], rax                      ; U->data = new malloc data
 
     ; reload r8, r9 after malloc call
-    mov r8, [r14 + 8]   ; r8 = m->rows
-    mov r9, [r14 + 16]  ; r9 = m->cols
+    mov r8, [r14 + 8]                   ; r8 = m->rows
+    mov r9, [r14 + 16]                  ; r9 = m->cols
 
     ; ========== allocate LU_Result if res is NULL ==========
-    mov qword [rsp + 24], 0 ; mark: did not allocate res
+    mov qword[rsp + 24], 0              ; mark: did not allocate res
 
     test rbx, rbx
     jnz alloc_done
 
-    mov rcx, 16 ; sizeof(LU_Result)
+    mov rcx, 16                         ; sizeof(LU_Result)
     call malloc
     test rax, rax
     jz malloc_fail_res
 
-    mov rbx, rax ; rbx = newly allocated res
-    mov qword [rsp + 24], 1 ; mark: allocated res
+    mov rbx, rax                        ; rbx = newly allocated res
+    mov qword[rsp + 24], 1              ; mark: allocated res
 
     ; reload r8, r9 after malloc call
-    mov r8, [r14 + 8]   ; r8 = m->rows
-    mov r9, [r14 + 16]  ; r9 = m->cols
+    mov r8, [r14 + 8]                   ; r8 = m->rows
+    mov r9, [r14 + 16]                  ; r9 = m->cols
 
 alloc_done:
 
     ; ========== load pointers for computation ==========
-    mov r9, [r14]   ; r9 = m->data (int*)
-    mov r10, [r12]  ; r10 = L->data (double*)
-    mov r11, [r13]  ; r11 = U->data (double*)
+    mov r9, [r14]                       ; r9 = m->data (int*)
+    mov r10, [r12]                      ; r10 = L->data (double*)
+    mov r11, [r13]                      ; r11 = U->data (double*)
     ; r8 = n (= m->rows = m->cols)
     ; The specific process of LU decomposition is as follows:
     ; 
@@ -218,31 +219,33 @@ alloc_done:
     ; From matrix multiplication, we obtain:
     ; init L matrix upper triangle
     ; ========== init L: upper triangle = 0 ==========
-    xor rdi, rdi ; i = 0
+    xor rdi, rdi                        ; i = 0
 
 init_L_i:
-    cmp rdi, r8 ; i < n?
+    cmp rdi, r8                         ; i < n?
     jge init_L_done
 
-    xor rsi, rsi ; j = 0
+    xor rsi, rsi                        ; j = 0
 
     init_L_j:
-        cmp rsi, r8 ; j < n?
+        cmp rsi, r8                     ; j < n?
         jge init_L_i_inc
 
         mov rax, rdi
         imul rax, r8
         add rax, rsi
 
-        cmp rsi, rdi ; i == j?
+        cmp rsi, rdi                    ; i == j?
         je L_set_one
         ; L->data[i * n + j] = 0.0
         movsd xmm0, [rel zero]
         movsd [r10 + rax * 8], xmm0
         jmp next
+
     L_set_one:
         movsd xmm0, [rel one]
         movsd [r10 + rax * 8], xmm0
+
     next:
         inc rsi
         jmp init_L_j
@@ -254,31 +257,31 @@ init_L_i_inc:
 init_L_done:
 
     ; ========== init U: first row = m[0][*] as double ==========
-    xor rsi, rsi ; j = 0
+    xor rsi, rsi                        ; j = 0
 
 init_U_first_row:
-    cmp rsi, r8 ; j < n?
+    cmp rsi, r8                         ; j < n?
     jge init_U_lower
 
-    movsxd rax, [r9 + rsi * 4] ; m->data[0 * n + j]
+    movsxd rax, [r9 + rsi * 4]          ; m->data[0 * n + j]
     cvtsi2sd xmm0, rax
-    movsd [r11 + rsi * 8], xmm0 ; U->data[0 * n + j]
+    movsd [r11 + rsi * 8], xmm0         ; U->data[0 * n + j]
 
     inc rsi
     jmp init_U_first_row
 
     ; ========== init U: lower triangle = 0 ==========
 init_U_lower:
-    xor rdi, rdi ; i = 0
+    xor rdi, rdi                        ; i = 0
 
 init_U_lower_i:
-    cmp rdi, r8 ; i < n?
+    cmp rdi, r8                         ; i < n?
     jge init_U_done
 
-    xor rsi, rsi ; j = 0
+    xor rsi, rsi                        ; j = 0
 
     init_U_lower_j:
-        cmp rsi, rdi ; j < i?
+        cmp rsi, rdi                    ; j < i?
         jge init_U_lower_i_inc
 
         ; U->data[i * n + j] = 0.0
@@ -298,24 +301,24 @@ init_U_lower_i_inc:
 init_U_done:
 
     ; ========== compute l_i0 = a_i0 / u_00 for i = 1..n-1 ==========
-    movsd xmm1, [r11] ; xmm1 = U->data[0] = u_00
+    movsd xmm1, [r11]                   ; xmm1 = U->data[0] = u_00
 
-    mov rdi, 1 ; i = 1
+    mov rdi, 1                          ; i = 1
 
 compute_l_i0:
-    cmp rdi, r8 ; i < n?
+    cmp rdi, r8                         ; i < n?
     jge compute_l_done
 
     ; load m->data[i * n + 0] as double
     mov rax, rdi
-    imul rax, r8   ; rax = i * n
-    movsxd rax, [r9 + rax * 4] ; m->data[i * n] sign-extended
+    imul rax, r8                        ; rax = i * n
+    movsxd rax, [r9 + rax * 4]          ; m->data[i * n] sign-extended
     cvtsi2sd xmm0, rax
-    divsd xmm0, xmm1 ; xmm0 = m[i][0] / u_00
+    divsd xmm0, xmm1                    ; xmm0 = m[i][0] / u_00
 
     ; store L->data[i * n + 0]
     mov rax, rdi
-    imul rax, r8   ; rax = i * n
+    imul rax, r8                        ; rax = i * n
     movsd [r10 + rax * 8], xmm0
 
     inc rdi
@@ -330,25 +333,25 @@ compute_l_done:
     ;     for j = i+1 to n-1:
     ;         L[j][i] = (m[j][i] - Σ L[j][k] * U[k][i]) / U[i][i], k=0..j-1
 
-    mov rdi, 1 ; i = 1
+    mov rdi, 1                          ; i = 1
 
 doolittle_loop_i:
-    cmp rdi, r8 ; i < n?
+    cmp rdi, r8                         ; i < n?
     jge doolittle_done
 
     ; === sub-loop 1: U[i][j] for j = i..n-1 ===
-    mov rsi, rdi ; j = i
+    mov rsi, rdi                        ; j = i
 
     doolittle_u_j:
-        cmp rsi, r8 ; j < n?
+        cmp rsi, r8                     ; j < n?
         jge doolittle_l_start
 
         ; sum = Σ L[i][k] * U[k][j] for k = 0..j-1
-        xorpd xmm4, xmm4 ; sum = 0.0
-        xor rcx, rcx ; k = 0
+        xorpd xmm4, xmm4                ; sum = 0.0
+        xor rcx, rcx                    ; k = 0
 
         doolittle_u_sum:
-            cmp rcx, rdi ; k < i?
+            cmp rcx, rdi                ; k < i?
             jge doolittle_u_store
 
             ; L[i][k]
@@ -381,23 +384,23 @@ doolittle_loop_i:
         add rax, rsi
         movsd [r11 + rax * 8], xmm0
 
-        inc rsi ; j++
+        inc rsi                         ; j++
         jmp doolittle_u_j
 
     ; === sub-loop 2: L[j][i] for j = i+1..n-1 ===
     doolittle_l_start:
-        lea rsi, [rdi + 1] ; j = i + 1
+        lea rsi, [rdi + 1]              ; j = i + 1
 
     doolittle_l_j:
-        cmp rsi, r8 ; j < n?
+        cmp rsi, r8                     ; j < n?
         jge doolittle_i_inc
 
         ; sum = Σ L[j][k] * U[k][i] for k = 0..j-1
-        xorpd xmm4, xmm4 ; sum = 0.0
-        xor rcx, rcx ; k = 0
+        xorpd xmm4, xmm4                ; sum = 0.0
+        xor rcx, rcx                    ; k = 0
 
     doolittle_l_sum:
-        cmp rcx, rsi ; k < j?
+        cmp rcx, rsi                    ; k < j?
         jge doolittle_l_store
 
         ; L[j][k]
@@ -437,29 +440,29 @@ doolittle_loop_i:
         add rax, rdi
         movsd [r10 + rax * 8], xmm0
 
-        inc rsi ; j++
+        inc rsi                         ; j++
         jmp doolittle_l_j
 
 doolittle_i_inc:
-    inc rdi ; i++
+    inc rdi                             ; i++
     jmp doolittle_loop_i
 
 doolittle_done:
 
     ; ========== store L and U in res ==========
-    mov [rbx], r12     ; res->L = L
-    mov [rbx + 8], r13 ; res->U = U
+    mov [rbx], r12                      ; res->L = L
+    mov [rbx + 8], r13                  ; res->U = U
     ; ========== free leading_minors ==========
-    xor rcx, rcx ; i = 0
+    xor rcx, rcx                        ; i = 0
 
 free_lm_data:
-    cmp rcx, [r15 + 8] ; i < leading_minors->len?
+    cmp rcx, [r15 + 8]                  ; i < leading_minors->len?
     jae free_lm_array
 
     mov rax, rcx
-    imul rax, 24 ; rax = i * sizeof(MatrixInt)
-    mov rdi, [r15]       ; rdi = leading_minors->matrix_data
-    mov rdi, [rdi + rax] ; rdi = matrix_data[i].data
+    imul rax, 24                        ; rax = i * sizeof(MatrixInt)
+    mov rdi, [r15]                      ; rdi = leading_minors->matrix_data
+    mov rdi, [rdi + rax]                ; rdi = matrix_data[i].data
     test rdi, rdi
     jz free_lm_next
     mov rcx, rdi
@@ -470,19 +473,19 @@ free_lm_next:
     jmp free_lm_data
 
 free_lm_array:
-    mov rcx, [r15] ; rcx = matrix_data array
+    mov rcx, [r15]                      ; rcx = matrix_data array
     call free
-    mov rcx, r15  ; rcx = leading_minors struct
+    mov rcx, r15                        ; rcx = leading_minors struct
     call free
 
-    mov rax, 1 ; return true
+    mov rax, 1                          ; return true
     jmp cleanup
 
 ; ========== error handlers ==========
 null_ptr:
     lea rcx, [rel invalid_param]
     call puts
-    xor eax, eax ; return false
+    xor eax, eax                        ; return false
     jmp cleanup
 
 not_a_square:
@@ -506,13 +509,13 @@ free_lm_and_fail:
     xor rcx, rcx
 
 free_lm_fail_data:
-    cmp rcx, [r15 + 8] ; i < leading_minors->len?
+    cmp rcx, [r15 + 8]                  ; i < leading_minors->len?
     jae free_lm_fail_array
 
     mov rax, rcx
     imul rax, 24
-    mov rdi, [r15]       ; rdi = leading_minors->matrix_data
-    mov rdi, [rdi + rax] ; rdi = matrix_data[i].data
+    mov rdi, [r15]                      ; rdi = leading_minors->matrix_data
+    mov rdi, [rdi + rax]                ; rdi = matrix_data[i].data
     test rdi, rdi
     jz free_lm_fail_next
     mov rcx, rdi
@@ -527,7 +530,7 @@ free_lm_fail_array:
     call free
     mov rcx, r15
     call free
-    xor eax, eax ; return false
+    xor eax, eax                        ; return false
     jmp cleanup
 
 malloc_fail_L:
@@ -539,44 +542,44 @@ malloc_fail_Ldata:
     lea rcx, [rel malloc_failed]
     call puts
     mov rcx, r12
-    call free ; free L struct
+    call free                           ; free L struct
     jmp free_lm_and_fail
 
 malloc_fail_U:
     lea rcx, [rel malloc_failed]
     call puts
     mov rcx, [r12]
-    call free ; free L->data
+    call free                           ; free L->data
     mov rcx, r12
-    call free ; free L struct
+    call free                           ; free L struct
     jmp free_lm_and_fail
 
 malloc_fail_Udata:
     lea rcx, [rel malloc_failed]
     call puts
     mov rcx, [r12]
-    call free ; free L->data
+    call free                           ; free L->data
     mov rcx, r12
-    call free ; free L struct
+    call free                           ; free L struct
     mov rcx, r13
-    call free ; free U struct
+    call free                           ; free U struct
     jmp free_lm_and_fail
 
 malloc_fail_res:
     lea rcx, [rel malloc_failed]
     call puts
     mov rcx, [r12]
-    call free ; free L->data
+    call free                           ; free L->data
     mov rcx, r12
-    call free ; free L struct
+    call free                           ; free L struct
     mov rcx, [r13]
-    call free ; free U->data
+    call free                           ; free U->data
     mov rcx, r13
-    call free ; free U struct
+    call free                           ; free U struct
     jmp free_lm_and_fail
 
 cleanup:
-    add rsp, 32 ; restore stack pointer
+    add rsp, 32                         ; restore stack pointer
     ; restore callee_register
     pop r15
     pop r14
