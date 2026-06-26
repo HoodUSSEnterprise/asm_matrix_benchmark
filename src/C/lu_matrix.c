@@ -78,6 +78,8 @@ bool LU_Decomposition_int(MatrixInt *m, LU_Result *res)
         fprintf(stderr, "Memory allocation failed\n");
         return false;
     }
+    //init L data with 0
+    memset(L->data, 0, sizeof(double) * L->rows * L->cols);
     // malloc new U
     MatrixDouble *U = NULL;
     U = (MatrixDouble *)malloc(sizeof(MatrixDouble));
@@ -96,6 +98,8 @@ bool LU_Decomposition_int(MatrixInt *m, LU_Result *res)
         fprintf(stderr, "Memory allocation failed\n");
         return false;
     }
+    //init U data with 0
+    memset(U->data, 0, sizeof(double) * U->rows * U->cols);
     // malloc new res
     if (res == NULL)
     {
