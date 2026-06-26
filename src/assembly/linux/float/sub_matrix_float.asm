@@ -1,11 +1,11 @@
-;-------------------------------------------------------------
+; -------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-24 20:38:22
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24 20:41:40
-; @FilePath: \asm_matrix_benchmark\src\assembly\linux\sub_matrix_float.asm
+; @LastEditTime: 2026-06-26 15:18:02
+; @FilePath: \asm_matrix_benchmark\src\assembly\linux\float\sub_matrix_float.asm
 ; @Description: sub matrix float nasm code on linux
-;-------------------------------------------------------------
+; -------------------------------------------------------------
 
 global sub_matrix_float
 extern printf
@@ -13,14 +13,15 @@ extern malloc
 extern free
 
 section .rodata
-    malloc_failed db "Memory allocation failed", 10, 0
-    invalid_param db "Invalid param!", 10, 0
-    dim_mismatch  db "Dimension mismatch! m1(%zu, %zu) vs m2(%zu, %zu)", 10, 0
+    malloc_failed  db  "Memory allocation failed", 10, 0
+    invalid_param  db  "Invalid param!", 10, 0
+    dim_mismatch   db  "Dimension mismatch! m1(%zu, %zu) vs m2(%zu, %zu)", 10, 0
 
 section .text
 
 ; MatrixFloat *sub_matrix_float(MatrixFloat *m1, MatrixFloat *m2);
 ; rdi = m1, rsi = m2 (System V)
+
 sub_matrix_float:
 
     push rbx
