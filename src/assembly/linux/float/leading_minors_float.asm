@@ -1,11 +1,11 @@
-;-------------------------------------------------------------
+; -------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-24 20:43:50
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24 20:44:05
-; @FilePath: \asm_matrix_benchmark\src\assembly\linux\leading_minors_float.asm
+; @LastEditTime: 2026-06-26 15:17:33
+; @FilePath: \asm_matrix_benchmark\src\assembly\linux\float\leading_minors_float.asm
 ; @Description: get leading principal minor float nasm code on linux
-;-------------------------------------------------------------
+; -------------------------------------------------------------
 
 global get_leading_minors_float
 extern printf
@@ -14,14 +14,15 @@ extern malloc
 extern free
 
 section .rodata
-    malloc_failed db "Memory allocation failed", 0
-    invalid_param db "Invalid param!", 0
-    not_square    db "It's not a square", 0
+    malloc_failed  db  "Memory allocation failed", 0
+    invalid_param  db  "Invalid param!", 0
+    not_square     db  "It's not a square", 0
 
 section .text
 
 ; Leading_Minors_Float *get_leading_minors_float(MatrixFloat *m);
 ; rdi = m (System V)
+
 get_leading_minors_float:
 
     push rbx
@@ -81,7 +82,7 @@ get_leading_minors_float:
 
     ; ========== loop order = 1..m->rows ==========
 
-    mov qword [rsp + 24], 0 ; successful_count = 0
+    mov qword[rsp + 24], 0              ; successful_count = 0
     mov rbx, 1
 
 order_loop:
@@ -110,10 +111,11 @@ order_loop:
     mov r11, [rsp + 32]
     mov [r11], rax
 
-    mov qword [rsp + 24], rbx ; successful_count = order
+    mov qword[rsp + 24], rbx            ; successful_count = order
 
     xor rcx, rcx
     mov rdx, [r11]
+
     copy_loop_i:
         cmp rcx, rbx
         jge copy_done
@@ -174,7 +176,7 @@ malloc_fail_subdata:
     xor rsi, rsi
 
     free_subdata_loop:
-        cmp rsi, [rsp + 24] ; i < successful_count?
+        cmp rsi, [rsp + 24]             ; i < successful_count?
         jae free_subdata_done
 
         mov rax, rsi
