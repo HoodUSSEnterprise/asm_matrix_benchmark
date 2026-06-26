@@ -1,11 +1,11 @@
-;-------------------------------------------------------------
+; -------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-24 21:02:07
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24 21:02:25
-; @FilePath: \asm_matrix_benchmark\src\assembly\linux\extract_diag_matrix_int.asm
+; @LastEditTime: 2026-06-26 15:19:37
+; @FilePath: \asm_matrix_benchmark\src\assembly\linux\int\extract_diag_matrix_int.asm
 ; @Description: get diagonal element for matrix, this method is like eye matrix.It means we get the element which row index equal to col index.
-;-------------------------------------------------------------
+; -------------------------------------------------------------
 
 global extract_diag_int
 
@@ -15,13 +15,14 @@ extern printf
 extern puts
 
 section .rodata
-    invalid_param db "Invalid param!", 10, 0
-    malloc_failed db "Memory allocation failed", 10, 0
+    invalid_param  db  "Invalid param!", 10, 0
+    malloc_failed  db  "Memory allocation failed", 10, 0
 
 section .text
 
 ; int *extract_diag_int(MatrixInt *m)
 ; rdi = m (System V)
+
 extract_diag_int:
 
     ; save callee_register
@@ -32,7 +33,7 @@ extract_diag_int:
     push r15
     sub rsp, 32
 
-    mov r14, rdi ; r14 = m
+    mov r14, rdi                        ; r14 = m
 
     ; check m
     test r14, r14
@@ -46,14 +47,15 @@ extract_diag_int:
     ; restore r14
     mov r14, rdi
 
-    mov r8, [r14 + 8]  ; r8 = m->rows
-    mov r9, [r14 + 16] ; r9 = m->cols
+    mov r8, [r14 + 8]                   ; r8 = m->rows
+    mov r9, [r14 + 16]                  ; r9 = m->cols
 
     ; choose smaller one
-    cmp r8, r9      ; m->rows < m->cols ?
+    cmp r8, r9                          ; m->rows < m->cols ?
     jae r8_bigger
     mov r12, r8
     jmp next
+
 r8_bigger:
     mov r12, r9
     jmp next
@@ -61,32 +63,32 @@ r8_bigger:
 next:
     ; malloc for res data, int type, len = r12
     mov rdi, r12
-    shl rdi, 2   ; rdi *= 4 (sizeof int)
+    shl rdi, 2                          ; rdi *= 4 (sizeof int)
     call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_pint
 
-    mov rbx, rax  ; rbx = new data
+    mov rbx, rax                        ; rbx = new data
 
     ; init loop
     ; for get diagonal element
-    xor rcx, rcx ; i = 0
-    mov r9, [r14 + 16] ; r9 = m->cols
-    mov r10, [r14]     ; r10 = m->data
+    xor rcx, rcx                        ; i = 0
+    mov r9, [r14 + 16]                  ; r9 = m->cols
+    mov r10, [r14]                      ; r10 = m->data
 
 loop1:
-    cmp rcx, r12  ; i < data->len?
+    cmp rcx, r12                        ; i < data->len?
     jge end
 
     ; data[i] = m->data[i * m->cols + i]
-    mov r8, rcx ; r8 = i
-    imul r8, r9 ; r8 *= m->cols
-    add r8, rcx ; r8 += i
+    mov r8, rcx                         ; r8 = i
+    imul r8, r9                         ; r8 *= m->cols
+    add r8, rcx                         ; r8 += i
 
-    mov r11d, [r10 + r8 * 4] ; r11d = m->data[i * m->cols + i]
-    mov [rbx + rcx * 4], r11d ; data[i] = m->data[i * m->cols + i]
+    mov r11d, [r10 + r8 * 4]            ; r11d = m->data[i * m->cols + i]
+    mov [rbx + rcx * 4], r11d           ; data[i] = m->data[i * m->cols + i]
 
-    inc rcx ; i++
+    inc rcx                             ; i++
     jmp loop1
 
 end:
