@@ -1,11 +1,11 @@
-;-------------------------------------------------------------
+; -------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-24 20:41:55
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-25 14:21:41
-; @FilePath: \asm_matrix_benchmark\src\assembly\linux\mul_matrix_float.asm
+; @LastEditTime: 2026-06-26 15:17:41
+; @FilePath: \asm_matrix_benchmark\src\assembly\linux\float\mul_matrix_float.asm
 ; @Description: mul matrix float nasm code on linux
-;-------------------------------------------------------------
+; -------------------------------------------------------------
 
 global mul_matrix_float
 extern printf
@@ -13,9 +13,9 @@ extern malloc
 extern free
 
 section .rodata
-    malloc_failed db "Memory allocation failed", 10, 0
-    invalid_param db "Invalid param!", 10, 0
-    dim_mismatch  db "Dimension mismatch! m1(%zu, %zu) vs m2(%zu, %zu)", 10, 0
+    malloc_failed  db  "Memory allocation failed", 10, 0
+    invalid_param  db  "Invalid param!", 10, 0
+    dim_mismatch   db  "Dimension mismatch! m1(%zu, %zu) vs m2(%zu, %zu)", 10, 0
 
 section .text
 
@@ -95,11 +95,13 @@ loop1:
     cmp rdi, r9
     jge end
     xor rsi, rsi
+
     loop2:
         cmp rsi, r10
         jge inc_rdi
         xorps xmm0, xmm0
         xor r13, r13
+
         loop3:
             cmp r13, rdx
             jge give_value
