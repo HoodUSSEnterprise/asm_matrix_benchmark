@@ -1,11 +1,12 @@
-;-------------------------------------------------------------
+; -------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-24
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24
-; @FilePath: \asm_matrix_benchmark\src\assembly\linux\cat_matrix_float.asm
+; @LastEditTime: 2026-06-26 15:17:05
+; @FilePath: \asm_matrix_benchmark\src\assembly\linux\float\cat_matrix_float.asm
 ; @Description: cat matrix float nasm code on linux
-;-------------------------------------------------------------
+; -------------------------------------------------------------
+
 global cat_matrix_float
 extern malloc
 extern free
@@ -13,16 +14,17 @@ extern printf
 extern puts
 
 section .rodata
-    malloc_failed db "Memory allocation failed", 10, 0
-    invalid_param db "Invalid param!", 10, 0
-    dim_mismatch  db "Dimension mismatch! m1(%zu, %zu) vs m2(%zu, %zu)", 10, 0
-    wrong_params  db "Wrong value, axis must be 0 or 1"
+    malloc_failed  db  "Memory allocation failed", 10, 0
+    invalid_param  db  "Invalid param!", 10, 0
+    dim_mismatch   db  "Dimension mismatch! m1(%zu, %zu) vs m2(%zu, %zu)", 10, 0
+    wrong_params   db  "Wrong value, axis must be 0 or 1"
 
 section .text
 
 ; MatrixFloat *cat_matrix_float(MatrixFloat *m1, MatrixFloat *m2, int axis);
 ; rdi = m1, rsi = m2, edx = axis (System V)
 ; axis : 1 means horizon, 0 means vertical
+
 cat_matrix_float:
 
     push rbx
