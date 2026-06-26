@@ -1,26 +1,27 @@
-;-------------------------------------------------------------
+; -------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-24 20:38:22
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-25 15:13:50
-; @FilePath: \asm_matrix_benchmark\src\assembly\linux\find_matrix_float.asm
+; @LastEditTime: 2026-06-26 15:17:22
+; @FilePath: \asm_matrix_benchmark\src\assembly\linux\float\find_matrix_float.asm
 ; @Description: find elem position in matrix float nasm code on linux
-;-------------------------------------------------------------
+; -------------------------------------------------------------
 
 global find_elem_float
 extern puts
 extern malloc
 
 section .rodata
-    invalid_param db "Invalid param!", 0
-    malloc_failed db "Memory allocation failed", 0
-    epsilon dd 1e-6
-    abs_mask dd 0x7FFFFFFF
+    invalid_param  db  "Invalid param!", 0
+    malloc_failed  db  "Memory allocation failed", 0
+    epsilon        dd  1e-6
+    abs_mask       dd  0x7FFFFFFF
 
 section .text
 
 ; bool find_elem_float(MatrixFloat *m, float elem, Point *pos);
 ; rdi = m, xmm0 = elem, rsi = pos (System V)
+
 find_elem_float:
 
     ; save callee_register
@@ -71,11 +72,11 @@ malloc_pos:
 
 init_loop:
     ; init loop condition
-    xor rdi, rdi ; i = 0
-    mov r8, [r14 + 8] ; m->rows
-    mov r9, [r14 + 16] ; m->cols
+    xor rdi, rdi                        ; i = 0
+    mov r8, [r14 + 8]                   ; m->rows
+    mov r9, [r14 + 16]                  ; m->cols
     mov r11, [r14]
-    movss xmm14, [rel epsilon] ; xmm14 = 1e-6f
+    movss xmm14, [rel epsilon]          ; xmm14 = 1e-6f
     movd xmm13, [rel abs_mask]
 
 loop1:
@@ -92,11 +93,11 @@ loop1:
         add r10, rsi
 
         ; compare m->data[i * m->cols + j] with elem using epsilon
-        movss xmm0, [r11 + r10 * 4] ; xmm0 = m->data[i * m->cols + j]
-        subss xmm0, xmm15 ; xmm0 = value - elem
+        movss xmm0, [r11 + r10 * 4]     ; xmm0 = m->data[i * m->cols + j]
+        subss xmm0, xmm15               ; xmm0 = value - elem
         ; fabs: clear sign bit
-        andps xmm0, xmm13 ; xmm0 = fabs(value - elem)
-        comiss xmm0, xmm14 ; compare with epsilon
+        andps xmm0, xmm13               ; xmm0 = fabs(value - elem)
+        comiss xmm0, xmm14              ; compare with epsilon
         jb end
         inc rsi
         jmp loop2
@@ -128,7 +129,7 @@ end:
     jmp cleanup
 
 cleanup:
-    
+
     movss xmm15, [rsp + 44]
     movss xmm14, [rsp + 40]
     movss xmm13, [rsp + 36]
