@@ -1,11 +1,11 @@
-;-------------------------------------------------------------
+; -------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-24 20:41:55
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-25 15:37:32
-; @FilePath: \asm_matrix_benchmark\src\assembly\linux\replace_matrix_float_by_value.asm
+; @LastEditTime: 2026-06-26 15:17:53
+; @FilePath: \asm_matrix_benchmark\src\assembly\linux\float\replace_matrix_float_by_value.asm
 ; @Description: replace matrix float by value nasm code on linux
-;-------------------------------------------------------------
+; -------------------------------------------------------------
 
 global replace_matrix_float_by_value
 
@@ -15,12 +15,13 @@ extern find_elem_float
 extern puts
 
 section .rodata
-    invalid_param db "Invalid param!", 0
+    invalid_param  db  "Invalid param!", 0
 
 section .text
 
 ; bool replace_matrix_float_by_value(MatrixFloat *m, float old_data, float new_data);
 ; rdi = m, xmm0 = old_data, xmm1 = new_data (System V)
+
 replace_matrix_float_by_value:
     ; save callee_register
     push rbx
@@ -34,7 +35,7 @@ replace_matrix_float_by_value:
 
     mov r14, rdi
     movss xmm15, xmm0
-    movss [rsp + 24], xmm1     ; new_data at safe stack offset
+    movss [rsp + 24], xmm1              ; new_data at safe stack offset
 
     ; check m
     test r14, r14
@@ -81,7 +82,7 @@ replace_data:
     add r10, [rsp + 40]
 
     movss xmm0, [rsp + 24]
-    mov rsi, [r14]              ; rsi = m->data (reload after call)
+    mov rsi, [r14]                      ; rsi = m->data (reload after call)
     movss [rsi + r10 * 4], xmm0
     jmp loop_replace
 
