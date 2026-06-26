@@ -1,11 +1,11 @@
-;-------------------------------------------------------------
+; -------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-24 20:46:00
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24 20:46:29
-; @FilePath: \asm_matrix_benchmark\src\assembly\linux\lu_matrix_float.asm
+; @LastEditTime: 2026-06-26 15:17:36
+; @FilePath: \asm_matrix_benchmark\src\assembly\linux\float\lu_matrix_float.asm
 ; @Description: lu decomposition float nasm code on linux
-;-------------------------------------------------------------
+; -------------------------------------------------------------
 
 global LU_Decomposition_float
 extern printf
@@ -16,18 +16,19 @@ extern get_leading_minors_float
 extern rank_matrix_float
 
 section .rodata
-    zero             dq 0.0
-    one              dq 1.0
-    malloc_failed    db "Memory allocation failed", 0
-    invalid_param    db "Invalid param!", 0
-    not_square       db "It's not a square", 0
-    wrong_lm         db "function get_leading_minors_float has a wrong value", 0
-    cant_lu          db "This matrix can't lu decomposition", 0
+    zero           dq  0.0
+    one            dq  1.0
+    malloc_failed  db  "Memory allocation failed", 0
+    invalid_param  db  "Invalid param!", 0
+    not_square     db  "It's not a square", 0
+    wrong_lm       db  "function get_leading_minors_float has a wrong value", 0
+    cant_lu        db  "This matrix can't lu decomposition", 0
 
 section .text
 
 ; bool LU_Decomposition_float(MatrixFloat *m, LU_Result *res);
 ; rdi = m, rsi = res (System V)
+
 LU_Decomposition_float:
 
     push rbx
@@ -82,7 +83,7 @@ check_lm_loop:
     test rax, rax
     jz check_lm_fail
 
-    movsxd rax, dword [rsp + 24]
+    movsxd rax, dword[rsp + 24]
     lea rdx, [r12 + 1]
     cmp rax, rdx
     jne check_lm_fail
@@ -152,7 +153,7 @@ check_lm_done:
     mov r9, [r14 + 16]
 
     ; ========== check if res == NULL (auto-allocate) ==========
-    mov qword [rsp + 24], 0
+    mov qword[rsp + 24], 0
 
     test rbx, rbx
     jnz alloc_done
@@ -163,7 +164,7 @@ check_lm_done:
     jz malloc_fail_res
 
     mov rbx, rax
-    mov qword [rsp + 24], 1
+    mov qword[rsp + 24], 1
 
     mov r8, [r14 + 8]
     mov r9, [r14 + 16]
@@ -197,9 +198,11 @@ init_L_i:
         movsd xmm0, [rel zero]
         movsd [r10 + rax * 8], xmm0
         jmp next
+
     L_set_one:
         movsd xmm0, [rel one]
         movsd [r10 + rax * 8], xmm0
+
     next:
         inc rsi
         jmp init_L_j
