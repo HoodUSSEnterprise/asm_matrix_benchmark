@@ -101,25 +101,27 @@ target_link_libraries(matrix_doublec matrix_int_clib)
 
 # 库的源文件（从对应平台目录读取）
 set(LIB_SOURCES_MATRIX_CPP
-    src/C++/add_matrix.cpp
-    src/C++/cat_matrix.cpp
-    src/C++/compare_matrix.cpp
-    src/C++/constructor_matrix.cpp
-    src/C++/destructor_matrix.cpp
-    src/C++/extract_matrix.cpp
-    src/C++/find_matrix.cpp
-    src/C++/leading_minors.cpp
-    src/C++/mul_matrix.cpp
-    src/C++/print_matrix.cpp
-    src/C++/rank_trace_matrix.cpp
-    src/C++/replace_matrix.cpp
-    src/C++/scale_matrix.cpp
-    src/C++/special_matrix.cpp
-    src/C++/sub_matrix.cpp
-    src/C++/transpose_matrix.cpp
+    src/C++/int/add_matrix.cpp
+    src/C++/int/cat_matrix.cpp
+    src/C++/int/compare_matrix.cpp
+    src/C++/int/constructor_matrix.cpp
+    src/C++/int/destructor_matrix.cpp
+    src/C++/int/extract_matrix.cpp
+    src/C++/int/find_matrix.cpp
+    src/C++/int/inv_matrix.cpp
+    src/C++/int/leading_minors.cpp
+    src/C++/int/mul_matrix.cpp
+    src/C++/double/print_matrix.cpp
+    src/C++/int/print_matrix.cpp
+    src/C++/int/rank_trace_matrix.cpp
+    src/C++/int/replace_matrix.cpp
+    src/C++/int/scale_matrix.cpp
+    src/C++/int/special_matrix.cpp
+    src/C++/int/sub_matrix.cpp
+    src/C++/int/transpose_matrix.cpp
 )
 
-# 创建库
+# 创建 C++ int 库
 add_library(matrix_int_cpplib ${LIB_SOURCES_MATRIX_CPP})
 
 target_include_directories(matrix_int_cpplib PUBLIC include)
