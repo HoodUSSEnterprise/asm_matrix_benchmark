@@ -2,12 +2,12 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-23 17:46:42
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-23 19:47:32
+@LastEditTime: 2026-06-25 21:09:45
 @FilePath: \asm_matrix_benchmark\example\matrix_int.cpp
 @Description:example of matrix int c++
 *************************************************************/
 
-#include "matrix_cpp.h"
+#include "matrix_int_cpp.h"
 #include <cstdio>
 
 int main()
@@ -124,7 +124,15 @@ int main()
     std::cout << (cmp1 != cmp3 ? "Two matrix not equals\n" : "Two matrix equals\n");
     puts("----------------------------------------------------------------------------------------");
 
-    puts("-------------------------------------determinant and leading minors---------------------");
+    puts("-------------------------------------invertible matrix-------------------------------------");
+    int inv_matrix[9] = {1, 2, 3, 0, 4, 5, 1, 0, 6};
+    MatrixInt matrix_orgin(inv_matrix, 3, 3);
+    MatrixDouble matrix_inv(3, 3);
+    matrix_inv = matrix_orgin.inv_matrix();
+    std::cout << matrix_inv;
+
+    puts("-------------------------------------leading minors-------------------------------------");
+    puts("-------------------------------------leading minors-------------------------------------");
     int lead_data[9] = {1, 2, 3, 4, 5, 6, 7, 8, 10};
     MatrixInt lead_m(lead_data, 3, 3);
     std::cout << lead_m;
