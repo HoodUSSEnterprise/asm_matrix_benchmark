@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-15 20:51:29
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-21 12:53:09
+@LastEditTime: 2026-06-26 17:35:56
 @FilePath: \asm_matrix_benchmark\include\matrix.h
 @Description:This is a header file that consolidates all matrix operations.
 *************************************************************/
@@ -16,6 +16,7 @@
 #include "compare_matrix.h"
 #include "extract_matrix.h"
 #include "find_matrix.h"
+#include "free_matrix.h"
 #include "inv_matrix.h"
 #include "leading_minors.h"
 #include "lu_matrix.h"
