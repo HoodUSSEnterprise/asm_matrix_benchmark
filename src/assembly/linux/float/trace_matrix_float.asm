@@ -1,23 +1,24 @@
-;-------------------------------------------------------------
+; -------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-24 20:38:22
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24 20:41:50
-; @FilePath: \asm_matrix_benchmark\src\assembly\linux\trace_matrix_float.asm
+; @LastEditTime: 2026-06-26 15:18:05
+; @FilePath: \asm_matrix_benchmark\src\assembly\linux\float\trace_matrix_float.asm
 ; @Description: the trace of matrix float nasm code on linux
-;-------------------------------------------------------------
+; -------------------------------------------------------------
 
 global trace_matrix_float
 extern puts
 
 section .rodata
-    invalid_param db "Invalid param!", 10, 0
-    no_square db "It is not a square!", 0
+    invalid_param  db  "Invalid param!", 10, 0
+    no_square      db  "It is not a square!", 0
 
 section .text
 
 ; bool trace_matrix_float(MatrixFloat *m, float *trace)
 ; rdi = m, rsi = trace (System V)
+
 trace_matrix_float:
     push rbx
     push r12
