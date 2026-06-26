@@ -46,7 +46,7 @@ bool rank_matrix_int(MatrixInt *m, int *rank)
     {
         // find main element
         size_t pivot = rows;
-        while (fabs(data[pivot * m->cols + cols]) < 1e-6 && pivot < m->rows)
+        while (pivot < m->rows && fabs(data[pivot * m->cols + cols]) < 1e-6)
         {
             pivot++;
         }
@@ -88,7 +88,7 @@ bool rank_matrix_int(MatrixInt *m, int *rank)
         // check one by one
         for (size_t j = 0; j < m->cols; j++)
         {
-            if (fabs(data[i * m->rows + j]) >= 1e-6)
+            if (fabs(data[i * m->cols + j]) >= 1e-6)
             {
                 flag = true;
                 break;
