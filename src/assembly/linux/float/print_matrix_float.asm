@@ -1,11 +1,11 @@
-;-------------------------------------------------------------
+; -------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-24 20:46:01
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24 20:46:42
-; @FilePath: \asm_matrix_benchmark\src\assembly\linux\print_matrix_float.asm
+; @LastEditTime: 2026-06-26 15:17:43
+; @FilePath: \asm_matrix_benchmark\src\assembly\linux\float\print_matrix_float.asm
 ; @Description: print matrix float nasm code on linux
-;-------------------------------------------------------------
+; -------------------------------------------------------------
 
 global print_matrix_float
 extern printf
@@ -13,16 +13,17 @@ extern puts
 extern putchar
 
 section .rodata
-    matrix_info db "------------------matrix info------------------", 0
-    invalid_param db "Invalid param!", 0
-    matrix_size db "matrix size: (%d, %d)", 10, 0
-    matrix_data db "matrix data:", 0
-    fmt db "%f ", 0
+    matrix_info    db  "------------------matrix info------------------", 0
+    invalid_param  db  "Invalid param!", 0
+    matrix_size    db  "matrix size: (%d, %d)", 10, 0
+    matrix_data    db  "matrix data:", 0
+    fmt            db  "%f ", 0
 
 section .text
 
 ; void print_matrix_float(MatrixFloat *m);
 ; rdi = m (System V)
+
 print_matrix_float:
     push rbx
     push r12
@@ -58,6 +59,7 @@ loop1:
     jge end
 
     xor r14, r14
+
 loop2:
     mov rsi, [r12 + 16]
     cmp r14, rsi
