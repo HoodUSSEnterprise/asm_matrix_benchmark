@@ -1,11 +1,11 @@
-;-------------------------------------------------------------
+; -------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-24 20:38:22
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24 20:41:05
-; @FilePath: \asm_matrix_benchmark\src\assembly\linux\compare_matrix_float.asm
+; @LastEditTime: 2026-06-26 15:17:11
+; @FilePath: \asm_matrix_benchmark\src\assembly\linux\float\compare_matrix_float.asm
 ; @Description: compare two matrix float nasm code on linux
-;-------------------------------------------------------------
+; -------------------------------------------------------------
 
 global is_equal_matrix_float
 
@@ -13,15 +13,16 @@ extern printf
 extern puts
 
 section .rodata
-    epsilon       dd 1e-6
-    abs_mask      dd 0x7FFFFFFF
-    invalid_param db "Invalid param!", 10, 0
-    dim_mismatch  db "Dimension mismatch! m1(%zu, %zu) vs m2(%zu, %zu)", 10, 0
+    epsilon        dd  1e-6
+    abs_mask       dd  0x7FFFFFFF
+    invalid_param  db  "Invalid param!", 10, 0
+    dim_mismatch   db  "Dimension mismatch! m1(%zu, %zu) vs m2(%zu, %zu)", 10, 0
 
 section .text
 
 ; bool is_equal_matrix_float(MatrixFloat *m1, MatrixFloat *m2)
 ; rdi = m1, rsi = m2 (System V)
+
 is_equal_matrix_float:
 
     push rbx
