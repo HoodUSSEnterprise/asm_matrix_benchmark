@@ -1,12 +1,12 @@
-;-------------------------------------------------------------
+; -------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-24 20:43:48
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24 20:44:31
-; @FilePath: \asm_matrix_benchmark\src\assembly\linux\special_matrix_float.asm
+; @LastEditTime: 2026-06-26 15:17:59
+; @FilePath: \asm_matrix_benchmark\src\assembly\linux\float\special_matrix_float.asm
 ; @Description: some special matrix like identity matrix, diag matrix,
 ; eye_matrix and zero matrix float nasm code on linux
-;-------------------------------------------------------------
+; -------------------------------------------------------------
 
 global identity_matrix_float, diag_matrix_float, eye_matrix_float, zero_matrix_float
 extern malloc
@@ -15,9 +15,9 @@ extern puts
 extern memset
 
 section .rodata
-    malloc_failed db "Memory allocation failed", 0
-    invalid_param db "Invalid param!", 0
-    one_float dd 1.0
+    malloc_failed  db  "Memory allocation failed", 0
+    invalid_param  db  "Invalid param!", 0
+    one_float      dd  1.0
 
 section .text
 
@@ -25,6 +25,7 @@ section .text
 ; MatrixFloat *identity_matrix_float(int order);
 ; edi = order
 ; ---------------------------------------------------------------------------------------------
+
 identity_matrix_float:
 
     push rbx
@@ -87,6 +88,7 @@ loopidentity:
 ; MatrixFloat *diag_matrix_float(float *data, size_t len);
 ; rdi = data, rsi = len
 ; ---------------------------------------------------------------------------------------------
+
 diag_matrix_float:
 
     push rbx
@@ -152,6 +154,7 @@ loopdiag:
 ; MatrixFloat *eye_matrix_float(int rows, int cols);
 ; edi = rows, esi = cols
 ; ---------------------------------------------------------------------------------------------
+
 eye_matrix_float:
 
     push rbx
@@ -225,6 +228,7 @@ loopeye:
 ; MatrixFloat *zero_matrix_float(int rows, int cols);
 ; edi = rows, esi = cols
 ; ---------------------------------------------------------------------------------------------
+
 zero_matrix_float:
 
     push rbx
