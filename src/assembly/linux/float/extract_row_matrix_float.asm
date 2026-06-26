@@ -1,11 +1,11 @@
-;-------------------------------------------------------------
+; -------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-24 20:41:23
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24 20:43:15
-; @FilePath: \asm_matrix_benchmark\src\assembly\linux\extract_row_matrix_float.asm
+; @LastEditTime: 2026-06-26 15:17:18
+; @FilePath: \asm_matrix_benchmark\src\assembly\linux\float\extract_row_matrix_float.asm
 ; @Description: extract row matrix float nasm code on linux
-;-------------------------------------------------------------
+; -------------------------------------------------------------
 
 global extract_row_float
 
@@ -14,13 +14,14 @@ extern free
 extern printf
 
 section .rodata
-    invalid_param db "Invalid param!", 10, 0
-    malloc_failed db "Memory allocation failed", 10, 0
+    invalid_param  db  "Invalid param!", 10, 0
+    malloc_failed  db  "Memory allocation failed", 10, 0
 
 section .text
 
 ; MatrixFloat *extract_row_float(MatrixFloat *m, size_t index);
 ; rdi = m, rsi = index (System V)
+
 extract_row_float:
 
     push rbx
@@ -62,7 +63,7 @@ extract_row_float:
 
     mov [rbx], rax
     mov r10, [r14 + 16]
-    mov qword [rbx + 8], 1
+    mov qword[rbx + 8], 1
     mov [rbx + 16], r10
 
     xor rsi, rsi
