@@ -1,11 +1,11 @@
-;-------------------------------------------------------------
+; -------------------------------------------------------------
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-24 20:43:49
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-24 20:44:19
-; @FilePath: \asm_matrix_benchmark\src\assembly\linux\rank_matrix_float.asm
+; @LastEditTime: 2026-06-26 15:17:48
+; @FilePath: \asm_matrix_benchmark\src\assembly\linux\float\rank_matrix_float.asm
 ; @Description: rank matrix float nasm code on linux
-;-------------------------------------------------------------
+; -------------------------------------------------------------
 
 global rank_matrix_float
 extern puts
@@ -13,15 +13,16 @@ extern malloc
 extern free
 
 section .rodata
-    epsilon dd 1e-6
-    abs_mask dd 0x7FFFFFFF
-    malloc_failed db "Memory allocation failed", 0
-    invalid_param db "Invalid param!", 0
+    epsilon        dd  1e-6
+    abs_mask       dd  0x7FFFFFFF
+    malloc_failed  db  "Memory allocation failed", 0
+    invalid_param  db  "Invalid param!", 0
 
 section .text
 
 ; bool rank_matrix_float(MatrixFloat *m, int *rank)
 ; rdi = m, rsi = rank (System V)
+
 rank_matrix_float:
 
     push rbx
@@ -54,8 +55,8 @@ rank_matrix_float:
 
     mov rdi, [r14 + 16]
     imul rdi, [r14 + 8]
-    mov r12, rdi        ; preserve element count
-    shl rdi, 2          ; rdi = byte size
+    mov r12, rdi                        ; preserve element count
+    shl rdi, 2                          ; rdi = byte size
     call malloc wrt ..plt
     test rax, rax
     jz malloc_fail_data
@@ -64,7 +65,7 @@ rank_matrix_float:
     mov r13, [r14]
 
     xor rdx, rdx
-    mov rdi, r12        ; restore element count
+    mov rdi, r12                        ; restore element count
 
 loop_copy:
     cmp rdx, rdi
@@ -91,8 +92,9 @@ loop1:
     cmp rdx, r9
     jge calc_rank
 
-    movd xmm3, [rel abs_mask]   ; reload abs_mask for each outer iteration
+    movd xmm3, [rel abs_mask]           ; reload abs_mask for each outer iteration
     mov r11, rcx
+
     find_pivot:
         cmp r11, r8
         jge col_zero
@@ -211,6 +213,7 @@ loop_calc_rank1:
     cmp rcx, r8
     jge end
     xor rdx, rdx
+
     loop_calc_rank2:
         cmp rdx, r9
         jge inc_rcx_calc_rank
@@ -236,7 +239,6 @@ inc_rcx_calc_rank:
     inc rcx
     jmp loop_calc_rank1
 
-
 null_ptr:
     lea rdi, [rel invalid_param]
     call puts wrt ..plt
@@ -250,7 +252,7 @@ malloc_fail_data:
     jmp cleanup
 
 end:
-    mov dword [r15], esi
+    mov dword[r15], esi
     mov rdi, r12
     call free wrt ..plt
     mov rax, 1
