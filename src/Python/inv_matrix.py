@@ -2,7 +2,7 @@
 # @Author: HoodUSSEnterprise
 # @Date: 2026-06-25 16:46:58
 # @LastEditors: HoodUSSEnterprise
-# @LastEditTime: 2026-06-25 16:47:40
+# @LastEditTime: 2026-06-26 9:40:40
 # @FilePath: \asm_matrix_benchmark\src\Python\inv_matrix.py
 # @Description: invertible matrix python code
 ###########################################################
@@ -55,6 +55,10 @@ def inv_matrix(m:Matrix) -> Matrix | None:
             aug_matrix[row][j] /= pivot_val
         
         # elimination this line
-        
-                
+        for i in range(m.rows):
+            factor = aug_matrix.data[i][col] / aug_matrix.data[row][col]
+            for j in range(cols, 2 * m.cols):
+                aug_matrix[i][j] -= factor * aug_matrix[row][j]
+
+
                 
