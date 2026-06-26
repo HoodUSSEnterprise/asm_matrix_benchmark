@@ -26,28 +26,28 @@ include_directories(include)
 
 # Assembly code 
 set(LIB_SOURCES_MATRIX_INT
-    src/assembly/${PLATFORM_DIR}/add_matrix_int.asm
-    src/assembly/${PLATFORM_DIR}/cat_matrix_int.asm
-    src/assembly/${PLATFORM_DIR}/compare_matrix_int.asm
-    src/assembly/${PLATFORM_DIR}/extract_col_matrix_int.asm
-    src/assembly/${PLATFORM_DIR}/extract_diag_matrix_int.asm
-    src/assembly/${PLATFORM_DIR}/extract_row_matrix_int.asm
-    src/assembly/${PLATFORM_DIR}/find_matrix_int.asm
-    src/assembly/${PLATFORM_DIR}/inv_matrix_int.asm
-    src/assembly/${PLATFORM_DIR}/leading_minors_int.asm
-    src/assembly/${PLATFORM_DIR}/lu_matrix_int.asm
-    src/assembly/${PLATFORM_DIR}/mul_matrix_int.asm
-    src/assembly/${PLATFORM_DIR}/print_matrix_double.asm
-    src/assembly/${PLATFORM_DIR}/print_matrix_int.asm
-    src/assembly/${PLATFORM_DIR}/random_matrix_int.asm
-    src/assembly/${PLATFORM_DIR}/rank_matrix_int.asm
-    src/assembly/${PLATFORM_DIR}/replace_matrix_int_by_coord.asm
-    src/assembly/${PLATFORM_DIR}/replace_matrix_int_by_value.asm
-    src/assembly/${PLATFORM_DIR}/scale_matrix_int.asm
-    src/assembly/${PLATFORM_DIR}/special_matrix_int.asm
-    src/assembly/${PLATFORM_DIR}/sub_matrix_int.asm
-    src/assembly/${PLATFORM_DIR}/trace_matrix_int.asm
-    src/assembly/${PLATFORM_DIR}/transpose_matrix_int.asm
+    src/assembly/${PLATFORM_DIR}/int/add_matrix_int.asm
+    src/assembly/${PLATFORM_DIR}/int/cat_matrix_int.asm
+    src/assembly/${PLATFORM_DIR}/int/compare_matrix_int.asm
+    src/assembly/${PLATFORM_DIR}/int/extract_col_matrix_int.asm
+    src/assembly/${PLATFORM_DIR}/int/extract_diag_matrix_int.asm
+    src/assembly/${PLATFORM_DIR}/int/extract_row_matrix_int.asm
+    src/assembly/${PLATFORM_DIR}/int/find_matrix_int.asm
+    src/assembly/${PLATFORM_DIR}/int/inv_matrix_int.asm
+    src/assembly/${PLATFORM_DIR}/int/leading_minors_int.asm
+    src/assembly/${PLATFORM_DIR}/int/lu_matrix_int.asm
+    src/assembly/${PLATFORM_DIR}/int/mul_matrix_int.asm
+    src/assembly/${PLATFORM_DIR}/double/print_matrix_double.asm
+    src/assembly/${PLATFORM_DIR}/int/print_matrix_int.asm
+    src/assembly/${PLATFORM_DIR}/int/random_matrix_int.asm
+    src/assembly/${PLATFORM_DIR}/int/rank_matrix_int.asm
+    src/assembly/${PLATFORM_DIR}/int/replace_matrix_int_by_coord.asm
+    src/assembly/${PLATFORM_DIR}/int/replace_matrix_int_by_value.asm
+    src/assembly/${PLATFORM_DIR}/int/scale_matrix_int.asm
+    src/assembly/${PLATFORM_DIR}/int/special_matrix_int.asm
+    src/assembly/${PLATFORM_DIR}/int/sub_matrix_int.asm
+    src/assembly/${PLATFORM_DIR}/int/trace_matrix_int.asm
+    src/assembly/${PLATFORM_DIR}/int/transpose_matrix_int.asm
 )
 
 # 创建库
@@ -104,7 +104,9 @@ set(LIB_SOURCES_MATRIX_CPP
     src/C++/int/add_matrix.cpp
     src/C++/int/cat_matrix.cpp
     src/C++/int/compare_matrix.cpp
+    src/C++/double/constructor_matrix.cpp
     src/C++/int/constructor_matrix.cpp
+    src/C++/double/destructor_matrix.cpp
     src/C++/int/destructor_matrix.cpp
     src/C++/int/extract_matrix.cpp
     src/C++/int/find_matrix.cpp
@@ -132,27 +134,27 @@ add_executable(matrix_intcpp example/matrix_int.cpp)
 target_link_libraries(matrix_intcpp matrix_int_cpplib)
 
 set(LIB_SOURCES_MATRIX_DOUBLE
-    src/assembly/${PLATFORM_DIR}/add_matrix_double.asm
-    src/assembly/${PLATFORM_DIR}/cat_matrix_double.asm
-    src/assembly/${PLATFORM_DIR}/compare_matrix_double.asm
-    src/assembly/${PLATFORM_DIR}/extract_col_matrix_double.asm
-    src/assembly/${PLATFORM_DIR}/extract_diag_matrix_double.asm
-    src/assembly/${PLATFORM_DIR}/extract_row_matrix_double.asm
-    src/assembly/${PLATFORM_DIR}/find_matrix_double.asm
-    src/assembly/${PLATFORM_DIR}/inv_matrix_double.asm
-    src/assembly/${PLATFORM_DIR}/leading_minors_double.asm
-    src/assembly/${PLATFORM_DIR}/lu_matrix_double.asm
-    src/assembly/${PLATFORM_DIR}/mul_matrix_double.asm
-    src/assembly/${PLATFORM_DIR}/print_matrix_double.asm
-    src/assembly/${PLATFORM_DIR}/random_matrix_double.asm
-    src/assembly/${PLATFORM_DIR}/rank_matrix_double.asm
-    src/assembly/${PLATFORM_DIR}/replace_matrix_double_by_coord.asm
-    src/assembly/${PLATFORM_DIR}/replace_matrix_double_by_value.asm
-    src/assembly/${PLATFORM_DIR}/scale_matrix_double.asm
-    src/assembly/${PLATFORM_DIR}/special_matrix_double.asm
-    src/assembly/${PLATFORM_DIR}/sub_matrix_double.asm
-    src/assembly/${PLATFORM_DIR}/trace_matrix_double.asm
-    src/assembly/${PLATFORM_DIR}/transpose_matrix_double.asm
+    src/assembly/${PLATFORM_DIR}/double/add_matrix_double.asm
+    src/assembly/${PLATFORM_DIR}/double/cat_matrix_double.asm
+    src/assembly/${PLATFORM_DIR}/double/compare_matrix_double.asm
+    src/assembly/${PLATFORM_DIR}/double/extract_col_matrix_double.asm
+    src/assembly/${PLATFORM_DIR}/double/extract_diag_matrix_double.asm
+    src/assembly/${PLATFORM_DIR}/double/extract_row_matrix_double.asm
+    src/assembly/${PLATFORM_DIR}/double/find_matrix_double.asm
+    src/assembly/${PLATFORM_DIR}/double/inv_matrix_double.asm
+    src/assembly/${PLATFORM_DIR}/double/leading_minors_double.asm
+    src/assembly/${PLATFORM_DIR}/double/lu_matrix_double.asm
+    src/assembly/${PLATFORM_DIR}/double/mul_matrix_double.asm
+    src/assembly/${PLATFORM_DIR}/double/print_matrix_double.asm
+    src/assembly/${PLATFORM_DIR}/double/random_matrix_double.asm
+    src/assembly/${PLATFORM_DIR}/double/rank_matrix_double.asm
+    src/assembly/${PLATFORM_DIR}/double/replace_matrix_double_by_coord.asm
+    src/assembly/${PLATFORM_DIR}/double/replace_matrix_double_by_value.asm
+    src/assembly/${PLATFORM_DIR}/double/scale_matrix_double.asm
+    src/assembly/${PLATFORM_DIR}/double/special_matrix_double.asm
+    src/assembly/${PLATFORM_DIR}/double/sub_matrix_double.asm
+    src/assembly/${PLATFORM_DIR}/double/trace_matrix_double.asm
+    src/assembly/${PLATFORM_DIR}/double/transpose_matrix_double.asm
 )
 
 add_library(matrix_double_lib ${LIB_SOURCES_MATRIX_DOUBLE})
@@ -164,28 +166,28 @@ target_link_libraries(matrix_double matrix_double_lib)
 
 # Float 版本
 set(LIB_SOURCES_MATRIX_FLOAT
-    src/assembly/${PLATFORM_DIR}/add_matrix_float.asm
-    src/assembly/${PLATFORM_DIR}/cat_matrix_float.asm
-    src/assembly/${PLATFORM_DIR}/compare_matrix_float.asm
-    src/assembly/${PLATFORM_DIR}/extract_col_matrix_float.asm
-    src/assembly/${PLATFORM_DIR}/extract_diag_matrix_float.asm
-    src/assembly/${PLATFORM_DIR}/extract_row_matrix_float.asm
-    src/assembly/${PLATFORM_DIR}/find_matrix_float.asm
-    src/assembly/${PLATFORM_DIR}/inv_matrix_float.asm
-    src/assembly/${PLATFORM_DIR}/leading_minors_float.asm
-    src/assembly/${PLATFORM_DIR}/lu_matrix_float.asm
-    src/assembly/${PLATFORM_DIR}/mul_matrix_float.asm
-    src/assembly/${PLATFORM_DIR}/print_matrix_double.asm
-    src/assembly/${PLATFORM_DIR}/print_matrix_float.asm
-    src/assembly/${PLATFORM_DIR}/random_matrix_float.asm
-    src/assembly/${PLATFORM_DIR}/rank_matrix_float.asm
-    src/assembly/${PLATFORM_DIR}/replace_matrix_float_by_coord.asm
-    src/assembly/${PLATFORM_DIR}/replace_matrix_float_by_value.asm
-    src/assembly/${PLATFORM_DIR}/scale_matrix_float.asm
-    src/assembly/${PLATFORM_DIR}/special_matrix_float.asm
-    src/assembly/${PLATFORM_DIR}/sub_matrix_float.asm
-    src/assembly/${PLATFORM_DIR}/trace_matrix_float.asm
-    src/assembly/${PLATFORM_DIR}/transpose_matrix_float.asm
+    src/assembly/${PLATFORM_DIR}/float/add_matrix_float.asm
+    src/assembly/${PLATFORM_DIR}/float/cat_matrix_float.asm
+    src/assembly/${PLATFORM_DIR}/float/compare_matrix_float.asm
+    src/assembly/${PLATFORM_DIR}/float/extract_col_matrix_float.asm
+    src/assembly/${PLATFORM_DIR}/float/extract_diag_matrix_float.asm
+    src/assembly/${PLATFORM_DIR}/float/extract_row_matrix_float.asm
+    src/assembly/${PLATFORM_DIR}/float/find_matrix_float.asm
+    src/assembly/${PLATFORM_DIR}/float/inv_matrix_float.asm
+    src/assembly/${PLATFORM_DIR}/float/leading_minors_float.asm
+    src/assembly/${PLATFORM_DIR}/float/lu_matrix_float.asm
+    src/assembly/${PLATFORM_DIR}/float/mul_matrix_float.asm
+    src/assembly/${PLATFORM_DIR}/double/print_matrix_double.asm
+    src/assembly/${PLATFORM_DIR}/float/print_matrix_float.asm
+    src/assembly/${PLATFORM_DIR}/float/random_matrix_float.asm
+    src/assembly/${PLATFORM_DIR}/float/rank_matrix_float.asm
+    src/assembly/${PLATFORM_DIR}/float/replace_matrix_float_by_coord.asm
+    src/assembly/${PLATFORM_DIR}/float/replace_matrix_float_by_value.asm
+    src/assembly/${PLATFORM_DIR}/float/scale_matrix_float.asm
+    src/assembly/${PLATFORM_DIR}/float/special_matrix_float.asm
+    src/assembly/${PLATFORM_DIR}/float/sub_matrix_float.asm
+    src/assembly/${PLATFORM_DIR}/float/trace_matrix_float.asm
+    src/assembly/${PLATFORM_DIR}/float/transpose_matrix_float.asm
 )
 
 add_library(matrix_float_lib ${LIB_SOURCES_MATRIX_FLOAT})
