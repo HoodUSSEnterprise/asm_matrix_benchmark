@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-22 12:45:34
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-26 15:22:47
+; @LastEditTime: 2026-06-27 09:43:44
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\int\lu_matrix_int.asm
 ; @Description: lu decomposition nasm code on windows 
 ; -------------------------------------------------------------
@@ -336,6 +336,7 @@ compute_l_done:
     mov rdi, 1                          ; i = 1
 
 doolittle_loop_i:
+
     cmp rdi, r8                         ; i < n?
     jge doolittle_done
 
@@ -453,13 +454,13 @@ doolittle_done:
     mov [rbx], r12                      ; res->L = L
     mov [rbx + 8], r13                  ; res->U = U
     ; ========== free leading_minors ==========
-    xor rcx, rcx                        ; i = 0
+    xor rsi, rsi                        ; i = 0
 
 free_lm_data:
-    cmp rcx, [r15 + 8]                  ; i < leading_minors->len?
+    cmp rsi, [r15 + 8]                  ; i < leading_minors->len?
     jae free_lm_array
 
-    mov rax, rcx
+    mov rax, rsi
     imul rax, 24                        ; rax = i * sizeof(MatrixInt)
     mov rdi, [r15]                      ; rdi = leading_minors->matrix_data
     mov rdi, [rdi + rax]                ; rdi = matrix_data[i].data
@@ -469,10 +470,11 @@ free_lm_data:
     call free
 
 free_lm_next:
-    inc rcx
+    inc rsi                             ; i++
     jmp free_lm_data
 
 free_lm_array:
+
     mov rcx, [r15]                      ; rcx = matrix_data array
     call free
     mov rcx, r15                        ; rcx = leading_minors struct
