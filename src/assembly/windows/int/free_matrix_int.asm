@@ -2,10 +2,11 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-26 17:32:01
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-27 08:54:16
+; @LastEditTime: 2026-06-27 09:46:57
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\int\free_matrix_int.asm
 ; @Description: free matrix nasm c code
 ; -------------------------------------------------------------
+
 global free_matrix_int
 
 extern free
@@ -51,6 +52,7 @@ free_matrix_int:
     ; optional, *m = NULL
     ; To avoid dangling pointers, I assign NULL here
     mov r14, 0
+    jmp cleanup
 
 null_ptr:
     lea rcx, [rel invalid_param]        ; rcx = invalid_param
