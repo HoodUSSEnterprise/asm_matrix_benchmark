@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-26 17:32:01
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-27 09:58:22
+; @LastEditTime: 2026-06-27 10:09:43
 ; @FilePath: \asm_matrix_benchmark\src\assembly\linux\int\free_matrix_int.asm
 ; @Description: free matrix nasm c code
 ; -------------------------------------------------------------
@@ -42,11 +42,11 @@ free_matrix_int:
 
     ; free (*m)->data
     mov rdi, [r14]                      ; rdi = (*m)->data
-    call free
+    call free wrt ..plt
 
     ; free *m
     mov rdi, r14                        ; rdi = *m
-    call free
+    call free wrt ..plt
 
     ; optional, *m = NULL
     ; To avoid dangling pointers, I assign NULL here
@@ -55,7 +55,7 @@ free_matrix_int:
 
 null_ptr:
     lea rdi, [rel invalid_param]        ; rdi = invalid_param
-    call puts
+    call puts wrt ..plt
     jmp cleanup
 
 cleanup:
