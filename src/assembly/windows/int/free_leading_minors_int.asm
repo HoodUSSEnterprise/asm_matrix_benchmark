@@ -2,13 +2,13 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-26 19:23:17
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-27 09:09:48
+; @LastEditTime: 2026-06-27 09:13:31
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\int\free_leading_minors_int.asm
 ; @Description: free leading minors int nasm code
 ; -------------------------------------------------------------
 global free_leading_minors_int
 
-extern puts
+extern free
 extern puts
 
 section .rodata
