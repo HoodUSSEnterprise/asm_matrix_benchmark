@@ -59,7 +59,7 @@ loop1:
     mov rax, r12                        ; rax = i
     imul rax, 24                        ; rax *= 24
     mov rdi, [r15 + rax]                ; rdi = (*l)->matrix_data[i].data
-    call free
+    call free wrt ..plt
 
     inc r12
     jmp loop1
@@ -67,11 +67,11 @@ loop1:
 next:
     ; free (*l)->matrix_data
     mov rdi, r15
-    call free
+    call free wrt ..plt
 
     ; free *l
     mov rdi, r14
-    call free
+    call free wrt ..plt
 
     ; optional, *m = NULL
     ; To avoid dangling pointers, I assign NULL here
@@ -80,7 +80,7 @@ next:
 
 null_ptr:
     lea rdi, [rel invalid_param]        ; rdi = invalid_param
-    call puts
+    call puts wrt ..plt
     jmp cleanup
 
 cleanup:
