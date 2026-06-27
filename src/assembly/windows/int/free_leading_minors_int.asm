@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-26 19:23:17
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-27 09:21:19
+; @LastEditTime: 2026-06-27 10:00:52
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\int\free_leading_minors_int.asm
 ; @Description: free leading minors int nasm code
 ; -------------------------------------------------------------
@@ -25,6 +25,7 @@ free_leading_minors_int:
     ; save callee_register
     push rbx
     push rdi
+    push rsi
     push r12
     push r13
     push r14
@@ -90,6 +91,7 @@ cleanup:
     pop r14
     pop r13
     pop r12
+    pop rsi
     pop rdi
     pop rbx
     ret
