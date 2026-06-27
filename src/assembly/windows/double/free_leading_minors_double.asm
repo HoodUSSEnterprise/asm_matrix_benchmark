@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-27 09:21:36
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-27 09:23:33
+; @LastEditTime: 2026-06-27 10:04:11
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\double\free_leading_minors_double.asm
 ; @Description: free leading minors double nasm code
 ; -------------------------------------------------------------
@@ -25,6 +25,7 @@ free_leading_minors_double:
     ; save callee_register
     push rbx
     push rdi
+    push rsi
     push r12
     push r13
     push r14
@@ -90,6 +91,7 @@ cleanup:
     pop r14
     pop r13
     pop r12
+    pop rsi
     pop rdi
     pop rbx
     ret
