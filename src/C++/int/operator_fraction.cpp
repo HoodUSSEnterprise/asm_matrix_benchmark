@@ -2,13 +2,19 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-27 19:40:53
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-27 20:03:52
+@LastEditTime: 2026-06-28 09:04:04
 @FilePath: \asm_matrix_benchmark\src\C++\int\operator_fraction.cpp
 @Description: operation of fraction
 *************************************************************/
 
 #include "matrix_int_cpp.h"
 
+/***********************************************************
+@description: calc greatest common divisor of x and y
+@param {int} x
+@param {int} y
+@return {*}
+*************************************************************/
 static int gcd(int x, int y)
 {
     return x % y == 0 ? y : gcd(y, x % y);
