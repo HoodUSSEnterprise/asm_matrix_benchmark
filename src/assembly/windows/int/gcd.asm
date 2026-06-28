@@ -33,11 +33,11 @@ loop1:
     je end
 
     mov eax, r12d                       ; eax = x
-    xor edx, edx                        ; edx = 0
+    cdq                                 ; sign-extend eax to edx:eax
     idiv r13d                           ; eax = x / y, edx = x % y
 
     mov r12d, r13d
-    mov r13d, eax
+    mov r13d, edx
     jmp loop1
 
 end:
