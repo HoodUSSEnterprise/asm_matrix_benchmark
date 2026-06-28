@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-16 19:02:24
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-26 15:26:59
+@LastEditTime: 2026-06-27 20:10:01
 @FilePath: \asm_matrix_benchmark\include\matrix_int_cpp.h
 @Description: matrix C++ head file
 *************************************************************/
@@ -12,6 +12,43 @@
 #include <iostream>
 #include <utility>
 #include <vector>
+
+class Fraction
+{
+private:
+    int x;
+    int y;
+
+public:
+    // constructors / destructor
+    Fraction();
+    Fraction(int x);
+    Fraction(int x, int y);
+    Fraction(const Fraction &other);
+    Fraction(Fraction &&other) noexcept;
+    ~Fraction();
+
+    // arithmetic operators
+    Fraction operator+(const Fraction &other) const;
+    Fraction operator-(const Fraction &other) const;
+    Fraction operator*(const Fraction &other) const;
+    Fraction operator/(const Fraction &other) const;
+
+    // compound assignment
+    Fraction &operator+=(const Fraction &other);
+    Fraction &operator-=(const Fraction &other);
+    Fraction &operator*=(const Fraction &other);
+    Fraction &operator/=(const Fraction &other);
+
+    // assignment
+    Fraction &operator=(const Fraction &other);
+    Fraction &operator=(Fraction &&other) noexcept;
+    double myFabs();
+
+    // real value
+    int real_valuei();
+    double real_valued();
+};
 
 class MatrixInt
 {
@@ -86,4 +123,10 @@ public:
     static MatrixInt zeros(size_t r, size_t c);
     static MatrixInt ones(size_t r, size_t c);
     static MatrixInt random(size_t r, size_t c, int low = 0, int high = 10);
+
+    // determinant
+    int determinant();
+
+    // decomposition
+    std::vector<MatrixDouble> LU_Decomposition();
 };
