@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-28 09:01:24
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-28 09:06:27
+@LastEditTime: 2026-06-28 13:03:54
 @FilePath: \asm_matrix_benchmark\src\C\operator_fraction.c
 @Description: operator of fraction c code
 *************************************************************/
@@ -10,13 +10,20 @@
 
 /***********************************************************
 @description: calc greatest common divisor of x and y
+Use the non-recursive form of the Euclidean algorithm
 @param {int} x
 @param {int} y
 @return {*}
 *************************************************************/
 static int gcd(int x, int y)
 {
-    return x % y == 0 ? y : gcd(y, x % y);
+    while (y != 0)
+    {
+        int temp = x % y;
+        x = y;
+        y = temp;
+    }
+    return x;
 }
 
 /***********************************************************
