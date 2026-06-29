@@ -2,16 +2,19 @@
 # @Author: HoodUSSEnterprise
 # @Date: 2026-06-23 17:15:27
 # @LastEditors: HoodUSSEnterprise
-# @LastEditTime: 2026-06-23 17:18:51
+# @LastEditTime: 2026-06-29 13:51:35
 # @FilePath: \asm_matrix_benchmark\src\Python\__init__.py
 # @Description: init file
 ###########################################################
 
 from .base_matrix import Matrix
 from .concat_matrix import cat_matrix
+from .determinant_matrix import determinant
 from .extract_matrix import extract_col, extract_row, extract_submatrix
 from .find_matrix import find_elem
-from .leading_minors import determinant, leading_minors, principal_minor
+from .inv_matrix import inv_matrix
+from .leading_minors import leading_minors, principal_minor
+from .lu_decomposition import lu_decomposition
 from .rank_matrix import rank
 from .replace_matrix import replace_elem, replace_pos
 from .random_matrix import (
@@ -34,7 +37,9 @@ __all__ = [
     "extract_submatrix",
     "find_elem",
     "identity",
+    "inv_matrix",
     "leading_minors",
+    "lu_decomposition",
     "ones",
     "principal_minor",
     "random_diagonal",
