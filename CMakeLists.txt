@@ -3,22 +3,22 @@ project(MyProject)
 
 enable_language(C ASM_NASM)
 
-# 根据平台选择不同的源文件目录
+# Platform-specific source directory selection
 if(WIN32)
     set(PLATFORM_DIR "windows")
     set(CMAKE_ASM_NASM_FLAGS "-f win64 -g")
-    set(EXTRA_LIBS "")  # Windows 特定库，如需要可添加
+    set(EXTRA_LIBS "")  # Windows-specific libs (add if needed)
 elseif(UNIX AND NOT APPLE)  # Linux
     set(PLATFORM_DIR "linux")
     set(CMAKE_ASM_NASM_FLAGS "-f elf64 -g")
-    set(EXTRA_LIBS m pthread dl)  # Linux 特定库
+    set(EXTRA_LIBS m pthread dl)  # Linux-specific libs
 else()
     message(FATAL_ERROR "Unsupported platform: Only Windows and Linux are supported")
 endif()
 
 message(STATUS "Building for platform: ${PLATFORM_DIR}")
 
-# 设置编译选项
+# Compiler options
 set(CMAKE_C_FLAGS_DEBUG "-g -O0 -Wall -Wextra")
 set(CMAKE_C_FLAGS_RELEASE "-O2 -DNDEBUG")
 
@@ -59,13 +59,13 @@ set(LIB_SOURCES_MATRIX_INT
     src/assembly/${PLATFORM_DIR}/int/transpose_matrix_int.asm
 )
 
-# 创建库
+# Build library
 add_library(matrix_int_lib ${LIB_SOURCES_MATRIX_INT})
 
 target_include_directories(matrix_int_lib PUBLIC include)
 target_link_libraries(matrix_int_lib ${EXTRA_LIBS})
 
-# 创建测试可执行文件
+# Build test executable
 add_executable(matrix_int example/matrix_int.c)
 target_link_libraries(matrix_int matrix_int_lib)
 
@@ -93,25 +93,25 @@ set(LIB_SOURCES_MATRIX_C
     src/C/transpose_matrix.c
 )
 
-# 创建库
+# Build library
 add_library(matrix_int_clib ${LIB_SOURCES_MATRIX_C})
 
 target_include_directories(matrix_int_clib PUBLIC include)
 target_link_libraries(matrix_int_clib ${EXTRA_LIBS})
 
-# 创建测试可执行文件
+# Build test executable
 add_executable(matrix_intc example/matrix_int.c)
 target_link_libraries(matrix_intc matrix_int_clib)
 
-# C Float 版本 (与 int 在同一组 C 源文件中)
+# C Float version (shares same C sources as int)
 add_executable(matrix_floatc example/matrix_float.c)
 target_link_libraries(matrix_floatc matrix_int_clib)
 
-# C Double 版本 (与 int 在同一组 C 源文件中)
+# C Double version (shares same C sources as int)
 add_executable(matrix_doublec example/matrix_double.c)
 target_link_libraries(matrix_doublec matrix_int_clib)
 
-# 库的源文件（从对应平台目录读取）
+# Library sources (read from platform-specific dir)
 set(LIB_SOURCES_MATRIX_CPP
     src/C++/int/add_matrix.cpp
     src/C++/int/cat_matrix.cpp
@@ -124,6 +124,7 @@ set(LIB_SOURCES_MATRIX_CPP
     src/C++/int/find_matrix.cpp
     src/C++/int/inv_matrix.cpp
     src/C++/int/leading_minors.cpp
+    src/C++/int/lu_matrix.cpp
     src/C++/int/mul_matrix.cpp
     src/C++/double/print_matrix.cpp
     src/C++/int/print_matrix.cpp
@@ -135,15 +136,73 @@ set(LIB_SOURCES_MATRIX_CPP
     src/C++/int/transpose_matrix.cpp
 )
 
-# 创建 C++ int 库
+# C++ int library
 add_library(matrix_int_cpplib ${LIB_SOURCES_MATRIX_CPP})
 
 target_include_directories(matrix_int_cpplib PUBLIC include)
 target_link_libraries(matrix_int_cpplib ${EXTRA_LIBS})
 
-# 创建测试可执行文件
+# Build test executable
 add_executable(matrix_intcpp example/matrix_int.cpp)
 target_link_libraries(matrix_intcpp matrix_int_cpplib)
+
+# C++ double library
+set(LIB_SOURCES_MATRIX_CPP_DOUBLE
+    src/C++/double/add_matrix.cpp
+    src/C++/double/cat_matrix.cpp
+    src/C++/double/compare_matrix.cpp
+    src/C++/double/constructor_matrix.cpp
+    src/C++/double/destructor_matrix.cpp
+    src/C++/double/extract_matrix.cpp
+    src/C++/double/find_matrix.cpp
+    src/C++/double/inv_matrix.cpp
+    src/C++/double/leading_minors.cpp
+    src/C++/double/lu_matrix.cpp
+    src/C++/double/mul_matrix.cpp
+    src/C++/double/print_matrix.cpp
+    src/C++/double/rank_trace_matrix.cpp
+    src/C++/double/replace_matrix.cpp
+    src/C++/double/scale_matrix.cpp
+    src/C++/double/special_matrix.cpp
+    src/C++/double/sub_matrix.cpp
+    src/C++/double/transpose_matrix.cpp
+)
+
+add_library(matrix_double_cpplib ${LIB_SOURCES_MATRIX_CPP_DOUBLE})
+target_include_directories(matrix_double_cpplib PUBLIC include)
+target_link_libraries(matrix_double_cpplib ${EXTRA_LIBS})
+
+add_executable(matrix_doublecpp example/matrix_double.cpp)
+target_link_libraries(matrix_doublecpp matrix_double_cpplib)
+
+# C++ float library
+set(LIB_SOURCES_MATRIX_CPP_FLOAT
+    src/C++/float/add_matrix.cpp
+    src/C++/float/cat_matrix.cpp
+    src/C++/float/compare_matrix.cpp
+    src/C++/float/constructor_matrix.cpp
+    src/C++/float/destructor_matrix.cpp
+    src/C++/float/extract_matrix.cpp
+    src/C++/float/find_matrix.cpp
+    src/C++/float/inv_matrix.cpp
+    src/C++/float/leading_minors.cpp
+    src/C++/float/lu_matrix.cpp
+    src/C++/float/mul_matrix.cpp
+    src/C++/float/print_matrix.cpp
+    src/C++/float/rank_trace_matrix.cpp
+    src/C++/float/replace_matrix.cpp
+    src/C++/float/scale_matrix.cpp
+    src/C++/float/special_matrix.cpp
+    src/C++/float/sub_matrix.cpp
+    src/C++/float/transpose_matrix.cpp
+)
+
+add_library(matrix_float_cpplib ${LIB_SOURCES_MATRIX_CPP_FLOAT})
+target_include_directories(matrix_float_cpplib PUBLIC include)
+target_link_libraries(matrix_float_cpplib matrix_double_cpplib ${EXTRA_LIBS})
+
+add_executable(matrix_floatcpp example/matrix_float.cpp)
+target_link_libraries(matrix_floatcpp matrix_float_cpplib)
 
 set(LIB_SOURCES_MATRIX_DOUBLE
     src/assembly/${PLATFORM_DIR}/double/add_matrix_double.asm
@@ -177,7 +236,7 @@ target_link_libraries(matrix_double_lib ${EXTRA_LIBS})
 add_executable(matrix_double example/matrix_double.c)
 target_link_libraries(matrix_double matrix_double_lib)
 
-# Float 版本
+# Float version
 set(LIB_SOURCES_MATRIX_FLOAT
     src/assembly/${PLATFORM_DIR}/float/add_matrix_float.asm
     src/assembly/${PLATFORM_DIR}/float/cat_matrix_float.asm
