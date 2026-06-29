@@ -2,7 +2,7 @@
 @Author: HoodUSSEnterprise
 @Date: 2026-06-23 17:46:42
 @LastEditors: HoodUSSEnterprise
-@LastEditTime: 2026-06-25 21:09:45
+@LastEditTime: 2026-06-29 10:36:22
 @FilePath: \asm_matrix_benchmark\example\matrix_int.cpp
 @Description:example of matrix int c++
 *************************************************************/
@@ -130,8 +130,8 @@ int main()
     MatrixDouble matrix_inv(3, 3);
     matrix_inv = matrix_orgin.inv_matrix();
     std::cout << matrix_inv;
+    puts("----------------------------------------------------------------------------------------");
 
-    puts("-------------------------------------leading minors-------------------------------------");
     puts("-------------------------------------leading minors-------------------------------------");
     int lead_data[9] = {1, 2, 3, 4, 5, 6, 7, 8, 10};
     MatrixInt lead_m(lead_data, 3, 3);
@@ -155,6 +155,20 @@ int main()
     std::cout << col;
     MatrixInt block = ext_m.extract_submatrix(0, 2, 1, 3);
     std::cout << block;
+    puts("----------------------------------------------------------------------------------------");
+
+    puts("-------------------------------------lu decomposition-------------------------------------");
+    int lu_data[9] = {1, 2, 3, 0, 4, 5, 1, 0, 6};
+    MatrixInt lu_m(lu_data, 3, 3);
+    std::cout << lu_m;
+    auto lu_res = lu_m.LU_Decomposition();
+    printf("L matrix:\n");
+    std::cout << lu_res[0];
+    printf("U matrix:\n");
+    std::cout << lu_res[1];
+    puts("----------------------------------------------------------------------------------------");
+
+    /* determinant temporarily disabled (assembly issues) */
     puts("----------------------------------------------------------------------------------------");
 
     return 0;
