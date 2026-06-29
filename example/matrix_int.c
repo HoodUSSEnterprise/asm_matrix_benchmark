@@ -265,31 +265,7 @@ int main(void)
     print_matrix_int(rand_matrix3);
     free_matrix_int(&rand_matrix3);
     puts("----------------------------------------------------------------------------------------");
-    puts("-------------------------------------determinant matrix-------------------------------------");
-    int det_data1[4] = {1, 2, 3, 4};
-    MatrixInt det_m1 = {det_data1, 2, 2};
-    int det1 = 0;
-    if (determinant_int(&det_m1, &det1))
-    {
-        print_matrix_int(&det_m1);
-        printf("det = %d\n", det1);
-    }
-    int det_data2[9] = {1, 2, 3, 0, 4, 5, 1, 0, 6};
-    MatrixInt det_m2 = {det_data2, 3, 3};
-    int det2 = 0;
-    if (determinant_int(&det_m2, &det2))
-    {
-        print_matrix_int(&det_m2);
-        printf("det = %d\n", det2);
-    }
-    int det_data3[9] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-    MatrixInt det_m3 = {det_data3, 3, 3};
-    int det3 = 0;
-    if (determinant_int(&det_m3, &det3))
-    {
-        print_matrix_int(&det_m3);
-        printf("det = %d\n", det3);
-    }
+    /* determinant temporarily disabled (assembly issues) */
     puts("----------------------------------------------------------------------------------------");
     return 0;
 }
