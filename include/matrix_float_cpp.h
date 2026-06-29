@@ -81,6 +81,7 @@ public:
     float trace() const;
     std::vector<MatrixFloat> leading_minors() const;
     MatrixDouble inv_matrix() const;
+    std::vector<MatrixDouble> LU_Decomposition();
 
     // static factories
     static MatrixFloat identity(size_t n);
