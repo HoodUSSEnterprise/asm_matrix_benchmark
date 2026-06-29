@@ -2,7 +2,7 @@
 # @Author: HoodUSSEnterprise
 # @Date: 2026-06-22 13:14:45
 # @LastEditors: HoodUSSEnterprise
-# @LastEditTime: 2026-06-22 13:17:06
+# @LastEditTime: 2026-06-29 13:12:52
 # @FilePath: \asm_matrix_benchmark\src\Python\base_matrix.py
 # @Description: Python file of matrix
 ###########################################################
@@ -92,14 +92,14 @@ class Matrix:
             )
             return None
 
-        result: List[Union[int, float]] = [0 for _ in range(self.rows * self.cols)]
+        result: List[Union[int, float]] = [0 for _ in range(self.rows * other.cols)]
 
         for i in range(self.rows):
             for j in range(other.cols):
                 num = 0
                 for k in range(other.rows):
-                    num += self.data[i * self.cols + k] * other.data[k * self.cols + j]
-                result[i * self.cols + j] = num
+                    num += self.data[i * self.cols + k] * other.data[k * other.cols + j]
+                result[i * other.cols + j] = num
 
         return Matrix(self.rows, other.cols, result)
 
@@ -136,10 +136,17 @@ class Matrix:
         if self is None:
             return "This matrix is None\n"
         else:
+            rows_str = "\n".join(
+                [
+                    "  ".join(map(str, self.data[i * self.cols : (i + 1) * self.cols]))
+                    for i in range(self.rows)
+                ]
+            )
             return (
                 f"--------------------------------------------\n"
                 f"matrix size: ({self.rows}, {self.cols})\n"
-                f"matrix data: {self.data}\n"
+                f"matrix data:\n"
+                f"{rows_str}\n"
                 f"--------------------------------------------"
             )
 
@@ -208,14 +215,14 @@ class Matrix:
             )
             return None
 
-        result: List[Union[int, float]] = [0 for _ in range(self.rows * self.cols)]
+        result: List[Union[int, float]] = [0 for _ in range(self.rows * other.cols)]
 
         for i in range(self.rows):
             for j in range(other.cols):
                 num = 0
                 for k in range(other.rows):
-                    num += self.data[i * self.cols + k] * other.data[k * self.cols + j]
-                result[i * self.cols + j] = num
+                    num += self.data[i * self.cols + k] * other.data[k * other.cols + j]
+                result[i * other.cols + j] = num
 
         self.data = result
         self.cols = other.cols
