@@ -2,7 +2,7 @@
 # @Author: HoodUSSEnterprise
 # @Date: 2026-06-22 13:08:22
 # @LastEditors: HoodUSSEnterprise
-# @LastEditTime: 2026-06-22 13:16:20
+# @LastEditTime: 2026-06-29 12:47:36
 # @FilePath: \asm_matrix_benchmark\src\Python\replace_matrix.py
 # @Description:replace matrix python code
 ###########################################################
@@ -34,7 +34,7 @@ def replace_pos(
 def replace_elem(
     m: "Matrix", old_value: Union[int, float], new_value: Union[int, float]
 ) -> None:
-    if find_elem(m, old_value) != (-1, -1):
+    if find_elem(m, old_value) == (-1, -1):
         print(f"No find number {old_value}")
         return
     while find_elem(m, old_value) != (-1, -1):
