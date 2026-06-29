@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-28 15:55:06
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-28 15:56:15
+; @LastEditTime: 2026-06-29 09:24:22
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\int\sub_fraction.asm
 ; @Description: sub fraction nasm code on windows
 ; -------------------------------------------------------------
@@ -21,6 +21,7 @@ sub_fraction:
     ; save callee_register
     push rbx
     push rdi
+    push rsi
     push r12
     push r13
     push r14
@@ -78,6 +79,7 @@ cleanup:
     pop r14
     pop r13
     pop r12
+    pop rsi
     pop rdi
     pop rbx
     ret
