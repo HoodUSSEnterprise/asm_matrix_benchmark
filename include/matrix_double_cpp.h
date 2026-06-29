@@ -80,6 +80,7 @@ public:
     double trace() const;
     std::vector<MatrixDouble> leading_minors() const;
     MatrixDouble inv_matrix() const;
+    std::vector<MatrixDouble> LU_Decomposition();
 
     // static factories
     static MatrixDouble identity(size_t n);
