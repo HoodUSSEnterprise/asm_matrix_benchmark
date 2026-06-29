@@ -262,12 +262,7 @@ public class matrix_float
         if (randMatrix3 != null) randMatrix3.print();
         System.out.println("----------------------------------------------------------------------------------------");
 
-        // determinant example
-        System.out.println("-------------------------------------determinant-----------------------------------------");
-        float[] detData = {1, 2, 3, 4};
-        MatrixFloat detMatrix = new MatrixFloat(detData, 2, 2);
-        double det = detMatrix.determinant();
-        System.out.println("determinant = " + det);
+        // determinant temporarily disabled (assembly issues)
         System.out.println("----------------------------------------------------------------------------------------");
     }
 }

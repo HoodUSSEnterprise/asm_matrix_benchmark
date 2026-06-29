@@ -1,10 +1,10 @@
 /************************************************************
- @Author: HoodUSSEnterprise
- @Date: 2026-06-28
- @LastEditors: HoodUSSEnterprise
- @LastEditTime: 2026-06-28
- @FilePath: \asm_matrix_benchmark\example\matrix_double.java
- @Description: example of matrix double Java
+@Author: HoodUSSEnterprise
+@Date: 2026-06-28
+@LastEditors: HoodUSSEnterprise
+@LastEditTime: 2026-06-29 13:55:00
+@FilePath: \asm_matrix_benchmark\example\matrix_double.java
+@Description: example of matrix double Java
 *************************************************************/
 
 public class matrix_double
@@ -262,12 +262,7 @@ public class matrix_double
         if (randMatrix3 != null) randMatrix3.print();
         System.out.println("----------------------------------------------------------------------------------------");
 
-        // determinant example
-        System.out.println("-------------------------------------determinant-----------------------------------------");
-        double[] detData = {1, 2, 3, 4};
-        MatrixDouble detMatrix = new MatrixDouble(detData, 2, 2);
-        double det = detMatrix.determinant();
-        System.out.println("determinant = " + det);
+        // determinant temporarily disabled (assembly issues)
         System.out.println("----------------------------------------------------------------------------------------");
     }
 }

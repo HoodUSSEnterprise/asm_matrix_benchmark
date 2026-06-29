@@ -266,12 +266,7 @@ public class matrix_int
         if (randMatrix3 != null) randMatrix3.print();
         System.out.println("----------------------------------------------------------------------------------------");
 
-        // determinant example
-        System.out.println("-------------------------------------determinant-----------------------------------------");
-        int[] detData = {1, 2, 3, 4};
-        MatrixInt detMatrix = new MatrixInt(detData, 2, 2);
-        int det = detMatrix.determinant();
-        System.out.println("determinant = " + det);
+        // determinant temporarily disabled (assembly issues)
         System.out.println("----------------------------------------------------------------------------------------");
     }
 }
