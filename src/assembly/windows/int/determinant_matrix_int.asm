@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-28
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-29 08:52:57
+; @LastEditTime: 2026-06-29 09:30:26
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\int\determinant_matrix_int.asm
 ; @Description: determinant matrix int nasm code on windows
 ; use Fraction arithmetic for exact integer determinant
@@ -38,7 +38,7 @@ determinant_int:
     push r13
     push r14
     push r15
-    sub rsp, 64                         ; 32 shadow space + 32 for factor + temp
+    sub rsp, 80                         ; 32 shadow space + 32 for factor + temp
 
     mov r15, rdx                        ; r15 = det
     mov r14, rcx                        ; r14 = m
@@ -186,8 +186,10 @@ find_pivot:
         ; elimination below pivot row
         mov r9, rsi                     ; r9 = i = rows + 1
         inc r9
+        mov [rsp + 64], r9
 
     elim_outer:
+        mov r9, [rsp + 64]
         cmp r9, r13                     ; i < m->rows?
         jge elim_done
 
@@ -215,8 +217,10 @@ find_pivot:
 
         ; inner loop: j = cols to m->cols-1
         mov r10, rdi                    ; r10 = j = cols
+        mov [rsp + 72], r10
 
         elim_inner:
+            mov r10, [rsp + 72]
             cmp r10, r12                ; j < m->cols?
             jge elim_inner_done
 
@@ -232,16 +236,16 @@ find_pivot:
             call mul_fraction           ; rax = temp (packed Fraction)
 
             ; save temp on stack [rsp+48..55]
-            mov [rsp + 48], eax         ; temp.x
+            mov dword[rsp + 48], eax    ; temp.x
             shr rax, 32
-            mov [rsp + 52], eax         ; temp.y
+            mov dword[rsp + 52], eax    ; temp.y
 
             ; data[i][j] = sub_fraction(&data[i][j], &temp)
             ; &data[i][j] = rbx + (i * cols + j) * 8
-            mov r9, rsi                 ; r9 = i = rows + 1
-            inc r9
+            mov r9, [rsp + 64]
             mov rax, r9
             imul rax, r12
+            mov r10, [rsp + 72]
             add rax, r10
             shl rax, 3
             lea rcx, [rbx + rax]        ; &data[i][j]
@@ -256,10 +260,10 @@ find_pivot:
             ; r12 = cols, r13 = rows
 
             ; offset = (i * cols + j) * 8
-            mov r9, rsi                 ; r9 = i = rows + 1
-            inc r9
+            mov r9, [rsp + 64]
             mov rdx, r9
             imul rdx, r12
+            mov r10, [rsp + 72]
             add rdx, r10
             shl rdx, 3
 
@@ -268,10 +272,12 @@ find_pivot:
             mov [rbx + rdx + 4], eax    ; data[i][j].y
 
             inc r10                     ; j++
+            mov [rsp + 72], r10
             jmp elim_inner
 
     elim_inner_done:
         inc r9                          ; i++
+        mov [rsp + 64], r9
         jmp elim_outer
 
 elim_done:
@@ -306,9 +312,9 @@ det_mul_loop:
     call mul_fraction
 
     ; store new res on stack for next iteration
-    mov [rsp + 48], eax                 ; res.x
+    mov dword[rsp + 48], eax            ; res.x
     shr rax, 32
-    mov [rsp + 52], eax                 ; res.y
+    mov dword[rsp + 52], eax            ; res.y
 
     inc r8
     jmp det_mul_loop
@@ -345,7 +351,7 @@ free_and_cleanup:
     mov eax, r14d                       ; restore return value
 
 cleanup:
-    add rsp, 64
+    add rsp, 80
     pop r15
     pop r14
     pop r13
