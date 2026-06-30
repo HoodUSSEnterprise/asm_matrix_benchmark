@@ -2,7 +2,7 @@
 ; @Author: HoodUSSEnterprise
 ; @Date: 2026-06-28
 ; @LastEditors: HoodUSSEnterprise
-; @LastEditTime: 2026-06-29 09:30:26
+; @LastEditTime: 2026-06-29 14:48:17
 ; @FilePath: \asm_matrix_benchmark\src\assembly\windows\int\determinant_matrix_int.asm
 ; @Description: determinant matrix int nasm code on windows
 ; use Fraction arithmetic for exact integer determinant
@@ -60,6 +60,7 @@ determinant_int:
     mov r13, [r14 + 8]                  ; r13 = m->rows
     mov r12, [r14 + 16]                 ; r12 = m->cols
 
+    ; check if dimension is zero or not
     cmp r13, 0
     je null_ptr
     cmp r12, 0
@@ -70,8 +71,13 @@ determinant_int:
     jne not_a_square
 
     ; malloc Fraction array (8 bytes per element)
-    mov rcx, r13
-    imul rcx, r12
+    ; struct Fraction
+    ; {
+    ;      int x;
+    ;      int y;
+    ; };
+    mov rcx, r13                        ; r13 = m->rows
+    imul rcx, r12                       ; r12 = m->cols, now rcx = m->rows * m->cols
     mov r11, rcx                        ; r11 = element count
     shl rcx, 3                          ; rcx *= 8
     call malloc
@@ -80,10 +86,14 @@ determinant_int:
 
     mov rbx, rax                        ; rbx = data (Fraction*)
 
-    ; copy m->data to data as Fractions {x, 1}
+    ; --------------------------------------------------------------
+    ; copy m->data to data
+    ; --------------------------------------------------------------
+    ; init loop
     xor rcx, rcx                        ; i = 0
     mov rsi, [r14]                      ; rsi = m->data (int*)
 
+; copy m->data to data as Fractions {x, 1}
 loop_copy:
     cmp rcx, r11                        ; i < element count?
     jge copied
@@ -114,31 +124,31 @@ loop1:
     ; find main element
     mov r8, rsi                         ; r8 = pivot = rows
 
-find_pivot:
-    cmp r8, r13                         ; pivot < m->rows?
-    jge col_zero
+    find_pivot:
+        cmp r8, r13                     ; pivot < m->rows?
+        jge col_zero
 
-    ; check fabs(data[pivot][cols].x / data[pivot][cols].y) < epsilon
-    mov rax, r8
-    imul rax, r12
-    add rax, rdi                        ; rax = pivot * cols + cols
+        ; check fabs(data[pivot][cols].x / data[pivot][cols].y) < epsilon
+        mov rax, r8                     ; rax = pivot
+        imul rax, r12                   ; rax = pivot * cols
+        add rax, rdi                    ; rax = pivot * cols + cols
 
-    movsxd rcx, [rbx + rax * 8]         ; rcx = x (sign-extended)
-    cvtsi2sd xmm0, rcx
-    movsxd rcx, [rbx + rax * 8 + 4]     ; rcx = y (sign-extended)
-    cvtsi2sd xmm1, rcx
-    divsd xmm0, xmm1                    ; xmm0 = x / y
+        movsxd rcx, [rbx + rax * 8]     ; rcx = x (sign-extended)
+        cvtsi2sd xmm0, rcx
+        movsxd rcx, [rbx + rax * 8 + 4] ; rcx = y (sign-extended)
+        cvtsi2sd xmm1, rcx
+        divsd xmm0, xmm1                ; xmm0 = x / y
 
-    ; fabs
-    mov rcx, 0x7FFFFFFFFFFFFFFF
-    movq xmm1, rcx
-    andps xmm0, xmm1                    ; xmm0 = fabs(x/y)
+        ; fabs
+        mov rcx, 0x7FFFFFFFFFFFFFFF
+        movq xmm1, rcx
+        andps xmm0, xmm1                ; xmm0 = fabs(x/y)
 
-    movsd xmm2, [rel epsilon]
-    comisd xmm0, xmm2
-    jb pivot_zero                       ; near zero, skip
+        movsd xmm2, [rel epsilon]       ; xmm2 = epsilon
+        comisd xmm0, xmm2               ; compare xmm0 and xmm2
+        jb pivot_zero                   ; near zero, skip
 
-    jmp pivot_found
+        jmp pivot_found
 
     pivot_zero:
         inc r8
@@ -295,29 +305,29 @@ calc_det:
 
     xor r8, r8                          ; i = 0
 
-det_mul_loop:
-    cmp r8, r13                         ; i < m->rows?
-    jge det_done
+    det_mul_loop:
+        cmp r8, r13                     ; i < m->rows?
+        jge det_done
 
-    ; res = mul_fraction(&res, &data[i][i])
-    lea rcx, [rsp + 48]                 ; &res
+        ; res = mul_fraction(&res, &data[i][i])
+        lea rcx, [rsp + 48]             ; &res
 
-    ; &data[i][i] = rbx + (i * cols + i) * 8
-    mov rax, r8
-    imul rax, r12
-    add rax, r8
-    shl rax, 3
-    lea rdx, [rbx + rax]                ; &data[i][i]
+        ; &data[i][i] = rbx + (i * cols + i) * 8
+        mov rax, r8
+        imul rax, r12
+        add rax, r8
+        shl rax, 3
+        lea rdx, [rbx + rax]            ; &data[i][i]
 
-    call mul_fraction
+        call mul_fraction
 
-    ; store new res on stack for next iteration
-    mov dword[rsp + 48], eax            ; res.x
-    shr rax, 32
-    mov dword[rsp + 52], eax            ; res.y
+        ; store new res on stack for next iteration
+        mov dword[rsp + 48], eax        ; res.x
+        shr rax, 32
+        mov dword[rsp + 52], eax        ; res.y
 
-    inc r8
-    jmp det_mul_loop
+        inc r8
+        jmp det_mul_loop
 
 det_done:
     ; extract x (numerator) = determinant
@@ -327,6 +337,7 @@ det_done:
     mov r14d, 1                         ; return true
     jmp free_and_cleanup
 
+; error return
 null_ptr:
     lea rcx, [rel invalid_param]
     call puts
